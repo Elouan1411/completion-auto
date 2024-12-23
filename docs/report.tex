@@ -1,0 +1,72 @@
+\documentclass[a4paper, 11pt]{report}
+\usepackage[T1]{fontenc} % Caractere francais
+\usepackage[utf8]{inputenc}
+\usepackage[english,french]{babel} 
+\usepackage{graphicx} % Pour les images
+\usepackage{multicol} % Pour faire des multi colonnes
+\usepackage[export]{adjustbox} % Pour la clé 'valign'  (aligner verticalement)
+\usepackage[colorlinks=true,linkcolor=black]{hyperref} % Pour qu'il y est des liens sur la table des matières
+\usepackage{caption} % Utiliser plus de fonction sur caption (caption* pour ne pas afficher FIGURE-1)
+\usepackage{lipsum} % Pour générer du texte pour voir comment ca rend
+\usepackage{ragged2e} % Pour justifier le texte
+\usepackage{ulem}
+\usepackage[margin=3.2cm]{geometry}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+
+
+
+
+\begin{document}
+
+
+% Première page
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Huge \textbf{Université de Franche-Comté} \par}
+    \vspace{1cm}
+    {\huge \texttt{}{Projet d'Initiation à la recherche\\ } \LARGE{\textbf{L2 - CMI}} \par} 
+    \vspace{1.2cm}
+    {\huge \textbf{Complétion (semi-)automatique} \par}
+    \vspace{1.5cm}
+    {\Large BOITEUX Elouan\\BENALI Samia\par}
+    \vspace{5cm}
+    \begin{minipage}[c]{0.40\textwidth}
+        \centering
+        \raisebox{-0.5\height}{\includegraphics[width=\textwidth]{latex-images/logo_univ.png}}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[c]{0.5\textwidth}
+        \centering
+        \raisebox{-0.5\height}{\includegraphics[width=\textwidth]{latex-images/logo_CMI.png}}
+    \end{minipage}
+    \vfill
+    {2024/2025}
+\end{titlepage}
+
+\tableofcontents
+
+
+
+\chapter*{Introduction} % * pour ne pas avoir de numéro de chapitre
+\addcontentsline{toc}{chapter}{Introduction}
+
+\chapter{Développement}
+
+\chapter*{Conclusion}
+\addcontentsline{toc}{chapter}{Conclusion} 
+% Page de résumé
+\newpage
+\begin{center}
+    \vspace*{\fill} % Espace vertical
+    \section*{Résumé}
+    \addcontentsline{toc}{chapter}{Résumé}
+    \begin{justify}
+Le resumé
+    \end{justify}
+\end{center}
+
+\end{document}
