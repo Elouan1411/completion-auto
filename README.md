@@ -19,7 +19,7 @@ The project is divided into the following tasks:
 3. **Markov Chains**: Study the basic principles and their use in adapting suggestions based on user history.
 4. **Implementation**: Develop a small text auto-completion tool using the studied techniques.
 
-<img src="images/example.png" alt="Auto-Completion Example" style="display: block; margin: 0 auto;" width="500">
+<img src="images/example.png" alt="Auto-Completion Example" style="margin: 0 auto;" width="500">
 
 
 ## Contents
