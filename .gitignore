@@ -1,3 +1,6 @@
 docs/bin/*
+target/
 
+
+Cargo.lock
 !docs/bin/report.pdf
