@@ -76,9 +76,14 @@ fn press_virtual_key(
 ) {
     // Vérification si le caractère est valide
     if let Some(key) = keycode_uinput.get(&input_char) {
-        // Envoi de la touche spécifiée
-        device.click(key).unwrap();
-        device.synchronize().unwrap();
+        // Envoi de la touche spécifiée avec gestion d'erreur
+        if let Err(err) = device.click(key) {
+            eprintln!("Erreur lors du clic de la touche '{}': {}", input_char, err);
+        }
+
+        if let Err(err) = device.synchronize() {
+            eprintln!("Erreur lors de la synchronisation : {}", err);
+        }
     } else {
         eprintln!("Caractère non mappé : '{}'", input_char);
     }

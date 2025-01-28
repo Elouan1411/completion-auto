@@ -5,7 +5,10 @@ use std::{
     io::{BufRead, BufReader},
 };
 extern crate uinput;
+use byteorder::{NativeEndian, ReadBytesExt};
+use std::fs::OpenOptions;
 use std::io::{self};
+use std::io::{Cursor, Read};
 use udev::Enumerator;
 
 pub fn init_keylogger(is_qwerty: &mut bool) -> HashMap<u16, String> {
@@ -140,4 +143,77 @@ pub fn list_keyboards() -> Vec<String> {
     devices.pop();
 
     devices
+}
+
+pub fn get_pressed_key(path: &Path, keycode_map: &HashMap<u16, String>) -> Option<String> {
+    let mut file_options = OpenOptions::new();
+    file_options.read(true).write(false).create(false);
+
+    let mut event_file = match file_options.open(path) {
+        Ok(file) => file,
+        Err(err) => {
+            eprintln!("Erreur lors de l'ouverture du fichier {:?} : {}", path, err);
+            return None;
+        }
+    };
+
+    let mut packet = [0u8; 24];
+    loop {
+        if let Err(err) = event_file.read_exact(&mut packet) {
+            eprintln!(
+                "Erreur lors de la lecture des données dans {:?} : {}",
+                path, err
+            );
+            return None; // Continue to the next iteration for this path
+        }
+
+        let mut rdr = Cursor::new(packet);
+        let _tv_sec = match rdr.read_u64::<NativeEndian>() {
+            Ok(val) => val,
+            Err(err) => {
+                eprintln!("Erreur de lecture _tv_sec dans {:?} : {}", path, err);
+                continue;
+            }
+        };
+        let _tv_usec = match rdr.read_u64::<NativeEndian>() {
+            Ok(val) => val,
+            Err(err) => {
+                eprintln!("Erreur de lecture _tv_usec dans {:?} : {}", path, err);
+                continue;
+            }
+        };
+        let evtype = match rdr.read_u16::<NativeEndian>() {
+            Ok(val) => val,
+            Err(err) => {
+                eprintln!("Erreur de lecture evtype dans {:?} : {}", path, err);
+                continue;
+            }
+        };
+        let code = match rdr.read_u16::<NativeEndian>() {
+            Ok(val) => val,
+            Err(err) => {
+                eprintln!("Erreur de lecture code dans {:?} : {}", path, err);
+                continue;
+            }
+        };
+        let value = match rdr.read_i32::<NativeEndian>() {
+            Ok(val) => val,
+            Err(err) => {
+                eprintln!("Erreur de lecture value dans {:?} : {}", path, err);
+                continue;
+            }
+        };
+
+        if evtype == 1 && value == 1 {
+            // Vérifie si c'est un événement de type touche (EV_KEY)
+            if let Some(letter) = keycode_map.get(&code) {
+                return Some(letter.clone());
+            } else {
+                eprintln!(
+                    "Chemin {:?} : Aucune lettre trouvée pour le keycode {}",
+                    path, code
+                );
+            }
+        }
+    }
 }

