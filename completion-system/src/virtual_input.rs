@@ -90,15 +90,14 @@ fn press_virtual_key(
 }
 
 pub fn init_virtual_key() -> Device {
-    let device = uinput::default()
-        .unwrap()
+    uinput::default()
+        .expect("Erreur lors de l'initialisation de uinput")
         .name("my_virtual_keyboard")
-        .unwrap()
+        .expect("Erreur lors de l'ajout du nom du clavier")
         .event(uinput::event::Keyboard::All)
-        .unwrap()
+        .expect("Erreur lors de l'ajout des événements clavier")
         .create()
-        .unwrap();
-    device
+        .expect("Erreur lors de la création du périphérique")
 }
 
 pub fn write_word(

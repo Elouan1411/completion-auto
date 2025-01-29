@@ -7,9 +7,10 @@ use std::{
 extern crate uinput;
 use byteorder::{NativeEndian, ReadBytesExt};
 use std::fs::OpenOptions;
+use std::io::Write;
 use std::io::{self};
 use std::io::{Cursor, Read};
-use udev::Enumerator;
+use udev::Enumerator; // Importation du trait Write
 
 pub fn init_keylogger(is_qwerty: &mut bool) -> HashMap<u16, String> {
     // Charger la carte de correspondance de touches
@@ -22,35 +23,27 @@ pub fn init_keylogger(is_qwerty: &mut bool) -> HashMap<u16, String> {
 }
 
 fn create_keycode_map_from_file(file_path: &str) -> HashMap<u16, String> {
-    let mut keycode_map = HashMap::new(); // Utilisation d'un HashMap mutable
+    let mut keycode_map = HashMap::new();
 
     let path = Path::new(file_path);
     let file = File::open(path).expect("Impossible d'ouvrir le fichier");
 
     let reader = BufReader::new(file);
 
-    // Lire chaque ligne du fichier
     for line in reader.lines() {
-        let line = line.expect("Erreur lors de la lecture de la ligne");
-
-        // Si la ligne contient une définition de touche (par exemple KEY_A, KEY_B, etc.)
-        if line.contains("KEY_") {
-            // Extraire le nom de la touche après "KEY_"
+        if let Ok(line) = line {
+            // Vérifie si la lecture de la ligne a réussi
             if let Some(pos) = line.find("KEY_") {
                 // Extraction du nom de la touche après "KEY_"
-                let key_name = &line[pos + 4..].split_whitespace().next().unwrap_or("");
-
-                // Trouver la dernière partie de la ligne après les espaces pour obtenir le keycode
-                let parts: Vec<&str> = line.split_whitespace().collect();
-                if parts.len() > 1 {
-                    let keycode_str = parts[parts.len() - 1];
-
-                    // Essayer de convertir le keycode en nombre
-                    if let Ok(keycode) = keycode_str.parse::<u16>() {
-                        // Affichage du nom de la touche et de son keycode
-                        // println!("Touche : {}, Keycode : {}", key_name, keycode);
-                        // Insérer dans le HashMap avec keycode comme clé et key_name comme valeur
-                        keycode_map.insert(keycode, key_name.to_string()); // Convertir key_name en String
+                let key_name_opt = line[pos + 4..].split_whitespace().next();
+                if let Some(key_name) = key_name_opt {
+                    let parts: Vec<&str> = line.split_whitespace().collect();
+                    if let Some(keycode_str) = parts.last() {
+                        // Récupère la dernière partie de la ligne
+                        if let Ok(keycode) = keycode_str.parse::<u16>() {
+                            // Ajoute l'entrée dans la table des keycodes
+                            keycode_map.insert(keycode, key_name.to_string());
+                        }
                     }
                 }
             }
@@ -61,21 +54,27 @@ fn create_keycode_map_from_file(file_path: &str) -> HashMap<u16, String> {
 }
 
 fn input_qwerty_azerty(keycode_map: &mut HashMap<u16, String>) -> bool {
-    println!("Votre clavier est-il en (Q)WERTY ou (A)ZERTY ? ");
+    print!("Votre clavier est-il en (Q)WERTY ou (A)ZERTY ? ");
+    io::stdout().flush().ok(); // Force l'affichage immédiat du message
+
     let mut input = String::new();
-    io::stdin().read_line(&mut input).unwrap();
-    // Nettoyer l'entrée et vérifier
+    if io::stdin().read_line(&mut input).is_err() {
+        println!("Erreur lors de la lecture de l'entrée. Supposons QWERTY par défaut.");
+        return true;
+    }
+
     let input = input.trim().to_uppercase();
-    // Si l'utilisateur choisit AZERTY, on convertit la carte
+
     if input == "A" {
         println!("Conversion du clavier en AZERTY...");
-        convert_qwerty_to_azerty(keycode_map); // Conversion vers AZERTY
-        return false;
+        convert_qwerty_to_azerty(keycode_map);
+        false
     } else if input != "Q" {
         println!("Réponse non valide, supposons que c'est QWERTY par défaut.");
-        return input_qwerty_azerty(keycode_map);
+        input_qwerty_azerty(keycode_map)
+    } else {
+        true
     }
-    return true;
 }
 
 fn convert_qwerty_to_azerty(keycode_map: &mut HashMap<u16, String>) {
@@ -117,29 +116,55 @@ fn convert_qwerty_to_azerty(keycode_map: &mut HashMap<u16, String>) {
     }
 }
 
+// pub fn list_keyboards() -> Vec<String> {
+//     let mut enumerator = Enumerator::new().unwrap();
+//     enumerator.match_subsystem("input").unwrap();
+
+//     let mut devices: Vec<String> = enumerator
+//         .scan_devices()
+//         .unwrap()
+//         .filter_map(|device| {
+//             // Vérification si le périphérique est un clavier en comparant avec une chaîne "1"
+//             if let Some(properties) = device.property_value("ID_INPUT_KEYBOARD") {
+//                 if properties == "1" {
+//                     // Comparaison avec &str
+//                     device.devnode().map(|p| p.to_string_lossy().into_owned()) // Conversion en String
+//                 } else {
+//                     None
+//                 }
+//             } else {
+//                 None
+//             }
+//         })
+//         .collect();
+
+//     // Suppression du clavier virtuel (dernier élément)
+//     devices.pop();
+
+//     devices
+// }
+
 pub fn list_keyboards() -> Vec<String> {
-    let mut enumerator = Enumerator::new().unwrap();
-    enumerator.match_subsystem("input").unwrap();
+    let mut devices = Vec::new();
 
-    let mut devices: Vec<String> = enumerator
-        .scan_devices()
-        .unwrap()
-        .filter_map(|device| {
-            // Vérification si le périphérique est un clavier en comparant avec une chaîne "1"
-            if let Some(properties) = device.property_value("ID_INPUT_KEYBOARD") {
-                if properties == "1" {
-                    // Comparaison avec &str
-                    device.devnode().map(|p| p.to_string_lossy().into_owned()) // Conversion en String
-                } else {
-                    None
-                }
-            } else {
-                None
+    if let Ok(mut enumerator) = Enumerator::new() {
+        if enumerator.match_subsystem("input").is_ok() {
+            if let Ok(device_iter) = enumerator.scan_devices() {
+                devices = device_iter
+                    .filter_map(|device| {
+                        if let Some(properties) = device.property_value("ID_INPUT_KEYBOARD") {
+                            if properties == "1" {
+                                return device.devnode().map(|p| p.to_string_lossy().into_owned());
+                            }
+                        }
+                        None
+                    })
+                    .collect();
             }
-        })
-        .collect();
+        }
+    }
 
-    // Suppression du clavier virtuel (dernier élément)
+    // Suppression du dernier élément s'il existe (potentiellement un clavier virtuel)
     devices.pop();
 
     devices
