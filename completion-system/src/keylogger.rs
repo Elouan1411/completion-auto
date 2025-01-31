@@ -103,6 +103,12 @@ fn convert_qwerty_to_azerty(keycode_map: &mut HashMap<u16, String>) {
         ("O", "O"),
         ("P", "P"),
         ("Z", "W"),
+        ("2", "é"),
+        ("4", "'"),
+        ("7", "è"),
+        ("9", "ç"),
+        ("0", "à"),
+        ("APOSTROPHE", "ù"),
     ]
     .iter()
     .cloned()
@@ -115,34 +121,6 @@ fn convert_qwerty_to_azerty(keycode_map: &mut HashMap<u16, String>) {
         }
     }
 }
-
-// pub fn list_keyboards() -> Vec<String> {
-//     let mut enumerator = Enumerator::new().unwrap();
-//     enumerator.match_subsystem("input").unwrap();
-
-//     let mut devices: Vec<String> = enumerator
-//         .scan_devices()
-//         .unwrap()
-//         .filter_map(|device| {
-//             // Vérification si le périphérique est un clavier en comparant avec une chaîne "1"
-//             if let Some(properties) = device.property_value("ID_INPUT_KEYBOARD") {
-//                 if properties == "1" {
-//                     // Comparaison avec &str
-//                     device.devnode().map(|p| p.to_string_lossy().into_owned()) // Conversion en String
-//                 } else {
-//                     None
-//                 }
-//             } else {
-//                 None
-//             }
-//         })
-//         .collect();
-
-//     // Suppression du clavier virtuel (dernier élément)
-//     devices.pop();
-
-//     devices
-// }
 
 pub fn list_keyboards() -> Vec<String> {
     let mut devices = Vec::new();

