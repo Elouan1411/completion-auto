@@ -4,7 +4,7 @@ use std::{
     fs::File,
     io::{BufRead, BufReader},
 };
-extern crate uinput;
+// extern crate uinput;
 use byteorder::{NativeEndian, ReadBytesExt};
 use std::fs::OpenOptions;
 use std::io::Write;

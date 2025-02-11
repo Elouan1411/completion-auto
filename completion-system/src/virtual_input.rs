@@ -6,10 +6,13 @@ pub fn create_keycode_uinput(is_qwerty: bool) -> HashMap<char, keyboard::Key> {
     // Création de la correspondance entre les caractères et les touches
     let mut keycode_uinput: HashMap<char, keyboard::Key> = [
         ('a', keyboard::Key::A),
+        ('à', keyboard::Key::A),
         ('b', keyboard::Key::B),
         ('c', keyboard::Key::C),
         ('d', keyboard::Key::D),
         ('e', keyboard::Key::E),
+        ('é', keyboard::Key::E),
+        ('è', keyboard::Key::E),
         ('f', keyboard::Key::F),
         ('g', keyboard::Key::G),
         ('h', keyboard::Key::H),
@@ -26,6 +29,7 @@ pub fn create_keycode_uinput(is_qwerty: bool) -> HashMap<char, keyboard::Key> {
         ('s', keyboard::Key::S),
         ('t', keyboard::Key::T),
         ('u', keyboard::Key::U),
+        ('ù', keyboard::Key::U),
         ('v', keyboard::Key::V),
         ('w', keyboard::Key::W),
         ('x', keyboard::Key::X),
@@ -41,7 +45,9 @@ pub fn create_keycode_uinput(is_qwerty: bool) -> HashMap<char, keyboard::Key> {
         ('7', keyboard::Key::_7),
         ('8', keyboard::Key::_8),
         ('9', keyboard::Key::_9),
+        (',', keyboard::Key::SemiColon),
         (' ', keyboard::Key::Space),
+        ('\'', keyboard::Key::Apostrophe),
         ('\n', keyboard::Key::Enter),
         ('\x08', keyboard::Key::BackSpace),
     ]
@@ -59,6 +65,11 @@ pub fn create_keycode_uinput(is_qwerty: bool) -> HashMap<char, keyboard::Key> {
             ('w', keyboard::Key::Z),
             ('m', keyboard::Key::SemiColon),
             (',', keyboard::Key::M),
+            ('é', keyboard::Key::_2),
+            ('è', keyboard::Key::_7),
+            ('à', keyboard::Key::_0),
+            ('ù', keyboard::Key::Apostrophe),
+            ('\'', keyboard::Key::_4),
         ];
 
         for (char, key) in azerty_overrides {
@@ -107,5 +118,15 @@ pub fn write_word(
 ) {
     for c in word.chars() {
         press_virtual_key(c.to_ascii_lowercase(), device, keycode_uinput);
+    }
+}
+
+pub fn delete_word(
+    word: String,
+    device: &mut Device,
+    keycode_uinput: &HashMap<char, keyboard::Key>,
+) {
+    for _k in 0..word.chars().count() {
+        press_virtual_key('\x08', device, keycode_uinput);
     }
 }

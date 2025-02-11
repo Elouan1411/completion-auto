@@ -16,12 +16,9 @@ fn main() {
     let mut is_qwerty: bool = true;
     let keycode_map: HashMap<u16, String> = keylogger::init_keylogger(&mut is_qwerty);
 
-    let keycode_uinput: HashMap<char, keyboard::Key> =
-        virtual_input::create_keycode_uinput(is_qwerty);
+    let keycode_uinput: HashMap<char, Vec<keyboard::Key>> = virtual_input::create_keycode_uinput();
 
-    virtual_input::write_word("coucou Noopyé".to_string(), &mut device, &keycode_uinput);
-    virtual_input::delete_word("Noopyé".to_string(), &mut device, &keycode_uinput);
-    virtual_input::write_word("mon coeur".to_string(), &mut device, &keycode_uinput);
+    virtual_input::write_word("é".to_string(), &mut device, &keycode_uinput);
 
     // println!("\nLancement de la détection des touches !");
 

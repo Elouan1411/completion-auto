@@ -7,6 +7,6 @@ edition = "2021"
 
 [dependencies]
 byteorder = "1.4.3"
-uinput = "0.1"
+uinput = "0.1.3"
 udev = "0.7"
 nix = "0.27"
