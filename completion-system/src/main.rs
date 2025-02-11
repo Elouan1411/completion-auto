@@ -6,9 +6,11 @@ use uinput::event::keyboard;
 use uinput::Device;
 
 mod keylogger;
+mod mouselogger;
 mod virtual_input;
 
 fn main() {
+    mouselogger::test();
     // init uinput
     let mut device: Device = virtual_input::init_virtual_key();
 
@@ -39,11 +41,11 @@ fn main() {
             let mut word: String = String::new();
             loop {
                 if let Some(mut letter) = keylogger::get_pressed_key(&path, &keycode_map) {
-                    letter = letter.to_lowercase(); // Convertir la lettre en minuscule
+                    letter = letter.to_lowercase(); // TODO: gestion des majuscules ? faire avec verrmaj plutot que combinaison de touche, plus facile a mettre en place
 
                     // Vérifier si la lettre contient un seul caractère et si ce caractère est alphabétique
                     if letter.chars().count() == 1 {
-                        // Vérifier explicitement si le premier caractère est une lettre
+                        // TODO: gérer le backspace (si letter.chars == backspace alors word = word[-1])
                         if let Some(first_char) = letter.chars().next() {
                             if first_char.is_alphabetic() || "éèàùç'ù".contains(first_char) {
                                 word.push_str(&letter); // Ajouter la lettre au mot
@@ -51,9 +53,8 @@ fn main() {
                                 word.clear(); // Si ce n'est pas une lettre, on vide le mot
                             }
                         }
-                        // TODO: détecter les clics de la souris pour clear aussi
                     } else {
-                        word.clear(); // Si la lettre n'est pas une seule lettre, on vide le mot
+                        word.clear(); // Si la lettre n'est pas une lettre, on vide le mot
                     }
 
                     println!("{}", word); // Affiche le mot formé
