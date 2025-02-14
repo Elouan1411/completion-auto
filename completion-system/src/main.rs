@@ -1,7 +1,9 @@
 use std::collections::HashMap;
-
 use std::path::Path;
 use std::thread;
+use std::time::Duration;
+
+use std::sync::{mpsc, Arc, Mutex};
 use uinput::event::keyboard;
 use uinput::Device;
 
@@ -11,6 +13,7 @@ mod virtual_input;
 
 fn main() {
     mouselogger::test();
+
     // init uinput
     let mut device: Device = virtual_input::init_virtual_key();
 
@@ -27,40 +30,76 @@ fn main() {
 
     // println!("\nLancement de la détection des touches !");
 
-    // Récupération des chemins des périphériques d'entrée
-    let event_paths: Vec<String> = keylogger::list_keyboards();
+    // Récupération des chemins des périphériques d'entrée (claviers)
+    let keyboard_paths: Vec<String> = keylogger::list_keyboards();
+    // Récupération des chemins des périphériques d'entrée (souris)
+    let mouse_paths: Vec<String> = mouselogger::list_mice_and_touchpads();
+
+    let (tx, rx) = mpsc::channel(); // Canal de communication entre les threads
+    let rx = Arc::new(Mutex::new(rx)); // Permet de partager `Receiver` entre plusieurs threads
 
     let mut handles = vec![];
 
-    // Pour chaque chemin dans event_paths, lancer un thread=
-    for path_str in event_paths {
-        let path = Path::new(&path_str).to_path_buf(); // Crée une copie du chemin pour chaque thread
+    // Pour chaque chemin dans `keyboard_paths`, lancer un thread
+    for path_str in keyboard_paths {
         let keycode_map = keycode_map.clone(); // Clone le keycode_map pour chaque thread
+        let path = Path::new(&path_str).to_path_buf(); // Crée une copie du chemin pour chaque thread
+        let rx = Arc::clone(&rx); // Clone l'Arc pour partager `rx`
 
         let handle = thread::spawn(move || {
             let mut word: String = String::new();
             loop {
                 if let Some(mut letter) = keylogger::get_pressed_key(&path, &keycode_map) {
-                    letter = letter.to_lowercase(); // TODO: gestion des majuscules ? faire avec verrmaj plutot que combinaison de touche, plus facile a mettre en place
+                    letter = letter.to_lowercase(); // TODO: gestion des majuscules ? faire avec verr maj plutôt que combinaison de touches, plus facile à mettre en place
 
+                    // Vérifier si un clic souris est arrivé AVANT d'ajouter la lettre
+                    if let Ok(rx) = rx.lock() {
+                        if rx.try_recv().is_ok() {
+                            word.clear();
+                            println!("🧹 Mot effacé à cause d'un clic !");
+                        }
+                    }
                     // Vérifier si la lettre contient un seul caractère et si ce caractère est alphabétique
                     if letter.chars().count() == 1 {
                         // TODO: gérer le backspace (si letter.chars == backspace alors word = word[-1])
                         if let Some(first_char) = letter.chars().next() {
-                            if first_char.is_alphabetic() || "éèàùç'ù".contains(first_char) {
-                                word.push_str(&letter); // Ajouter la lettre au mot
+                            if first_char.is_alphabetic() || "éèàùç'".contains(first_char) {
+                                word.push_str(&letter);
                             } else {
-                                word.clear(); // Si ce n'est pas une lettre, on vide le mot
+                                // Si ce n'est pas une lettre, on vide le mot
+                                word.clear();
                             }
                         }
                     } else {
-                        word.clear(); // Si la lettre n'est pas une lettre, on vide le mot
+                        word.clear();
                     }
 
-                    println!("{}", word); // Affiche le mot formé
+                    println!("⌨️ Clavier : {}", word);
                 }
-                // Pour éviter une surcharge inutile du CPU
-                thread::sleep(std::time::Duration::from_millis(10));
+
+                thread::sleep(Duration::from_millis(10));
+            }
+        });
+
+        handles.push(handle);
+    }
+
+    // Ajout de la gestion des souris
+
+    // Pour chaque chemin dans `mouse_paths`, lancer un thread
+    for path_str in mouse_paths {
+        let path = Path::new(&path_str).to_path_buf(); // Crée une copie du chemin pour chaque thread
+        let tx = tx.clone(); // Clone le sender pour l'envoyer à chaque thread
+
+        let handle = thread::spawn(move || {
+            loop {
+                if let Some(button) = mouselogger::get_mouse_click(&path) {
+                    if button == 1 {
+                        println!("🖱️ Souris : Clic gauche détecté !");
+                        let _ = tx.send(()); // Envoie un signal au clavier pour effacer `word`
+                    }
+                }
+                thread::sleep(Duration::from_millis(10));
             }
         });
 
