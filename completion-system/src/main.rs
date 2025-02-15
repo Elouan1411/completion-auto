@@ -48,30 +48,50 @@ fn main() {
 
         let handle = thread::spawn(move || {
             let mut word: String = String::new();
+            let mut offset: usize = 0;
             loop {
                 if let Some(mut letter) = keylogger::get_pressed_key(&path, &keycode_map) {
-                    letter = letter.to_lowercase(); // TODO: gestion des majuscules ? faire avec verr maj plutôt que combinaison de touches, plus facile à mettre en place
+                    letter = letter.to_lowercase();
 
-                    // Vérifier si un clic souris est arrivé AVANT d'ajouter la lettre
                     if let Ok(rx) = rx.lock() {
                         if rx.try_recv().is_ok() {
                             word.clear();
+                            offset = 0;
                             println!("🧹 Mot effacé à cause d'un clic !");
+
+                            // 🔥 Purger tous les événements restants dans la queue
+                            while rx.try_recv().is_ok() {}
                         }
                     }
+
+                    // Gestion du mot
+                    if letter == "backspace" {
+                        if offset >= 1 {
+                            word.remove(offset - 1);
+                            offset -= 1;
+                        }
+                    } else if letter == "left" {
+                        if offset >= 1 {
+                            offset -= 1;
+                        }
+                    } else if letter == "right" {
+                        offset += 1;
+                    }
                     // Vérifier si la lettre contient un seul caractère et si ce caractère est alphabétique
-                    if letter.chars().count() == 1 {
-                        // TODO: gérer le backspace (si letter.chars == backspace alors word = word[-1])
+                    else if letter.chars().count() == 1 {
                         if let Some(first_char) = letter.chars().next() {
                             if first_char.is_alphabetic() || "éèàùç'".contains(first_char) {
-                                word.push_str(&letter);
+                                word.insert(offset, first_char);
+                                offset += 1;
                             } else {
                                 // Si ce n'est pas une lettre, on vide le mot
                                 word.clear();
+                                offset = 0;
                             }
                         }
                     } else {
                         word.clear();
+                        offset = 0;
                     }
 
                     println!("⌨️ Clavier : {}", word);
