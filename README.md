@@ -41,19 +41,12 @@ This project uses Rust as the programming language.
 
 ### Build and Run
 
-Navigate to the repository root and execute:
+Execute:
 
 ```bash
-cargo build
-cargo run
-```
-
-### Testing
-
-Run the tests using:
-
-```bash
-cargo test
+cd completion-system
+cargo build --release
+sudo ./target/release/completion-system
 ```
 
 ## Authors
