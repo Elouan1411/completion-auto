@@ -12,11 +12,6 @@ mod mouselogger;
 mod virtual_input;
 
 fn main() {
-<<<<<<< HEAD
-=======
-    mouselogger::test();
-
->>>>>>> f0f6e19d2469ca8129ceced3c085bb196125d6d2
     // init uinput
     let mut device: Device = virtual_input::init_virtual_key();
 
@@ -62,11 +57,7 @@ fn main() {
                             offset = 0;
                             println!("🧹 Mot effacé à cause d'un clic !");
 
-<<<<<<< HEAD
                             // Purger tous les événements restants dans la queue
-=======
-                            // 🔥 Purger tous les événements restants dans la queue
->>>>>>> f0f6e19d2469ca8129ceced3c085bb196125d6d2
                             while rx.try_recv().is_ok() {}
                         }
                     }
@@ -82,16 +73,12 @@ fn main() {
                             offset -= 1;
                         }
                     } else if letter == "right" {
-<<<<<<< HEAD
                         if offset < word.len() {
                             offset += 1;
                         } else {
                             word.clear();
                             offset = 0;
                         }
-=======
-                        offset += 1;
->>>>>>> f0f6e19d2469ca8129ceced3c085bb196125d6d2
                     }
                     // Vérifier si la lettre contient un seul caractère et si ce caractère est alphabétique
                     else if letter.chars().count() == 1 {

@@ -82,18 +82,3 @@ pub fn list_mice_and_touchpads() -> Vec<String> {
 
     devices
 }
-<<<<<<< HEAD
-=======
-
-pub fn test() {
-    let mice = list_mice_and_touchpads();
-    if mice.is_empty() {
-        println!("🖱️ Aucune souris détectée !");
-    } else {
-        println!("🖱️ Souris détectées :");
-        for mouse in mice {
-            println!("- {}", mouse);
-        }
-    }
-}
->>>>>>> f0f6e19d2469ca8129ceced3c085bb196125d6d2
