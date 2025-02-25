@@ -22,12 +22,6 @@ fn main() {
     let keycode_uinput: HashMap<char, keyboard::Key> =
         virtual_input::create_keycode_uinput(is_qwerty);
 
-    virtual_input::write_word("coucou Noopyé".to_string(), &mut device, &keycode_uinput);
-    virtual_input::delete_word("Noopyé".to_string(), &mut device, &keycode_uinput);
-    virtual_input::write_word("mon coeur".to_string(), &mut device, &keycode_uinput);
-
-    // println!("\nLancement de la détection des touches !");
-
     // Récupération des chemins des périphériques d'entrée (claviers)
     let keyboard_paths: Vec<String> = keylogger::list_keyboards();
     // Récupération des chemins des périphériques d'entrée (souris)
@@ -69,7 +63,9 @@ fn main() {
                             offset -= 1;
                         }
                     } else if letter == "left" {
-                        if offset >= 1 {
+                        if offset == 0 {
+                            word.clear();
+                        } else {
                             offset -= 1;
                         }
                     } else if letter == "right" {
