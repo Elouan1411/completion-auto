@@ -1,22 +1,26 @@
-use std::fs::{remove_file, File};
+use crate::virtual_input;
+use std::collections::HashMap;
+use std::fs::{remove_dir_all, set_permissions, File};
 use std::io::{BufRead, BufReader, Write};
+use std::os::unix::fs::PermissionsExt;
+use std::process::exit;
 use std::process::{Command, Stdio};
+use std::sync::atomic::Ordering;
 use std::sync::{Arc, Mutex};
 use std::thread;
-
-use std::collections::HashMap;
-
+use tempfile::TempDir;
 use uinput::event::keyboard;
 use uinput::Device;
 
-use crate::virtual_input;
+use crate::RUNNING;
 
-const PYTHON_SCRIPT: &[u8] = include_bytes!("gui.py"); // Script Python embarqué
+const PYTHON_SCRIPT: &[u8] = include_bytes!("gui.py");
 
 #[derive(Clone)]
 pub struct PythonGUI {
-    child: Arc<Mutex<std::process::Child>>,
-    stdin: Arc<Mutex<std::process::ChildStdin>>,
+    _child: Arc<Mutex<Option<std::process::Child>>>,
+    stdin: Arc<Mutex<Option<std::process::ChildStdin>>>,
+    _temp_dir: Arc<TempDir>,
 }
 
 impl PythonGUI {
@@ -24,47 +28,69 @@ impl PythonGUI {
         device: Arc<Mutex<Device>>,
         keycode_uinput: Arc<Mutex<HashMap<char, keyboard::Key>>>,
     ) -> Self {
-        let temp_path = std::env::current_dir()
-            .unwrap()
-            .join("interface_embedded.py");
+        let temp_dir = Arc::new(
+            tempfile::Builder::new()
+                .prefix("completion_system_temp_")
+                .tempdir()
+                .expect("Impossible de créer un dossier temporaire"),
+        );
 
-        let mut temp_file =
-            File::create(&temp_path).expect("Impossible de créer le fichier temporaire");
-        std::io::Write::write_all(&mut temp_file, PYTHON_SCRIPT)
-            .expect("Impossible d'écrire le script");
+        let temp_path = temp_dir.path();
+        set_permissions(temp_path, std::fs::Permissions::from_mode(0o755))
+            .expect("Impossible de définir les permissions");
+
+        let script_path = temp_path.join("gui.py");
+        let mut script_file = File::create(&script_path).expect("Impossible de créer le fichier");
+        script_file
+            .write_all(PYTHON_SCRIPT)
+            .expect("Erreur d'écriture");
 
         let mut child = Command::new("python3")
-            .arg(&temp_path)
+            .arg(&script_path)
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .spawn()
             .expect("Échec du lancement de Python");
 
-        let stdin = child.stdin.take().expect("Erreur accès stdin");
-        let stdout = child.stdout.take().expect("Erreur accès stdout");
-        let reader = BufReader::new(stdout);
+        let stdin = child.stdin.take();
+        let stdout = child.stdout.take();
+        let reader = BufReader::new(stdout.expect("Erreur accès stdout"));
 
-        let child_arc = Arc::new(Mutex::new(child));
+        let child_arc = Arc::new(Mutex::new(Some(child)));
         let stdin_arc = Arc::new(Mutex::new(stdin));
-
         let device_clone = Arc::clone(&device);
         let keycode_clone = Arc::clone(&keycode_uinput);
+        let temp_dir_clone = Arc::clone(&temp_dir);
+        let child_clone = Arc::clone(&child_arc);
+        let stdin_clone = Arc::clone(&stdin_arc);
 
-        // ✅ Démarrer le thread après avoir créé l'instance
         thread::spawn(move || {
             for line in reader.lines() {
+                if !RUNNING.load(Ordering::Relaxed) {
+                    break;
+                }
                 match line {
                     Ok(msg) => {
                         if msg == "EXIT" {
-                            println!("Python a demandé l'arrêt. Fermeture...");
-                            let temp_path = std::env::current_dir()
-                                .unwrap()
-                                .join("interface_embedded.py");
-                            println!("Suppression du fichier temporaire...");
-                            let _ = remove_file(temp_path);
-                            std::process::exit(0);
+                            // 🔹 Ferme `stdin` avant de tuer Python
+                            if let Ok(mut stdin_lock) = stdin_clone.lock() {
+                                *stdin_lock = None;
+                            }
+
+                            // 🔹 Tue le processus Python
+                            if let Ok(mut child_lock) = child_clone.lock() {
+                                if let Some(child) = child_lock.as_mut() {
+                                    let _ = child.kill();
+                                }
+                                *child_lock = None;
+                            }
+
+                            let _ = remove_dir_all(temp_dir_clone.clone().path());
+
+                            RUNNING.store(false, Ordering::Relaxed);
+                            exit(0); //Temporaire
+                                     // break;
                         }
-                        println!("Python a envoyé: {}", msg);
 
                         let mut device = device_clone.lock().unwrap();
                         let keycode_map = keycode_clone.lock().unwrap();
@@ -74,27 +100,22 @@ impl PythonGUI {
                 }
             }
         });
+
         Self {
-            child: child_arc,
+            _child: child_arc,
             stdin: stdin_arc,
+            _temp_dir: temp_dir,
         }
     }
 
     /// Envoie trois mots à l'interface Python
     pub fn send_words(&self, words: [&str; 3]) {
-        let mut stdin = self.stdin.lock().unwrap();
-        writeln!(stdin, "{} {} {}", "Bonjour", words[1], words[2]).expect("Erreur écriture stdin");
-    }
-}
-
-// Nettoyage automatique à la fermeture
-impl Drop for PythonGUI {
-    fn drop(&mut self) {
-        let _ = self.child.lock().unwrap().kill();
-        let temp_path = std::env::current_dir()
-            .unwrap()
-            .join("interface_embedded.py");
-        println!("Suppression du fichier temporaire...");
-        let _ = remove_file(temp_path);
+        if let Ok(mut stdin_lock) = self.stdin.lock() {
+            if let Some(ref mut stdin) = *stdin_lock {
+                if writeln!(stdin, "{} {} {}", words[0], words[1], words[2]).is_err() {
+                    eprintln!("Erreur écriture stdin: Broken Pipe (Python fermé ?)");
+                }
+            }
+        }
     }
 }

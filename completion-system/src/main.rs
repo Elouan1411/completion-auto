@@ -16,6 +16,9 @@ mod mouselogger;
 mod offset;
 mod virtual_input;
 
+use std::sync::atomic::{AtomicBool, Ordering};
+pub static RUNNING: AtomicBool = AtomicBool::new(true);
+
 fn main() {
     // init uinput
     let device: Device = virtual_input::init_virtual_key();
@@ -51,7 +54,7 @@ fn main() {
 
         let handle = thread::spawn(move || {
             let mut word: String = String::new();
-            loop {
+            while RUNNING.load(Ordering::Relaxed) {
                 if let Some(mut letter) = keylogger::get_pressed_key(&path, &keycode_map) {
                     letter = letter.to_lowercase();
 
@@ -73,6 +76,7 @@ fn main() {
 
                 thread::sleep(Duration::from_millis(10));
             }
+            println!("keyboard fermé");
         });
 
         handles.push(handle);
@@ -85,17 +89,12 @@ fn main() {
         let tx = tx.clone();
 
         let handle = thread::spawn(move || {
-            loop {
+            while RUNNING.load(Ordering::Relaxed) {
                 if let Some(button) = mouselogger::get_mouse_click(&path) {
                     if button == 1 {
                         println!("🖱️ Souris : Clic gauche détecté !");
                         let _ = tx.send(()); // Envoie un signal au clavier pour effacer `word`
-                                             // if let Ok(mut device) = device_clone.lock() {
-                                             //     virtual_input::wake_up_keyboard(&mut *device);
-                                             //     println!("okkkk");
-                                             // } else {
-                                             //     println!("aaa");
-                                             // }
+                                             // if let Ok(mut device) = device_clone.lock() { // TODO:supprimer de l'afffichage les mots de l'interface graphique une fois le clique dessus (pas forcement a traiter ici) plutot dans le programme python
                     }
                 }
                 thread::sleep(Duration::from_millis(10));
@@ -108,4 +107,5 @@ fn main() {
     for handle in handles {
         handle.join().expect("Le thread a rencontré une erreur.");
     }
+    println!("✅ Programme terminé proprement !");
 }

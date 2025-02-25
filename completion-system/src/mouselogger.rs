@@ -5,6 +5,8 @@ use std::io::Read;
 use std::path::Path;
 use udev::Enumerator;
 
+use crate::RUNNING;
+
 pub fn get_mouse_click(path: &Path) -> Option<u8> {
     let mut file_options = OpenOptions::new();
     file_options.read(true).write(false).create(false);
@@ -19,6 +21,9 @@ pub fn get_mouse_click(path: &Path) -> Option<u8> {
 
     let mut packet = [0u8; 24];
     loop {
+        if !RUNNING.load(std::sync::atomic::Ordering::Relaxed) {
+            return None;
+        }
         if let Err(err) = event_file.read_exact(&mut packet) {
             eprintln!(
                 "Erreur lors de la lecture des données dans {:?} : {}",

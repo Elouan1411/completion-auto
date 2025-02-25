@@ -159,12 +159,4 @@ pub fn delete_and_write(
     change_window(device);
     delete_word(offset::get(), device, keycode_uinput);
     write_word(word_correction, device, keycode_uinput);
-    wake_up_keyboard(device);
-}
-
-pub fn wake_up_keyboard(device: &mut Device) {
-    println!("activation wakeup");
-    device.press(&keyboard::Key::A).unwrap();
-    thread::sleep(Duration::from_millis(50));
-    device.release(&keyboard::Key::A).unwrap();
 }

@@ -8,6 +8,7 @@ def listen_rust():
         line = sys.stdin.readline().strip()
         if not line:
             continue
+              
 
         words = line.split()
         update_buttons(words)
@@ -30,6 +31,7 @@ def on_close():
     """Quand la fenêtre est fermée, on envoie 'EXIT' à Rust."""
     print("EXIT", flush=True)  # Informe Rust d'arrêter
     root.destroy()  # Ferme la fenêtre GUI
+    sys.exit(0)  # Quitte immédiatement le script Python
 
 # Création de l'interface Tkinter
 root = tk.Tk()
@@ -48,3 +50,5 @@ threading.Thread(target=listen_rust, daemon=True).start()
 
 # Lancer l'interface graphique
 root.mainloop()
+
+
