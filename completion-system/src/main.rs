@@ -7,13 +7,18 @@ use std::sync::{mpsc, Arc, Mutex};
 use uinput::event::keyboard;
 use uinput::Device;
 
+mod python_gui;
+
+use python_gui::PythonGUI;
+
 mod keylogger;
 mod mouselogger;
+mod offset;
 mod virtual_input;
 
 fn main() {
     // init uinput
-    let mut device: Device = virtual_input::init_virtual_key();
+    let device: Device = virtual_input::init_virtual_key();
 
     // init keylogger
     let mut is_qwerty: bool = true;
@@ -21,6 +26,11 @@ fn main() {
 
     let keycode_uinput: HashMap<char, keyboard::Key> =
         virtual_input::create_keycode_uinput(is_qwerty);
+
+    // init gui
+    let device = Arc::new(Mutex::new(device));
+    let keycode_uinput = Arc::new(Mutex::new(keycode_uinput));
+    let gui = PythonGUI::new(Arc::clone(&device), Arc::clone(&keycode_uinput));
 
     // Récupération des chemins des périphériques d'entrée (claviers)
     let keyboard_paths: Vec<String> = keylogger::list_keyboards();
@@ -34,13 +44,13 @@ fn main() {
 
     // Pour chaque chemin dans `keyboard_paths`, lancer un thread
     for path_str in keyboard_paths {
-        let keycode_map = keycode_map.clone(); // Clone le keycode_map pour chaque thread
-        let path = Path::new(&path_str).to_path_buf(); // Crée une copie du chemin pour chaque thread
-        let rx = Arc::clone(&rx); // Clone l'Arc pour partager `rx`
+        let keycode_map = keycode_map.clone();
+        let path = Path::new(&path_str).to_path_buf();
+        let rx = Arc::clone(&rx);
+        let gui_clone = gui.clone();
 
         let handle = thread::spawn(move || {
             let mut word: String = String::new();
-            let mut offset: usize = 0;
             loop {
                 if let Some(mut letter) = keylogger::get_pressed_key(&path, &keycode_map) {
                     letter = letter.to_lowercase();
@@ -48,52 +58,17 @@ fn main() {
                     if let Ok(rx) = rx.lock() {
                         if rx.try_recv().is_ok() {
                             word.clear();
-                            offset = 0;
+                            offset::reset();
                             println!("🧹 Mot effacé à cause d'un clic !");
 
-                            // Purger tous les événements restants dans la queue
+                            // Enlever tout les cliques qui sont dans la queue
                             while rx.try_recv().is_ok() {}
                         }
                     }
 
-                    // Gestion du mot
-                    if letter == "backspace" {
-                        if offset >= 1 {
-                            word.remove(offset - 1);
-                            offset -= 1;
-                        }
-                    } else if letter == "left" {
-                        if offset == 0 {
-                            word.clear();
-                        } else {
-                            offset -= 1;
-                        }
-                    } else if letter == "right" {
-                        if offset < word.len() {
-                            offset += 1;
-                        } else {
-                            word.clear();
-                            offset = 0;
-                        }
-                    }
-                    // Vérifier si la lettre contient un seul caractère et si ce caractère est alphabétique
-                    else if letter.chars().count() == 1 {
-                        if let Some(first_char) = letter.chars().next() {
-                            if first_char.is_alphabetic() || "éèàùç'".contains(first_char) {
-                                word.insert(offset, first_char);
-                                offset += 1;
-                            } else {
-                                // Si ce n'est pas une lettre, on vide le mot
-                                word.clear();
-                                offset = 0;
-                            }
-                        }
-                    } else {
-                        word.clear();
-                        offset = 0;
-                    }
-
+                    offset::manage_word(&mut letter, &mut word);
                     println!("⌨️ Clavier : {}", word);
+                    gui_clone.send_words([word.as_str(), word.as_str(), word.as_str()]);
                 }
 
                 thread::sleep(Duration::from_millis(10));
@@ -102,13 +77,12 @@ fn main() {
 
         handles.push(handle);
     }
-
-    // Ajout de la gestion des souris
+    // Ggestion des souris
 
     // Pour chaque chemin dans `mouse_paths`, lancer un thread
     for path_str in mouse_paths {
-        let path = Path::new(&path_str).to_path_buf(); // Crée une copie du chemin pour chaque thread
-        let tx = tx.clone(); // Clone le sender pour l'envoyer à chaque thread
+        let path = Path::new(&path_str).to_path_buf();
+        let tx = tx.clone();
 
         let handle = thread::spawn(move || {
             loop {
@@ -116,12 +90,17 @@ fn main() {
                     if button == 1 {
                         println!("🖱️ Souris : Clic gauche détecté !");
                         let _ = tx.send(()); // Envoie un signal au clavier pour effacer `word`
+                                             // if let Ok(mut device) = device_clone.lock() {
+                                             //     virtual_input::wake_up_keyboard(&mut *device);
+                                             //     println!("okkkk");
+                                             // } else {
+                                             //     println!("aaa");
+                                             // }
                     }
                 }
                 thread::sleep(Duration::from_millis(10));
             }
         });
-
         handles.push(handle);
     }
 
