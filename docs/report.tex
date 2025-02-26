@@ -3,6 +3,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english,french]{babel} 
 \usepackage{graphicx} % Pour les images
+\def\@captype{figure}
+\usepackage{float}
 \usepackage{multicol} % Pour faire des multi colonnes
 \usepackage[export]{adjustbox} % Pour la clé 'valign'  (aligner verticalement)
 \usepackage[colorlinks=true,linkcolor=black]{hyperref} % Pour qu'il y est des liens sur la table des matières
@@ -11,10 +13,37 @@
 \usepackage{ragged2e} % Pour justifier le texte
 \usepackage{ulem}
 \usepackage[margin=3.2cm]{geometry}
-
+\usepackage{forest}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage[section]{placeins}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fancybox}
+\usepackage{fancyhdr}
 
+% Configuration de fancyhdr
+\pagestyle{fancy}
+\fancyhf{} % Efface tous les en-têtes et pieds de page précédents
+\fancyhead[C]{Rapport de Stage} % Texte centré en haut de la page
+\fancyfoot[L]{2024} % Texte en bas à gauche du pied de page
+\fancyfoot[C]{Samia BENALI} % Texte au centre du pied de page
+\fancyfoot[R]{\thepage} % Numéro de page en bas à droite du pied de page
+
+\renewcommand{\headrulewidth}{0.4pt} % Épaisseur de la ligne de séparation de l'en-tête
+\renewcommand{\footrulewidth}{0.4pt} % Épaisseur de la ligne de séparation du pied depage
+\setlength{\headheight}{13.59999pt}
+% Appliquer le style d'en-tête fancy aux pages de début de chapitre
+
+\fancypagestyle{plain}{
+  \fancyhf{} % Effacer tous
+  \fancyhead[C]{Rapport de Stage} % Texte centré en haut de la page
+  \fancyfoot[L]{L1 Informatique} % Texte en bas à gauche du pied de page
+  \fancyfoot[C]{Samia BENALI} % Texte au centre du pied de page
+  \fancyfoot[R]{\thepage} % Numéro de page en bas à droite du pied de page
+  \renewcommand{\headrulewidth}{0.4pt} % Épaisseur de la ligne de séparation de l'en-tête
+  \renewcommand{\footrulewidth}{0.4pt} % Épaisseur de la ligne de séparation du pied de page
+}
 
 
 
@@ -54,29 +83,32 @@
 \chapter*{Introduction} % * pour ne pas avoir de numéro de chapitre
 \addcontentsline{toc}{chapter}{Introduction}
 
-Défis dans la complétion semi-automatique : 
-\begin{itemize}
-    \item Assurer des suggestions précises et en adéquation avec l'intention e l'utilisateur
-    \item Trouver le juste milieu entre précision et rapidité
-    \item Gestion des langues et des styles
-\end{itemize}
+Dans le cadre de notre projet de Recherche du CMI informatique de l’Université de Franche-Comté, encadré par Monsieur Héam, nous avons travaillé sur la complétion (semi-)automatique. \\
 
+Ce projet nous a permis de découvrir ce qu'était la complétion automatique et la complétion semi-automatique et de comprendre sur quoi ce repose ces deux notions. \\ 
+La complétion automatique est un processus par lequel un système va prédire et compléter une entrée en fonction de certaines données et contextes. Cependant, la complétion semi-automatique, est une assistance permettant au système de proposer des options tout en laissant à l'utilisateur la décision finale. \\
+La complétion (semi-)automatique peut etre utilisée dans de nombreuses applications : une saisie sur clavier, une complétion de code, une recherche sur un moteur de recherche, une assistance virtuelle etc\dots \\
+Ce rapport va nous permettre, dans un premier temps, d’étudier les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique. \\
+\vfill
 
-\chapter{Les différentes approches utilisées jusqu'à aujourd'hui}
+\chapter{Les différentes approches utilisées}
+
 \section{Modèles basés sur des règles}
-Pour proposer des suggestions, ce modèle utilisent des algorithmes simples basé sur la correspondance de préfixes ou l'application de règles syntaxiques présices permettant de générer des complétions basées sur des motifs connus.
+Pour proposer des suggestions, ce modèle utilisent des algorithmes simples basés sur des règles préprogrammés comme la correspondance de préfixes ou une séquence que nous allons donnée en amont par exemple. Ces algorithmes vont être gérer principalement grâce à des disctionnaires statiques ou des listes.  Cette implémentation est plutôt rapide et simple à mettre en place, elle est cependant très peu flexible et empêche donc une utilisation complexe\dots
 
-\section{Modèles statistiques}
-a reformuler
-Les modèles statistiques exploitent les données historiques pour estimer les complétions probables. Les N-grammes ou les chaînes de Markov sont couramment utilisés pour capturer les dépendances locales dans les séquences.
+\section{Modèles basés sur des statistiques}
+Pour proposer des suggestions, ce modèle utilisent des statistiques fournies grâce aux données historiques. Cela permettra de prédire des séquences comme avec le modèle de Markov ou la méthode TD-IDF.
+Cette implémentation permet d'obtenir des résultat rapidement, on a cependant aucune compréhension sémentique donc les suggestions ne conviendront que rarement au contexte\dots
 
-\section{Modèles d’apprentissage automatique}
-a reformuler
+\section{Modèles basés sur l'intelligence artificielle}
+Pour proposer des suggestions, ce modèle utilisent des algorithmes basés sur l'intelligence artificielle et les réseaux neuronaux. 
 Avec l’apprentissage supervisé et non supervisé, ces modèles apprennent des motifs complexes à partir des données. Ils peuvent inclure des algorithmes comme les forêts aléatoires ou les régressions pour fournir des prédictions plus contextuelles.
+Cette implémentation permet d'être efficace face à des problèmes très complexes et de répondre à des demandes rares. Cependant, ce genre d'implémentation nécéssite énormément de temps de calculs et de ressources\dots
 
-\section{Modèles de deep learning}
-a reformuler
-Les réseaux de neurones avancés, tels que les RNN (et leurs variantes LSTM et GRU), ainsi que les modèles Transformers comme GPT, offrent une capacité à comprendre le contexte global et à générer des complétions précises.
+
+\section{Modèles basés sur le deep learning}
+Pour proposer des suggestions, ce modèle utilisent des algorithmes basés sur l'amélioration en temps réel. C'est à l'utilisiteur de faire des choix et ces mêmes choix sont mémorisés pour une utilisation personnalisée et plus précise. Cette implémentation est donc très adapatable et permet des réponses précises avec un sens sémentique. Cependant, cette implémentation est complexe et très longue à mettre en place puisque les choix de l'utilisateur sont nécessaires et les réponses dépendront totalement des données collectées\dots  
+
 
 
 \chapter{Les algorythmes de calcul de distance}
