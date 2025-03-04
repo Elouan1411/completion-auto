@@ -3,6 +3,7 @@ use std::path::Path;
 use std::thread;
 use std::time::Duration;
 
+use libc::geteuid;
 use std::sync::{mpsc, Arc, Mutex};
 use uinput::event::keyboard;
 use uinput::Device;
@@ -20,6 +21,12 @@ use std::sync::atomic::{AtomicBool, Ordering};
 pub static RUNNING: AtomicBool = AtomicBool::new(true);
 
 fn main() {
+    if unsafe { geteuid() } != 0 {
+        eprintln!("Ce programme nécessite des privilèges administrateur pour fonctionner.");
+        eprintln!("Il doit surveiller le clavier et la souris afin d'offrir l'auto-complétion.");
+        eprintln!("Veuillez le relancer avec 'sudo'.");
+        std::process::exit(1);
+    }
     // init uinput
     let device: Device = virtual_input::init_virtual_key();
 

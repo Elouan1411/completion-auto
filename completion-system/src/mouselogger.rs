@@ -1,4 +1,5 @@
 use byteorder::{NativeEndian, ReadBytesExt};
+use pyo3::exceptions::socket::timeout;
 use std::fs::OpenOptions;
 use std::io::Cursor;
 use std::io::Read;
