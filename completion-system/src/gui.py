@@ -29,7 +29,7 @@ def update_buttons(words):
 
 def on_close():
     """Quand la fenêtre est fermée, on envoie 'EXIT' à Rust."""
-    print("EXIT", flush=True)  # Informe Rust d'arrêter
+    print("E X I T", flush=True)  # Informe Rust d'arrêter
     root.destroy()  # Ferme la fenêtre GUI
     sys.exit(0)  # Quitte immédiatement le script Python
 

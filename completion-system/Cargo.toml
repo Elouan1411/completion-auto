@@ -14,3 +14,5 @@ pyo3 = { version = "0.18", features = ["extension-module"] }
 rand = "0.8"
 tempfile = "3.17.1"
 libc = "0.2.170"
+tokio = { version = "1", features = ["full"] }
+tokio-util = "0.7"

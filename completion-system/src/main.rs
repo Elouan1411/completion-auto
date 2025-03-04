@@ -1,10 +1,11 @@
 use std::collections::HashMap;
 use std::path::Path;
-use std::thread;
-use std::time::Duration;
+// use std::thread;
+// use std::time::Duration;
 
 use libc::geteuid;
 use std::sync::{mpsc, Arc, Mutex};
+use tokio_util::sync::CancellationToken;
 use uinput::event::keyboard;
 use uinput::Device;
 
@@ -17,10 +18,11 @@ mod mouselogger;
 mod offset;
 mod virtual_input;
 
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::AtomicBool;
 pub static RUNNING: AtomicBool = AtomicBool::new(true);
 
-fn main() {
+#[tokio::main]
+async fn main() {
     if unsafe { geteuid() } != 0 {
         eprintln!("Ce programme nécessite des privilèges administrateur pour fonctionner.");
         eprintln!("Il doit surveiller le clavier et la souris afin d'offrir l'auto-complétion.");
@@ -37,10 +39,17 @@ fn main() {
     let keycode_uinput: HashMap<char, keyboard::Key> =
         virtual_input::create_keycode_uinput(is_qwerty);
 
+    // init signal pour arreter le programme
+    let token: Arc<CancellationToken> = Arc::new(CancellationToken::new());
+
     // init gui
     let device = Arc::new(Mutex::new(device));
     let keycode_uinput = Arc::new(Mutex::new(keycode_uinput));
-    let gui = PythonGUI::new(Arc::clone(&device), Arc::clone(&keycode_uinput));
+    let gui = PythonGUI::new(
+        Arc::clone(&device),
+        Arc::clone(&keycode_uinput),
+        token.clone(),
+    );
 
     // Récupération des chemins des périphériques d'entrée (claviers)
     let keyboard_paths: Vec<String> = keylogger::list_keyboards();
@@ -58,32 +67,38 @@ fn main() {
         let path = Path::new(&path_str).to_path_buf();
         let rx = Arc::clone(&rx);
         let gui_clone = gui.clone();
+        let token_clone = token.clone();
+        println!("clavier");
 
-        let handle = thread::spawn(move || {
+        let handle = tokio::spawn(async move {
             let mut word: String = String::new();
-            while RUNNING.load(Ordering::Relaxed) {
-                if let Some(mut letter) = keylogger::get_pressed_key(&path, &keycode_map) {
-                    letter = letter.to_lowercase();
+            tokio::select! {
+                // Cas d'annulation du token
+                _ = token_clone.cancelled() => {}
+                _ = async {
+                    loop {
+                        if let Some(mut letter) = keylogger::get_pressed_key(&path, &keycode_map) {
+                            letter = letter.to_lowercase();
 
-                    if let Ok(rx) = rx.lock() {
-                        if rx.try_recv().is_ok() {
-                            word.clear();
-                            offset::reset();
-                            println!("🧹 Mot effacé à cause d'un clic !");
+                            if let Ok(rx) = rx.lock() {
+                                if rx.try_recv().is_ok() {
+                                    word.clear();
+                                    offset::reset();
+                                    println!("🧹 Mot effacé à cause d'un clic !");
 
-                            // Enlever tout les cliques qui sont dans la queue
-                            while rx.try_recv().is_ok() {}
+                                    // Enlever tout les cliques qui sont dans la queue
+                                    while rx.try_recv().is_ok() {}
+                                }
+                            }
+
+                            offset::manage_word(&mut letter, &mut word);
+                            println!("⌨️ Clavier : {}", word);
+                            gui_clone.send_words([word.as_str(), word.as_str(), word.as_str()]);
                         }
                     }
-
-                    offset::manage_word(&mut letter, &mut word);
-                    println!("⌨️ Clavier : {}", word);
-                    gui_clone.send_words([word.as_str(), word.as_str(), word.as_str()]);
-                }
-
-                thread::sleep(Duration::from_millis(10));
+                } => {}
             }
-            println!("keyboard fermé");
+            println!("fin clavier");
         });
 
         handles.push(handle);
@@ -94,25 +109,45 @@ fn main() {
     for path_str in mouse_paths {
         let path = Path::new(&path_str).to_path_buf();
         let tx = tx.clone();
+        let token_clone = token.clone();
+        println!("souris");
 
-        let handle = thread::spawn(move || {
-            while RUNNING.load(Ordering::Relaxed) {
-                if let Some(button) = mouselogger::get_mouse_click(&path) {
-                    if button == 1 {
-                        println!("🖱️ Souris : Clic gauche détecté !");
-                        let _ = tx.send(()); // Envoie un signal au clavier pour effacer `word`
-                                             // if let Ok(mut device) = device_clone.lock() { // TODO:supprimer de l'afffichage les mots de l'interface graphique une fois le clique dessus (pas forcement a traiter ici) plutot dans le programme python
+        let handle = tokio::spawn(async move {
+            tokio::select! {
+                        // Cas d'annulation du token
+                        _ = token_clone.cancelled() => {println!("annulation")}
+                        _ = async {
+                            loop {
+                        if let Some(button) = mouselogger::get_mouse_click(&path) {
+                            if button == 1 {
+                                println!("🖱️ Souris : Clic gauche détecté !");
+                                let _ = tx.send(()); // Envoie un signal au clavier pour effacer `word`
+                                                     // if let Ok(mut device) = device_clone.lock() { // TODO:supprimer de l'afffexitage les mots de l'interface graphique une fois le clique dessus (pas forcement a traiter ici) plutot dans le programme python
+                            }
+                        }
+                        // thread::sleep(Duration::from_millis(10));
                     }
-                }
-                thread::sleep(Duration::from_millis(10));
+                } => {}
             }
+            println!("fin souris");
         });
         handles.push(handle);
     }
 
+    tokio::spawn(async move {
+        // J'ai testé de le mettre ici mais a terme il sera dans le fichier python_gui.rs
+        tokio::time::sleep(std::time::Duration::from_secs(4)).await;
+        println!("annulation !");
+
+        token.cancel();
+    });
+
     // Attendre la fin de tous les threads avant de quitter
     for handle in handles {
-        handle.join().expect("Le thread a rencontré une erreur.");
+        // Ici, on attend chaque tâche sans unwrap
+        if let Err(e) = handle.await {
+            eprintln!("Erreur dans une tâche: {:?}", e);
+        }
     }
     println!("✅ Programme terminé proprement !");
 }

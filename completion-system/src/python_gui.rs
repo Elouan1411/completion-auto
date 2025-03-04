@@ -3,12 +3,12 @@ use std::collections::HashMap;
 use std::fs::{remove_dir_all, set_permissions, File};
 use std::io::{BufRead, BufReader, Write};
 use std::os::unix::fs::PermissionsExt;
-use std::process::exit;
 use std::process::{Command, Stdio};
 use std::sync::atomic::Ordering;
 use std::sync::{Arc, Mutex};
-use std::thread;
+// use std::thread;
 use tempfile::TempDir;
+use tokio_util::sync::CancellationToken;
 use uinput::event::keyboard;
 use uinput::Device;
 
@@ -27,6 +27,7 @@ impl PythonGUI {
     pub fn new(
         device: Arc<Mutex<Device>>,
         keycode_uinput: Arc<Mutex<HashMap<char, keyboard::Key>>>,
+        token: Arc<CancellationToken>,
     ) -> Self {
         let temp_dir = Arc::new(
             tempfile::Builder::new()
@@ -64,14 +65,11 @@ impl PythonGUI {
         let child_clone = Arc::clone(&child_arc);
         let stdin_clone = Arc::clone(&stdin_arc);
 
-        thread::spawn(move || {
+        tokio::spawn(async move {
             for line in reader.lines() {
-                if !RUNNING.load(Ordering::Relaxed) {
-                    break;
-                }
                 match line {
                     Ok(msg) => {
-                        if msg == "EXIT" {
+                        if msg == "E X I T" {
                             // 🔹 Ferme `stdin` avant de tuer Python
                             if let Ok(mut stdin_lock) = stdin_clone.lock() {
                                 *stdin_lock = None;
@@ -88,13 +86,14 @@ impl PythonGUI {
                             let _ = remove_dir_all(temp_dir_clone.clone().path());
 
                             RUNNING.store(false, Ordering::Relaxed);
-                            exit(0); //Temporaire
-                                     // break;
+                            token.cancel();
+                            // exit(0); //Temporaire
+                            // break;
+                        } else {
+                            let mut device = device_clone.lock().unwrap();
+                            let keycode_map = keycode_clone.lock().unwrap();
+                            virtual_input::delete_and_write(msg, &mut *device, &*keycode_map);
                         }
-
-                        let mut device = device_clone.lock().unwrap();
-                        let keycode_map = keycode_clone.lock().unwrap();
-                        virtual_input::delete_and_write(msg, &mut *device, &*keycode_map);
                     }
                     Err(e) => eprintln!("Erreur lecture stdout: {}", e),
                 }
