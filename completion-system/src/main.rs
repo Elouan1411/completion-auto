@@ -74,10 +74,16 @@ async fn main() {
             let mut word: String = String::new();
             tokio::select! {
                 // Cas d'annulation du token
-                _ = token_clone.cancelled() => {}
+                _ = token_clone.cancelled() => {println!("annulation clavier")}
                 _ = async {
                     loop {
-                        if let Some(mut letter) = keylogger::get_pressed_key(&path, &keycode_map) {
+                        let path_clone = path.clone();
+                        let keycode_map_clone = keycode_map.clone();
+                        let letter = tokio::task::spawn_blocking(move || {
+                            keylogger::get_pressed_key(&path_clone, &keycode_map_clone)
+                        }).await.expect("Erreur lors de l'exécution de get_pressed_key");
+
+                        if let Some(mut letter) = letter {
                             letter = letter.to_lowercase();
 
                             if let Ok(rx) = rx.lock() {
@@ -103,29 +109,39 @@ async fn main() {
 
         handles.push(handle);
     }
-    // Ggestion des souris
-
-    // Pour chaque chemin dans `mouse_paths`, lancer un thread
+    // Gestion des souris
     for path_str in mouse_paths {
         let path = Path::new(&path_str).to_path_buf();
         let tx = tx.clone();
         let token_clone = token.clone();
-        println!("souris");
+        println!("debut souris");
 
         let handle = tokio::spawn(async move {
             tokio::select! {
-                        // Cas d'annulation du token
-                        _ = token_clone.cancelled() => {println!("annulation")}
-                        _ = async {
-                            loop {
-                        if let Some(button) = mouselogger::get_mouse_click(&path) {
+                // Cas d'annulation du token
+                _ = token_clone.cancelled() => {println!("annulation souris")}
+                _ = async {
+                    loop {
+                        println!("boucle souris");
+                        let path_clone = path.clone();
+                        let button = tokio::task::spawn_blocking(move || {
+                            mouselogger::get_mouse_click(&path_clone)
+                        }).await.expect("Erreur lors de l'exécution de get_mouse_click");
+
+                        if !RUNNING.load(std::sync::atomic::Ordering::Relaxed) {
+                            println!("suppresion souris");
+                            break;
+                        }else{
+                            println!("ba les couilles");
+                        }
+
+                        if let Some(button) = button {
                             if button == 1 {
                                 println!("🖱️ Souris : Clic gauche détecté !");
                                 let _ = tx.send(()); // Envoie un signal au clavier pour effacer `word`
-                                                     // if let Ok(mut device) = device_clone.lock() { // TODO:supprimer de l'afffexitage les mots de l'interface graphique une fois le clique dessus (pas forcement a traiter ici) plutot dans le programme python
+                                //                                                  // if let Ok(mut device) = device_clone.lock() { // TODO:supprimer de l'afffexitage les mots de l'interface graphique une fois le clique dessus (pas forcement a traiter ici) plutot dans le programme python
                             }
                         }
-                        // thread::sleep(Duration::from_millis(10));
                     }
                 } => {}
             }
@@ -134,13 +150,13 @@ async fn main() {
         handles.push(handle);
     }
 
-    tokio::spawn(async move {
-        // J'ai testé de le mettre ici mais a terme il sera dans le fichier python_gui.rs
-        tokio::time::sleep(std::time::Duration::from_secs(4)).await;
-        println!("annulation !");
+    // tokio::spawn(async move {
+    //     // J'ai testé de le mettre ici mais a terme il sera dans le fichier python_gui.rs
+    //     tokio::time::sleep(std::time::Duration::from_secs(4)).await;
+    //     println!("annulation !");
 
-        token.cancel();
-    });
+    //     token.cancel();
+    // });
 
     // Attendre la fin de tous les threads avant de quitter
     for handle in handles {

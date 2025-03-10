@@ -98,6 +98,7 @@ impl PythonGUI {
                     Err(e) => eprintln!("Erreur lecture stdout: {}", e),
                 }
             }
+            println!("Fin de la boucle de lecture stdout");
         });
 
         Self {
