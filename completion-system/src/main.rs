@@ -1,7 +1,5 @@
 use std::collections::HashMap;
 use std::path::Path;
-// use std::thread;
-// use std::time::Duration;
 
 use libc::geteuid;
 use std::sync::{mpsc, Arc, Mutex};
@@ -128,18 +126,13 @@ async fn main() {
                             mouselogger::get_mouse_click(&path_clone)
                         }).await.expect("Erreur lors de l'exécution de get_mouse_click");
 
-                        if !RUNNING.load(std::sync::atomic::Ordering::Relaxed) {
-                            println!("suppresion souris");
-                            break;
-                        }else{
-                            println!("ba les couilles");
-                        }
+
 
                         if let Some(button) = button {
                             if button == 1 {
                                 println!("🖱️ Souris : Clic gauche détecté !");
                                 let _ = tx.send(()); // Envoie un signal au clavier pour effacer `word`
-                                //                                                  // if let Ok(mut device) = device_clone.lock() { // TODO:supprimer de l'afffexitage les mots de l'interface graphique une fois le clique dessus (pas forcement a traiter ici) plutot dans le programme python
+                                // TODO:supprimer de l'afffexitage les mots de l'interface graphique une fois le clique dessus (pas forcement a traiter ici) plutot dans le programme python
                             }
                         }
                     }
@@ -150,20 +143,13 @@ async fn main() {
         handles.push(handle);
     }
 
-    // tokio::spawn(async move {
-    //     // J'ai testé de le mettre ici mais a terme il sera dans le fichier python_gui.rs
-    //     tokio::time::sleep(std::time::Duration::from_secs(4)).await;
-    //     println!("annulation !");
-
-    //     token.cancel();
-    // });
-
     // Attendre la fin de tous les threads avant de quitter
     for handle in handles {
-        // Ici, on attend chaque tâche sans unwrap
         if let Err(e) = handle.await {
             eprintln!("Erreur dans une tâche: {:?}", e);
         }
     }
+
     println!("✅ Programme terminé proprement !");
+    std::process::exit(0); //>TODO: essayer de l'enlever
 }

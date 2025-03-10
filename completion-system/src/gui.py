@@ -2,13 +2,15 @@ import tkinter as tk
 import threading
 import sys
 
+# Créer un événement d'arrêt global
+stop_event = threading.Event()
+
 def listen_rust():
     """Écoute Rust en continu et met à jour l'interface."""
-    while True:
+    while not stop_event.is_set():
         line = sys.stdin.readline().strip()
         if not line:
             continue
-              
 
         words = line.split()
         update_buttons(words)
@@ -28,8 +30,9 @@ def update_buttons(words):
         btn.pack(side=tk.LEFT, padx=5, pady=5)
 
 def on_close():
-    """Quand la fenêtre est fermée, on envoie 'EXIT' à Rust."""
+    """Quand la fenêtre est fermée, on envoie 'EXIT' à Rust et arrête le thread."""
     print("E X I T", flush=True)  # Informe Rust d'arrêter
+    stop_event.set()  # Déclenche l'événement d'arrêt
     root.destroy()  # Ferme la fenêtre GUI
     sys.exit(0)  # Quitte immédiatement le script Python
 
@@ -50,5 +53,3 @@ threading.Thread(target=listen_rust, daemon=True).start()
 
 # Lancer l'interface graphique
 root.mainloop()
-
-

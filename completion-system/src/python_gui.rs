@@ -6,7 +6,6 @@ use std::os::unix::fs::PermissionsExt;
 use std::process::{Command, Stdio};
 use std::sync::atomic::Ordering;
 use std::sync::{Arc, Mutex};
-// use std::thread;
 use tempfile::TempDir;
 use tokio_util::sync::CancellationToken;
 use uinput::event::keyboard;
