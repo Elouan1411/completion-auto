@@ -1,17 +1,15 @@
 use crate::virtual_input;
-use std::collections::HashMap;
-use std::fs::{remove_dir_all, set_permissions, File};
-use std::io::{BufRead, BufReader, Write};
-use std::os::unix::fs::PermissionsExt;
-use std::process::{Command, Stdio};
-use std::sync::atomic::Ordering;
-use std::sync::{Arc, Mutex};
+use std::{
+    collections::HashMap,
+    fs::{remove_dir_all, set_permissions, File},
+    io::{BufRead, BufReader, Write},
+    os::unix::fs::PermissionsExt,
+    process::{Command, Stdio},
+    sync::{Arc, Mutex},
+};
 use tempfile::TempDir;
 use tokio_util::sync::CancellationToken;
-use uinput::event::keyboard;
-use uinput::Device;
-
-use crate::RUNNING;
+use uinput::{event::keyboard, Device};
 
 const PYTHON_SCRIPT: &[u8] = include_bytes!("gui.py");
 
@@ -84,7 +82,6 @@ impl PythonGUI {
 
                             let _ = remove_dir_all(temp_dir_clone.clone().path());
 
-                            RUNNING.store(false, Ordering::Relaxed);
                             token.cancel();
                             // exit(0); //Temporaire
                             // break;
@@ -97,7 +94,6 @@ impl PythonGUI {
                     Err(e) => eprintln!("Erreur lecture stdout: {}", e),
                 }
             }
-            println!("Fin de la boucle de lecture stdout");
         });
 
         Self {

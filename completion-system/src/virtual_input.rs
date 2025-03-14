@@ -1,11 +1,17 @@
-use std::collections::HashMap;
-use std::thread;
-use std::time::Duration;
-use uinput::event::keyboard;
-use uinput::Device;
+use std::{collections::HashMap, thread, time::Duration};
+use uinput::{event::keyboard, Device};
 
 use crate::offset;
 
+/// Creates a keycode map for uinput based on the keyboard layout.
+///
+/// # Arguments
+///
+/// * `is_qwerty` - A boolean indicating if the keyboard is QWERTY.
+///
+/// # Returns
+///
+/// * `HashMap<char, keyboard::Key>` - A map of characters to uinput keys.
 pub fn create_keycode_uinput(is_qwerty: bool) -> HashMap<char, keyboard::Key> {
     // Création de la correspondance entre les caractères et les touches
     let mut keycode_uinput: HashMap<char, keyboard::Key> = [
@@ -84,6 +90,13 @@ pub fn create_keycode_uinput(is_qwerty: bool) -> HashMap<char, keyboard::Key> {
     keycode_uinput
 }
 
+/// Presses a virtual key on the device.
+///
+/// # Arguments
+///
+/// * `input_char` - The character to press.
+/// * `device` - The virtual device.
+/// * `keycode_uinput` - A map of characters to uinput keys.
 fn press_virtual_key(
     input_char: char,
     device: &mut Device,
@@ -104,6 +117,11 @@ fn press_virtual_key(
     }
 }
 
+/// Initializes the virtual keyboard device.
+///
+/// # Returns
+///
+/// * `Device` - The virtual keyboard device.
 pub fn init_virtual_key() -> Device {
     uinput::default()
         .expect("Erreur lors de l'initialisation de uinput")
@@ -115,6 +133,13 @@ pub fn init_virtual_key() -> Device {
         .expect("Erreur lors de la création du périphérique")
 }
 
+/// Writes a word using the virtual keyboard.
+///
+/// # Arguments
+///
+/// * `word` - The word to write.
+/// * `device` - The virtual device.
+/// * `keycode_uinput` - A map of characters to uinput keys.
 pub fn write_word(
     word: String,
     device: &mut Device,
@@ -125,6 +150,13 @@ pub fn write_word(
     }
 }
 
+/// Deletes a word using the virtual keyboard.
+///
+/// # Arguments
+///
+/// * `size` - The size of the word to delete.
+/// * `device` - The virtual device.
+/// * `keycode_uinput` - A map of characters to uinput keys.
 pub fn delete_word(
     size: usize,
     device: &mut Device,
@@ -135,8 +167,10 @@ pub fn delete_word(
     }
 }
 
+/// Changes the active window using the virtual keyboard.
+///
+/// This function simulates pressing ALT+TAB to switch windows.
 pub fn change_window(device: &mut Device) {
-    println!("changement de fenetre");
     // Appuie sur ALT
     device.press(&keyboard::Key::LeftAlt).unwrap();
     thread::sleep(Duration::from_millis(50)); // Petite pause pour la stabilité
@@ -151,6 +185,13 @@ pub fn change_window(device: &mut Device) {
     device.release(&keyboard::Key::LeftAlt).unwrap();
 }
 
+/// Deletes the current word and writes a corrected word using the virtual keyboard.
+///
+/// # Arguments
+///
+/// * `word_correction` - The corrected word to write.
+/// * `device` - The virtual device.
+/// * `keycode_uinput` - A map of characters to uinput keys.
 pub fn delete_and_write(
     word_correction: String,
     device: &mut Device,

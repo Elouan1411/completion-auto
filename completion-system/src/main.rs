@@ -1,32 +1,24 @@
-use std::collections::HashMap;
-use std::path::Path;
+use std::{
+    collections::HashMap,
+    path::Path,
+    sync::{mpsc, Arc, Mutex},
+};
 
 use libc::geteuid;
-use std::sync::{mpsc, Arc, Mutex};
 use tokio_util::sync::CancellationToken;
-use uinput::event::keyboard;
-use uinput::Device;
-
-mod python_gui;
-
-use python_gui::PythonGUI;
+use uinput::{event::keyboard, Device};
 
 mod keylogger;
 mod mouselogger;
 mod offset;
+mod python_gui;
 mod virtual_input;
 
-use std::sync::atomic::AtomicBool;
-pub static RUNNING: AtomicBool = AtomicBool::new(true);
+use python_gui::PythonGUI;
 
 #[tokio::main]
 async fn main() {
-    if unsafe { geteuid() } != 0 {
-        eprintln!("Ce programme nécessite des privilèges administrateur pour fonctionner.");
-        eprintln!("Il doit surveiller le clavier et la souris afin d'offrir l'auto-complétion.");
-        eprintln!("Veuillez le relancer avec 'sudo'.");
-        std::process::exit(1);
-    }
+    check_sudo();
     // init uinput
     let device: Device = virtual_input::init_virtual_key();
 
@@ -54,8 +46,8 @@ async fn main() {
     // Récupération des chemins des périphériques d'entrée (souris)
     let mouse_paths: Vec<String> = mouselogger::list_mice_and_touchpads();
 
-    let (tx, rx) = mpsc::channel(); // Canal de communication entre les threads
-    let rx = Arc::new(Mutex::new(rx)); // Permet de partager `Receiver` entre plusieurs threads
+    let (sender_canal, receiver_canal) = mpsc::channel(); // Canal de communication entre les threads
+    let receiver_canal = Arc::new(Mutex::new(receiver_canal)); // Permet de partager `Receiver` entre plusieurs threads
 
     let mut handles = vec![];
 
@@ -63,16 +55,15 @@ async fn main() {
     for path_str in keyboard_paths {
         let keycode_map = keycode_map.clone();
         let path = Path::new(&path_str).to_path_buf();
-        let rx = Arc::clone(&rx);
+        let receiver_canal = Arc::clone(&receiver_canal);
         let gui_clone = gui.clone();
         let token_clone = token.clone();
-        println!("clavier");
 
+        // Creation du thread pour chaque clavier
         let handle = tokio::spawn(async move {
             let mut word: String = String::new();
             tokio::select! {
-                // Cas d'annulation du token
-                _ = token_clone.cancelled() => {println!("annulation clavier")}
+                _ = token_clone.cancelled() => {}
                 _ = async {
                     loop {
                         let path_clone = path.clone();
@@ -84,43 +75,41 @@ async fn main() {
                         if let Some(mut letter) = letter {
                             letter = letter.to_lowercase();
 
-                            if let Ok(rx) = rx.lock() {
-                                if rx.try_recv().is_ok() {
+                            if let Ok(receiver_canal) = receiver_canal.lock() {
+                                if receiver_canal.try_recv().is_ok() {
+                                    // Effacer le mot en cours
                                     word.clear();
                                     offset::reset();
-                                    println!("🧹 Mot effacé à cause d'un clic !");
-
                                     // Enlever tout les cliques qui sont dans la queue
-                                    while rx.try_recv().is_ok() {}
+                                    while receiver_canal.try_recv().is_ok() {}
                                 }
                             }
 
                             offset::manage_word(&mut letter, &mut word);
                             println!("⌨️ Clavier : {}", word);
+                            // Envoie à l'interface graphique
                             gui_clone.send_words([word.as_str(), word.as_str(), word.as_str()]);
                         }
                     }
                 } => {}
             }
-            println!("fin clavier");
         });
 
         handles.push(handle);
     }
-    // Gestion des souris
+    // Pour chaque chemin dans `mouse_paths`, lancer un thread
     for path_str in mouse_paths {
         let path = Path::new(&path_str).to_path_buf();
-        let tx = tx.clone();
+        let sender_canal = sender_canal.clone();
         let token_clone = token.clone();
-        println!("debut souris");
 
+        // Création du thread
         let handle = tokio::spawn(async move {
             tokio::select! {
-                // Cas d'annulation du token
-                _ = token_clone.cancelled() => {println!("annulation souris")}
+                _ = token_clone.cancelled() => {}
                 _ = async {
                     loop {
-                        println!("boucle souris");
+                        // Récupère les évemenents de la souris et envoie un signal si il y a un clique gauche pour supprimer le mot
                         let path_clone = path.clone();
                         let button = tokio::task::spawn_blocking(move || {
                             mouselogger::get_mouse_click(&path_clone)
@@ -130,15 +119,13 @@ async fn main() {
 
                         if let Some(button) = button {
                             if button == 1 {
-                                println!("🖱️ Souris : Clic gauche détecté !");
-                                let _ = tx.send(()); // Envoie un signal au clavier pour effacer `word`
+                                let _ = sender_canal.send(()); // Envoie un signal au clavier pour effacer `word`
                                 // TODO:supprimer de l'afffexitage les mots de l'interface graphique une fois le clique dessus (pas forcement a traiter ici) plutot dans le programme python
                             }
                         }
                     }
                 } => {}
             }
-            println!("fin souris");
         });
         handles.push(handle);
     }
@@ -151,5 +138,17 @@ async fn main() {
     }
 
     println!("✅ Programme terminé proprement !");
-    std::process::exit(0); //>TODO: essayer de l'enlever /
+    std::process::exit(0); //TODO: essayer de l'enlever /
+}
+
+/// Checks if the program is running with sudo privileges.
+///
+/// If not, it prints an error message and exits the program.
+fn check_sudo() {
+    if unsafe { geteuid() } != 0 {
+        eprintln!("Ce programme nécessite des privilèges administrateur pour fonctionner.");
+        eprintln!("Il doit surveiller le clavier et la souris afin d'offrir l'auto-complétion.");
+        eprintln!("Veuillez le relancer avec 'sudo'.");
+        std::process::exit(1);
+    }
 }

@@ -1,10 +1,23 @@
 use byteorder::{NativeEndian, ReadBytesExt};
-use std::fs::OpenOptions;
-use std::io::Cursor;
-use std::io::Read;
-use std::path::Path;
+use std::{
+    fs::OpenOptions,
+    io::{Cursor, Read},
+    path::Path,
+};
 use udev::Enumerator;
 
+/// Reads mouse click events from the given file path.
+///
+/// This function opens the file and reads events to detect left mouse clicks.
+/// If a left click is detected, it returns `Some(1)`.
+///
+/// # Arguments
+///
+/// * `path` - The path to the input device file.
+///
+/// # Returns
+///
+/// * `Option<u8>` - Returns `Some(1)` if a left click is detected, otherwise `None`.
 pub fn get_mouse_click(path: &Path) -> Option<u8> {
     let mut file_options = OpenOptions::new();
     file_options.read(true).write(false).create(false);
@@ -36,12 +49,19 @@ pub fn get_mouse_click(path: &Path) -> Option<u8> {
 
         // Vérifie si c'est un clic gauche (EV_KEY = 1, BTN_LEFT = 272, value = 1 pour un appui)
         if evtype == Some(1) && code == Some(272) && value == Some(1) {
-            println!("Clic gauche détecté !");
             return Some(1); // Retourne 1 pour un clic gauche
         }
     }
 }
 
+/// Lists all mice and touchpads connected to the system.
+///
+/// This function scans the system for input devices and returns a list of paths
+/// to the devices that are either mice or touchpads.
+///
+/// # Returns
+///
+/// * `Vec<String>` - A list of device paths for mice and touchpads.
 pub fn list_mice_and_touchpads() -> Vec<String> {
     let mut devices = Vec::new();
 
