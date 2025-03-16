@@ -25,9 +25,9 @@
 % Configuration de fancyhdr
 \pagestyle{fancy}
 \fancyhf{} % Efface tous les en-têtes et pieds de page précédents
-\fancyhead[C]{Rapport de Stage} % Texte centré en haut de la page
-\fancyfoot[L]{2024} % Texte en bas à gauche du pied de page
-\fancyfoot[C]{Samia BENALI} % Texte au centre du pied de page
+\fancyhead[C]{Recherche} % Texte centré en haut de la page
+\fancyfoot[L]{2024 - 2025} % Texte en bas à gauche du pied de page
+\fancyfoot[C]{Samia BENALI \& Elouan BOITEUX} % Texte au centre du pied de page
 \fancyfoot[R]{\thepage} % Numéro de page en bas à droite du pied de page
 
 \renewcommand{\headrulewidth}{0.4pt} % Épaisseur de la ligne de séparation de l'en-tête
@@ -37,9 +37,9 @@
 
 \fancypagestyle{plain}{
   \fancyhf{} % Effacer tous
-  \fancyhead[C]{Rapport de Stage} % Texte centré en haut de la page
-  \fancyfoot[L]{L1 Informatique} % Texte en bas à gauche du pied de page
-  \fancyfoot[C]{Samia BENALI} % Texte au centre du pied de page
+  \fancyhead[C]{Recherche} % Texte centré en haut de la page
+  \fancyfoot[L]{L2 Informatique} % Texte en bas à gauche du pied de page
+  \fancyfoot[C]{Samia BENALI \& Elouan BOITEUX} % Texte au centre du pied de page
   \fancyfoot[R]{\thepage} % Numéro de page en bas à droite du pied de page
   \renewcommand{\headrulewidth}{0.4pt} % Épaisseur de la ligne de séparation de l'en-tête
   \renewcommand{\footrulewidth}{0.4pt} % Épaisseur de la ligne de séparation du pied de page
@@ -87,14 +87,14 @@ Dans le cadre de notre projet de Recherche du CMI informatique de l’Universit�
 
 Ce projet nous a permis de découvrir ce qu'était la complétion automatique et la complétion semi-automatique et de comprendre sur quoi ce repose ces deux notions. \\ 
 La complétion automatique est un processus par lequel un système va prédire et compléter une entrée en fonction de certaines données et contextes. Cependant, la complétion semi-automatique, est une assistance permettant au système de proposer des options tout en laissant à l'utilisateur la décision finale. \\
-La complétion (semi-)automatique peut etre utilisée dans de nombreuses applications : une saisie sur clavier, une complétion de code, une recherche sur un moteur de recherche, une assistance virtuelle etc\dots \\
+La complétion (semi-)automatique peut être utilisée dans de nombreuses applications : une saisie sur clavier, une complétion de code, une recherche sur un moteur de recherche, une assistance virtuelle etc\dots \\
 Ce rapport va nous permettre, dans un premier temps, d’étudier les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique. \\
 \vfill
 
 \chapter{Les différentes approches utilisées}
 
 \section{Modèles basés sur des règles}
-Pour proposer des suggestions, ce modèle utilisent des algorithmes simples basés sur des règles préprogrammés comme la correspondance de préfixes ou une séquence que nous allons donnée en amont par exemple. Ces algorithmes vont être gérer principalement grâce à des disctionnaires statiques ou des listes.  Cette implémentation est plutôt rapide et simple à mettre en place, elle est cependant très peu flexible et empêche donc une utilisation complexe\dots
+Pour proposer des suggestions, ce modèle utilisent des algorithmes simples basés sur des règles préprogrammés comme la correspondance de préfixes ou une séquence que nous allons donnée en amont par exemple. Ces algorithmes vont être gérer principalement grâce à des dictionnaires statiques ou des listes.  Cette implémentation est plutôt rapide et simple à mettre en place, elle est cependant très peu flexible et empêche donc une utilisation complexe\dots
 
 \section{Modèles basés sur des statistiques}
 Pour proposer des suggestions, ce modèle utilisent des statistiques fournies grâce aux données historiques. Cela permettra de prédire des séquences comme avec le modèle de Markov ou la méthode TD-IDF.
@@ -103,19 +103,19 @@ Cette implémentation permet d'obtenir des résultat rapidement, on a cependant 
 \section{Modèles basés sur l'intelligence artificielle}
 Pour proposer des suggestions, ce modèle utilisent des algorithmes basés sur l'intelligence artificielle et les réseaux neuronaux. 
 Avec l’apprentissage supervisé et non supervisé, ces modèles apprennent des motifs complexes à partir des données. Ils peuvent inclure des algorithmes comme les forêts aléatoires ou les régressions pour fournir des prédictions plus contextuelles.
-Cette implémentation permet d'être efficace face à des problèmes très complexes et de répondre à des demandes rares. Cependant, ce genre d'implémentation nécéssite énormément de temps de calculs et de ressources\dots
+Cette implémentation permet d'être efficace face à des problèmes très complexes et de répondre à des demandes rares. Cependant, ce genre d'implémentation nécessite énormément de temps de calculs et de ressources\dots
 
 
 \section{Modèles basés sur le deep learning}
-Pour proposer des suggestions, ce modèle utilisent des algorithmes basés sur l'amélioration en temps réel. C'est à l'utilisiteur de faire des choix et ces mêmes choix sont mémorisés pour une utilisation personnalisée et plus précise. Cette implémentation est donc très adapatable et permet des réponses précises avec un sens sémentique. Cependant, cette implémentation est complexe et très longue à mettre en place puisque les choix de l'utilisateur sont nécessaires et les réponses dépendront totalement des données collectées\dots  
+Pour proposer des suggestions, ce modèle utilisent des algorithmes basés sur l'amélioration en temps réel. C'est à l'utilisateur de faire des choix et ces mêmes choix sont mémorisés pour une utilisation personnalisée et plus précise. Cette implémentation est donc très adaptable et permet des réponses précises avec un sens sémantique. Cependant, cette implémentation est complexe et très longue à mettre en place puisque les choix de l'utilisateur sont nécessaires et les réponses dépendront totalement des données collectées\dots  
 
 
 
-\chapter{Les algorythmes de calcul de distance}
+\chapter{Les algorithmes de calcul de distance}
 
 \section{Distance d'édition}
 
-\chapter{Chaine de Markov}
+\chapter{Chaîne de Markov}
 
 \chapter{Notre outil de complétion (semi-)automatique}
 
@@ -128,7 +128,7 @@ Pour proposer des suggestions, ce modèle utilisent des algorithmes basés sur l
     \section*{Résumé}
     \addcontentsline{toc}{chapter}{Résumé}
     \begin{justify}
-Le resumé
+Le résumé.
     \end{justify}
 \end{center}
 

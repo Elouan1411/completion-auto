@@ -9,6 +9,7 @@ use tokio_util::sync::CancellationToken;
 use uinput::{event::keyboard, Device};
 
 mod keylogger;
+mod levenshtein;
 mod mouselogger;
 mod offset;
 mod python_gui;
@@ -18,6 +19,14 @@ use python_gui::PythonGUI;
 
 #[tokio::main]
 async fn main() {
+    println!("debut");
+    // Example usage of get_suggestions
+    match levenshtein::get_suggestions("bambochiezz", "gutenberg.txt") {
+        Ok(suggestions) => println!("Suggestions for 'bonkour': {:?}", suggestions),
+        Err(e) => eprintln!("Error getting suggestions: {}", e),
+    }
+    std::process::exit(0);
+
     check_sudo();
     // init uinput
     let device: Device = virtual_input::init_virtual_key();
