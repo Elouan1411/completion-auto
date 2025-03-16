@@ -19,13 +19,12 @@ use python_gui::PythonGUI;
 
 #[tokio::main]
 async fn main() {
-    println!("debut");
-    // Example usage of get_suggestions
-    match levenshtein::get_suggestions("bambochiezz", "gutenberg.txt") {
-        Ok(suggestions) => println!("Suggestions for 'bonkour': {:?}", suggestions),
-        Err(e) => eprintln!("Error getting suggestions: {}", e),
-    }
-    std::process::exit(0);
+    // // Example usage of get_suggestions
+    // match levenshtein::get_suggestions("bambochiezz", "gutenberg.txt") {
+    //     Ok(suggestions) => println!("Suggestions for 'bonkour': {:?}", suggestions),
+    //     Err(e) => eprintln!("Error getting suggestions: {}", e),
+    // }
+    // std::process::exit(0);
 
     check_sudo();
     // init uinput
@@ -97,7 +96,7 @@ async fn main() {
                             offset::manage_word(&mut letter, &mut word);
                             println!("⌨️ Clavier : {}", word);
                             // Envoie à l'interface graphique
-                            gui_clone.send_words([word.as_str(), word.as_str(), word.as_str()]);
+                            gui_clone.send_words(["hello", "word", word.as_str()]);
                         }
                     }
                 } => {}

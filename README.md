@@ -26,18 +26,19 @@ The project is divided into the following tasks:
 ## Contents
 
 - **docs/**: Documentation and references.
-- **src/**: Source code for the implementation.
-- **tests/**: Unit tests for the algorithms and functionalities.
-- **examples/**: Examples of how the tool works with various inputs.
+- **completion-system/**: Main project directory containing the Rust and Python code.
 
 ## Requirements
 
-This project uses Rust as the programming language.
+This project uses Rust as the backend programming language and Python for the frontend.
 
 ### Prerequisites
 
-1. Install Rust: Follow the [official Rust installation guide](https://www.rust-lang.org/tools/install).
-2. Ensure `cargo` (Rust's package manager) is installed.
+1. Install dependencies:
+   ```bash
+   sudo apt update
+   sudo apt install cargo libudev-dev pkg-config python3 python3-tk
+   ```
 
 ### Build and Run
 
@@ -48,6 +49,8 @@ cd completion-system
 cargo build --release
 sudo ./target/release/completion-system
 ```
+
+> Note: The project must be executed with `sudo` because it needs to read peripheral actions and includes a virtual keyboard.
 
 ## Authors
 
