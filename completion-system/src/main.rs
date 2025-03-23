@@ -26,7 +26,7 @@ async fn main() {
     // }
     // std::process::exit(0);
 
-    check_sudo();
+    check_permission();
     // init uinput
     let device: Device = virtual_input::init_virtual_key();
 
@@ -152,11 +152,9 @@ async fn main() {
 /// Checks if the program is running with sudo privileges.
 ///
 /// If not, it prints an error message and exits the program.
-fn check_sudo() {
-    if unsafe { geteuid() } != 0 {
-        eprintln!("Ce programme nécessite des privilèges administrateur pour fonctionner.");
-        eprintln!("Il doit surveiller le clavier et la souris afin d'offrir l'auto-complétion.");
-        eprintln!("Veuillez le relancer avec 'sudo'.");
-        std::process::exit(1);
-    }
+fn check_permission() {
+    //TODO: si pas uinput ou input alors exit
+    // if not permission {
+    //     std::process::exit(1);
+    // }
 }
