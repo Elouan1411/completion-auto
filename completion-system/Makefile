@@ -1,7 +1,7 @@
 USERNAME := $(shell whoami)
 APP_NAME := completion-system
 BIN_PATH := /usr/local/bin/$(APP_NAME)
-ICON_PATH := /usr/local/share/icons/$(APP_NAME).png
+ICON_PATH := /opt/$(APP_NAME).png
 DESKTOP_FILE := ~/.local/share/applications/$(APP_NAME).desktop
 
 install: setup udev build move_binary install_desktop
