@@ -1,15 +1,18 @@
+USERNAME := $(shell whoami)
+
+
 install: setup udev build move_binary
 
 setup:
 	@echo "Updating system and installing dependencies..."
 	@sudo apt update
 	@sudo apt install -y cargo libudev-dev pkg-config python3 python3-tk
-	@sudo usermod -aG input elouan
+	@sudo usermod -aG input $(USERNAME)
 
 udev:
 	@echo "Configuring udev rules..."
-	@if ! grep -q 'KERNEL=="uinput", OWNER="elouan", MODE="600"' /etc/udev/rules.d/99-uinput-completion-system.rules; then \
-		echo 'KERNEL=="uinput", OWNER="elouan", MODE="600"' | sudo tee -a /etc/udev/rules.d/99-uinput-completion-system.rules; \
+	@if ! grep -q 'KERNEL=="uinput", OWNER="$(USERNAME)", MODE="600"' /etc/udev/rules.d/99-uinput-completion-system.rules; then \
+		echo 'KERNEL=="uinput", OWNER="$(USERNAME)", MODE="600"' | sudo tee -a /etc/udev/rules.d/99-uinput-completion-system.rules; \
 		sudo udevadm control --reload-rules && sudo udevadm trigger; \
 		echo "uinput rules added."; \
 	else \
@@ -59,7 +62,7 @@ uninstall:
 	fi
 
 	@echo "Uninstalling udev rules..."
-	@if grep -q 'KERNEL=="uinput", OWNER="elouan", MODE="600"' /etc/udev/rules.d/99-uinput-completion-system.rules; then \
+	@if grep -q 'KERNEL=="uinput", OWNER="$(USERNAME)", MODE="600"' /etc/udev/rules.d/99-uinput-completion-system.rules; then \
 		sudo rm /etc/udev/rules.d/99-uinput-completion-system.rules; \
 		sudo udevadm control --reload-rules && sudo udevadm trigger; \
 		echo "uinput rules removed."; \
