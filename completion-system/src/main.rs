@@ -31,7 +31,7 @@ async fn main() {
     let device: Device = virtual_input::init_virtual_key();
 
     // init keylogger
-    let mut is_qwerty: bool = true;
+    let mut is_qwerty: bool = true; //TODO: demander azerty ou qwerty dans l'interface graphique
     let keycode_map: HashMap<u16, String> = keylogger::init_keylogger(&mut is_qwerty);
 
     let keycode_uinput: HashMap<char, keyboard::Key> =

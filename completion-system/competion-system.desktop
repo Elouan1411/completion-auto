@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Completion System
+Exec=/usr/local/bin/completion-system
+Icon=/usr/local/share/icons/completion-system.png
+Terminal=false
+Categories=Utility;
+
+
+
+
+# nano ~/.local/share/applications/completion-system.desktop

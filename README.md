@@ -49,6 +49,8 @@ Execute:
 completion-system
 ```
 
+Or launch it from the application menu after installation.
+
 ### Uninstall
 
 Execute:
