@@ -1,4 +1,5 @@
 use byteorder::{NativeEndian, ReadBytesExt};
+// use libc::GENL_ID_VFS_DQUOT;
 use std::{
     collections::HashMap,
     fs::File,
@@ -77,23 +78,24 @@ fn create_keycode_map_from_file(file_path: &str) -> HashMap<u16, String> {
 ///
 /// * `bool` - Returns true if the keyboard is QWERTY, false if AZERTY.
 fn input_qwerty_azerty(keycode_map: &mut HashMap<u16, String>) -> bool {
-    // print!("Votre clavier est-il en (Q)WERTY ou (A)ZERTY ? ");
-    // io::stdout().flush().ok(); // Force l'affichage immédiat du message
+    print!("Votre clavier est-il en (Q)WERTY ou (A)ZERTY ? ");
+    io::stdout().flush().ok(); // Force l'affichage immédiat du message
 
-    // let mut input = String::new();
-    // if io::stdin().read_line(&mut input).is_err() {
-    //     println!("Erreur lors de la lecture de l'entrée. Supposons QWERTY par défaut.");
-    //     return true;
-    // }
+    let mut input = String::new();
+    if io::stdin().read_line(&mut input).is_err() {
+        println!("Erreur lors de la lecture de l'entrée. Supposons QWERTY par défaut.");
+        return true;
+    }
+    let input = input.trim().to_uppercase();
 
-    // let input = input.trim().to_uppercase();
-    let mut input = "A".to_string();
+    // let input = "A".to_string();
+
     if input == "A" {
         println!("Conversion du clavier en AZERTY...");
         convert_qwerty_to_azerty(keycode_map);
         false
     } else if input != "Q" {
-        println!("Réponse non valide, supposons que c'est QWERTY par défaut.");
+        println!("Réponse non valide...");
         input_qwerty_azerty(keycode_map)
     } else {
         true

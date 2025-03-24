@@ -1,6 +1,6 @@
 use std::fs::File;
 use std::io::{self, BufRead};
-use std::path::Path;
+// use std::path::Path;
 
 /// Calculates the Levenshtein distance between two strings.
 ///

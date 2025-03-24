@@ -4,7 +4,7 @@ use std::{
     sync::{mpsc, Arc, Mutex},
 };
 
-use libc::geteuid;
+// use libc::geteuid;
 use tokio_util::sync::CancellationToken;
 use uinput::{event::keyboard, Device};
 
@@ -58,7 +58,7 @@ async fn main() {
     let receiver_canal = Arc::new(Mutex::new(receiver_canal)); // Permet de partager `Receiver` entre plusieurs threads
 
     let mut handles = vec![];
-
+    println!("clavier : {:?}", keyboard_paths);
     // Pour chaque chemin dans `keyboard_paths`, lancer un thread
     for path_str in keyboard_paths {
         let keycode_map = keycode_map.clone();
