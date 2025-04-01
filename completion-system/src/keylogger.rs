@@ -18,12 +18,12 @@ use udev::Enumerator;
 /// # Returns
 ///
 /// * `HashMap<u16, String>` - A map of keycodes to key names.
-pub fn init_keylogger(is_qwerty: &mut bool) -> HashMap<u16, String> {
+pub fn init_keylogger() -> HashMap<u16, String> {
     // Charger la carte de correspondance de touches
     let file_path = "/usr/include/linux/input-event-codes.h";
     let mut keycode_map: HashMap<u16, String> = create_keycode_map_from_file(file_path);
 
-    *is_qwerty = input_qwerty_azerty(&mut keycode_map);
+    convert_qwerty_to_azerty(&mut keycode_map);
 
     keycode_map
 }
@@ -66,41 +66,6 @@ fn create_keycode_map_from_file(file_path: &str) -> HashMap<u16, String> {
     }
 
     keycode_map
-}
-
-/// Checks if the keyboard is QWERTY or AZERTY.
-///
-/// # Arguments
-///
-/// * `keycode_map` - A mutable reference to the keycode map.
-///
-/// # Returns
-///
-/// * `bool` - Returns true if the keyboard is QWERTY, false if AZERTY.
-fn input_qwerty_azerty(keycode_map: &mut HashMap<u16, String>) -> bool {
-    // print!("Votre clavier est-il en (Q)WERTY ou (A)ZERTY ? ");
-    // io::stdout().flush().ok(); // Force l'affichage immédiat du message
-
-    // let mut input = String::new();
-    // if io::stdin().read_line(&mut input).is_err() {
-    //     println!("Erreur lors de la lecture de l'entrée. Supposons QWERTY par défaut.");
-    //     return true;
-    // }
-    // let input = input.trim().to_uppercase();
-
-    let input = "A".to_string();
-    //attendre 5 sec
-
-    if input == "A" {
-        println!("Conversion du clavier en AZERTY...");
-        convert_qwerty_to_azerty(keycode_map);
-        false
-    } else if input != "Q" {
-        println!("Réponse non valide...");
-        input_qwerty_azerty(keycode_map)
-    } else {
-        true
-    }
 }
 
 /// Converts a QWERTY keycode map to AZERTY.

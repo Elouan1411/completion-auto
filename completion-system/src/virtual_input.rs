@@ -12,7 +12,7 @@ use crate::offset;
 /// # Returns
 ///
 /// * `HashMap<char, keyboard::Key>` - A map of characters to uinput keys.
-pub fn create_keycode_uinput(is_qwerty: bool) -> HashMap<char, keyboard::Key> {
+pub fn create_keycode_uinput() -> HashMap<char, keyboard::Key> {
     // Création de la correspondance entre les caractères et les touches
     let mut keycode_uinput: HashMap<char, keyboard::Key> = [
         ('a', keyboard::Key::A),
@@ -65,28 +65,24 @@ pub fn create_keycode_uinput(is_qwerty: bool) -> HashMap<char, keyboard::Key> {
     .cloned()
     .collect();
 
-    // Si le clavier est en AZERTY, ajuster le mappage
-    if !is_qwerty {
-        // Remplacement spécifique pour AZERTY
-        let azerty_overrides = [
-            ('a', keyboard::Key::Q),
-            ('q', keyboard::Key::A),
-            ('z', keyboard::Key::W),
-            ('w', keyboard::Key::Z),
-            ('m', keyboard::Key::SemiColon),
-            (',', keyboard::Key::M),
-            ('é', keyboard::Key::_2),
-            ('è', keyboard::Key::_7),
-            ('à', keyboard::Key::_0),
-            ('ù', keyboard::Key::Apostrophe),
-            ('\'', keyboard::Key::_4),
-        ];
+    // Conversion de QWERTY à AZERTY
+    let azerty_overrides = [
+        ('a', keyboard::Key::Q),
+        ('q', keyboard::Key::A),
+        ('z', keyboard::Key::W),
+        ('w', keyboard::Key::Z),
+        ('m', keyboard::Key::SemiColon),
+        (',', keyboard::Key::M),
+        ('é', keyboard::Key::_2),
+        ('è', keyboard::Key::_7),
+        ('à', keyboard::Key::_0),
+        ('ù', keyboard::Key::Apostrophe),
+        ('\'', keyboard::Key::_4),
+    ];
 
-        for (char, key) in azerty_overrides {
-            keycode_uinput.insert(char, key);
-        }
+    for (char, key) in azerty_overrides {
+        keycode_uinput.insert(char, key);
     }
-
     keycode_uinput
 }
 
