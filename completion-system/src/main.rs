@@ -105,6 +105,7 @@ async fn main() {
 
         handles.push(handle);
     }
+    println!("souris : {:?}", mouse_paths);
     // Pour chaque chemin dans `mouse_paths`, lancer un thread
     for path_str in mouse_paths {
         let path = Path::new(&path_str).to_path_buf();

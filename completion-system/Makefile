@@ -4,7 +4,7 @@ BIN_PATH := /usr/local/bin/$(APP_NAME)
 ICON_PATH := /opt/$(APP_NAME).png
 DESKTOP_FILE := ~/.local/share/applications/$(APP_NAME).desktop
 
-install: setup udev build move_binary install_desktop
+install: setup udev build move_binary install_desktop update_groups
 
 setup:
 	@echo "Updating system and installing dependencies..."
@@ -68,7 +68,11 @@ install_desktop:
 		echo "Icon installed."; \
 	else \
 		echo "Icon already exists or source missing."; \
-	fi
+	fi	
+
+update_groups:
+	@echo "Updating input group..."
+	@newgrp input
 
 clean:
 	@echo "Cleaning up build files..."
