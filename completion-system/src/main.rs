@@ -27,6 +27,12 @@ async fn main() {
     // std::process::exit(0);
 
     check_permission();
+
+    // Récupération des chemins des périphériques d'entrée (claviers)
+    let keyboard_paths: Vec<String> = keylogger::list_keyboards();
+    // Récupération des chemins des périphériques d'entrée (souris)
+    let mouse_paths: Vec<String> = mouselogger::list_mice_and_touchpads();
+
     // init uinput
     let device: Device = virtual_input::init_virtual_key();
 
@@ -48,11 +54,6 @@ async fn main() {
         Arc::clone(&keycode_uinput),
         token.clone(),
     );
-
-    // Récupération des chemins des périphériques d'entrée (claviers)
-    let keyboard_paths: Vec<String> = keylogger::list_keyboards();
-    // Récupération des chemins des périphériques d'entrée (souris)
-    let mouse_paths: Vec<String> = mouselogger::list_mice_and_touchpads();
 
     let (sender_canal, receiver_canal) = mpsc::channel(); // Canal de communication entre les threads
     let receiver_canal = Arc::new(Mutex::new(receiver_canal)); // Permet de partager `Receiver` entre plusieurs threads
