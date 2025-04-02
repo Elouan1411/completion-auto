@@ -4,7 +4,7 @@ use std::{
     collections::HashMap,
     fs::File,
     fs::OpenOptions,
-    io::{self, BufRead, BufReader, Cursor, Read, Write},
+    io::{BufRead, BufReader, Cursor, Read},
     path::Path,
 };
 use udev::Enumerator;

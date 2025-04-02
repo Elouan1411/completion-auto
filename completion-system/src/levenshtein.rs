@@ -12,27 +12,27 @@ use std::io::{self, BufRead};
 /// # Returns
 ///
 /// * `usize` - The Levenshtein distance.
-pub fn levenshtein_distance(a: &str, b: &str) -> usize {
-    let n = a.len();
-    let m = b.len();
-    let mut dp = vec![vec![0; m + 1]; n + 1];
+// pub fn levenshtein_distance(a: &str, b: &str) -> usize {
+//     let n = a.len();
+//     let m = b.len();
+//     let mut dp = vec![vec![0; m + 1]; n + 1];
 
-    for i in 0..=n {
-        for j in 0..=m {
-            if i == 0 {
-                dp[i][j] = j;
-            } else if j == 0 {
-                dp[i][j] = i;
-            } else if a.chars().nth(i - 1) == b.chars().nth(j - 1) {
-                dp[i][j] = dp[i - 1][j - 1];
-            } else {
-                dp[i][j] = 1 + dp[i - 1][j].min(dp[i][j - 1]).min(dp[i - 1][j - 1]);
-            }
-        }
-    }
+//     for i in 0..=n {
+//         for j in 0..=m {
+//             if i == 0 {
+//                 dp[i][j] = j;
+//             } else if j == 0 {
+//                 dp[i][j] = i;
+//             } else if a.chars().nth(i - 1) == b.chars().nth(j - 1) {
+//                 dp[i][j] = dp[i - 1][j - 1];
+//             } else {
+//                 dp[i][j] = 1 + dp[i - 1][j].min(dp[i][j - 1]).min(dp[i - 1][j - 1]);
+//             }
+//         }
+//     }
 
-    dp[n][m]
-}
+//     dp[n][m]
+// }
 
 /// Calculates the optimized Levenshtein distance between two strings.
 ///

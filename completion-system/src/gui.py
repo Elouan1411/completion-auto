@@ -39,6 +39,7 @@ def on_close():
 # Création de l'interface Tkinter
 root = tk.Tk()
 root.title("Interface Rust <-> Python")
+root.minsize(400,50)
 
 # Garder la fenêtre toujours en premier plan
 root.attributes("-topmost", True)

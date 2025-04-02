@@ -17,17 +17,15 @@ mod virtual_input;
 
 use python_gui::PythonGUI;
 
+// Example usage of get_suggestions
+// match levenshtein::get_suggestions("tabls", "gutenberg.txt") {
+//     Ok(suggestions) => println!("Suggestions for 'kilian': {:?}", suggestions),
+//     Err(e) => eprintln!("Error getting suggestions: {}", e),
+// }
+// std::process::exit(0);
+
 #[tokio::main]
 async fn main() {
-    // // Example usage of get_suggestions
-    // match levenshtein::get_suggestions("bambochiezz", "gutenberg.txt") {
-    //     Ok(suggestions) => println!("Suggestions for 'bonkour': {:?}", suggestions),
-    //     Err(e) => eprintln!("Error getting suggestions: {}", e),
-    // }
-    // std::process::exit(0);
-
-    check_permission();
-
     // Récupération des chemins des périphériques d'entrée (claviers)
     let keyboard_paths: Vec<String> = keylogger::list_keyboards();
     // Récupération des chemins des périphériques d'entrée (souris)
@@ -95,7 +93,18 @@ async fn main() {
                             offset::manage_word(&mut letter, &mut word);
                             println!("⌨️ Clavier : {}", word);
                             // Envoie à l'interface graphique
-                            gui_clone.send_words(["hello", "word", word.as_str()]);
+
+                            match levenshtein::get_suggestions(&word, "gutenberg.txt") {
+                                Ok(suggestions) => {
+                                    let suggestions: Vec<&str> = suggestions.iter().map(|s| s.as_str()).collect();
+                                    if suggestions.len() >= 3 {
+                                        gui_clone.send_words([suggestions[0], suggestions[1], suggestions[2]]);
+                                    } else {
+                                        eprintln!("Not enough suggestions found.");
+                                    }
+                                }
+                                Err(e) => eprintln!("Error getting suggestions: {}", e),
+                            }
                         }
                     }
                 } => {}
