@@ -196,4 +196,5 @@ pub fn delete_and_write(
     change_window(device);
     delete_word(offset::get(), device, keycode_uinput);
     write_word(word_correction, device, keycode_uinput);
+    press_virtual_key(' ', device, keycode_uinput);
 }

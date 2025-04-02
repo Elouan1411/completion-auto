@@ -94,17 +94,21 @@ async fn main() {
                             println!("⌨️ Clavier : {}", word);
                             // Envoie à l'interface graphique
 
-                            match levenshtein::get_suggestions(&word, "gutenberg.txt") {
-                                Ok(suggestions) => {
-                                    let suggestions: Vec<&str> = suggestions.iter().map(|s| s.as_str()).collect();
-                                    if suggestions.len() >= 3 {
-                                        gui_clone.send_words([suggestions[0], suggestions[1], suggestions[2]]);
-                                    } else {
-                                        eprintln!("Not enough suggestions found.");
+                            if word.chars().count() > 0{
+                                //TODO: essayer de lancer la fonction en arriere plan pour ne pas que ca fasse ramer
+                                match levenshtein::get_suggestions(&word, "gutenberg.txt") {
+                                    Ok(suggestions) => {
+                                        let suggestions: Vec<&str> = suggestions.iter().map(|s| s.as_str()).collect();
+                                        if suggestions.len() == 3 {
+                                            gui_clone.send_words([suggestions[0], suggestions[1], suggestions[2]]);
+                                        } else {
+                                            eprintln!("Not enough suggestions found.");
+                                        }
                                     }
+                                    Err(e) => eprintln!("Error getting suggestions: {}", e),
                                 }
-                                Err(e) => eprintln!("Error getting suggestions: {}", e),
                             }
+
                         }
                     }
                 } => {}

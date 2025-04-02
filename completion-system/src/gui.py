@@ -18,6 +18,7 @@ def listen_rust():
 def send_to_rust(word):
     """Envoie le mot cliqué à Rust."""
     print(word, flush=True)
+    update_buttons([""*3])
 
 def update_buttons(words):
     """Met à jour les boutons avec les nouveaux mots."""
@@ -39,7 +40,7 @@ def on_close():
 # Création de l'interface Tkinter
 root = tk.Tk()
 root.title("Interface Rust <-> Python")
-root.minsize(400,50)
+root.minsize(400,80)
 
 # Garder la fenêtre toujours en premier plan
 root.attributes("-topmost", True)
