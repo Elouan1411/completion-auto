@@ -25,9 +25,9 @@
 % Configuration de fancyhdr
 \pagestyle{fancy}
 \fancyhf{} % Efface tous les en-têtes et pieds de page précédents
-\fancyhead[C]{Recherche} % Texte centré en haut de la page
-\fancyfoot[L]{2024 - 2025} % Texte en bas à gauche du pied de page
-\fancyfoot[C]{Samia BENALI \& Elouan BOITEUX} % Texte au centre du pied de page
+\fancyhead[C]{Rapport de Stage} % Texte centré en haut de la page
+\fancyfoot[L]{2024} % Texte en bas à gauche du pied de page
+\fancyfoot[C]{Samia BENALI} % Texte au centre du pied de page
 \fancyfoot[R]{\thepage} % Numéro de page en bas à droite du pied de page
 
 \renewcommand{\headrulewidth}{0.4pt} % Épaisseur de la ligne de séparation de l'en-tête
@@ -37,8 +37,8 @@
 
 \fancypagestyle{plain}{
   \fancyhf{} % Effacer tous
-  \fancyhead[C]{Recherche} % Texte centré en haut de la page
-  \fancyfoot[L]{L2 Informatique} % Texte en bas à gauche du pied de page
+  \fancyhead[C]{Rapport de Stage} % Texte centré en haut de la page
+  \fancyfoot[L]{L2 CMI Informatique} % Texte en bas à gauche du pied de page
   \fancyfoot[C]{Samia BENALI \& Elouan BOITEUX} % Texte au centre du pied de page
   \fancyfoot[R]{\thepage} % Numéro de page en bas à droite du pied de page
   \renewcommand{\headrulewidth}{0.4pt} % Épaisseur de la ligne de séparation de l'en-tête
@@ -87,36 +87,107 @@ Dans le cadre de notre projet de Recherche du CMI informatique de l’Universit�
 
 Ce projet nous a permis de découvrir ce qu'était la complétion automatique et la complétion semi-automatique et de comprendre sur quoi ce repose ces deux notions. \\ 
 La complétion automatique est un processus par lequel un système va prédire et compléter une entrée en fonction de certaines données et contextes. Cependant, la complétion semi-automatique, est une assistance permettant au système de proposer des options tout en laissant à l'utilisateur la décision finale. \\
-La complétion (semi-)automatique peut être utilisée dans de nombreuses applications : une saisie sur clavier, une complétion de code, une recherche sur un moteur de recherche, une assistance virtuelle etc\dots \\
+La complétion (semi-)automatique peut etre utilisée dans de nombreuses applications : une saisie sur clavier, une complétion de code, une recherche sur un moteur de recherche, une assistance virtuelle etc\dots \\
 Ce rapport va nous permettre, dans un premier temps, d’étudier les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique. \\
 \vfill
 
 \chapter{Les différentes approches utilisées}
 
-\section{Modèles basés sur des règles}
-Pour proposer des suggestions, ce modèle utilisent des algorithmes simples basés sur des règles préprogrammés comme la correspondance de préfixes ou une séquence que nous allons donnée en amont par exemple. Ces algorithmes vont être gérer principalement grâce à des dictionnaires statiques ou des listes.  Cette implémentation est plutôt rapide et simple à mettre en place, elle est cependant très peu flexible et empêche donc une utilisation complexe\dots
+\section{Modèles s'appuyant sur des règles}
+Pour proposer des suggestions, ce modèle utilisent des algorithmes simples qui s'appuient sur des règles préprogrammées telles que la correspondance de préfixes ou une séquence donnée en amont. Ces algorithmes vont être gérer principalement grâce à des dictionnaires statiques ou des listes.  Cette implémentation est plutôt rapide et simple à mettre en place, elle est cependant très peu flexible et empêche donc une utilisation complexe\dots
 
-\section{Modèles basés sur des statistiques}
+\section{Modèles s'appuyant sur des statistiques}
 Pour proposer des suggestions, ce modèle utilisent des statistiques fournies grâce aux données historiques. Cela permettra de prédire des séquences comme avec le modèle de Markov ou la méthode TD-IDF.
-Cette implémentation permet d'obtenir des résultat rapidement, on a cependant aucune compréhension sémentique donc les suggestions ne conviendront que rarement au contexte\dots
+Cette implémentation permet d'obtenir des résultats rapidement. On a cependant aucune compréhension sémantique donc les suggestions ne conviendront que rarement au contexte\dots
 
-\section{Modèles basés sur l'intelligence artificielle}
-Pour proposer des suggestions, ce modèle utilisent des algorithmes basés sur l'intelligence artificielle et les réseaux neuronaux. 
+\section{Modèles s'appuyant sur l'intelligence artificielle}
+Pour proposer des suggestions, ce modèle utilisent des algorithmes qui s'appuient sur l'intelligence artificielle et les réseaux neuronaux. 
 Avec l’apprentissage supervisé et non supervisé, ces modèles apprennent des motifs complexes à partir des données. Ils peuvent inclure des algorithmes comme les forêts aléatoires ou les régressions pour fournir des prédictions plus contextuelles.
-Cette implémentation permet d'être efficace face à des problèmes très complexes et de répondre à des demandes rares. Cependant, ce genre d'implémentation nécessite énormément de temps de calculs et de ressources\dots
+Cette implémentation permet d'être efficace face à des problèmes très complexes et de répondre à des demandes rares. Cependant, ce genre d'implémentation nécéssite énormément de temps de calculs et de ressources\dots
 
 
-\section{Modèles basés sur le deep learning}
-Pour proposer des suggestions, ce modèle utilisent des algorithmes basés sur l'amélioration en temps réel. C'est à l'utilisateur de faire des choix et ces mêmes choix sont mémorisés pour une utilisation personnalisée et plus précise. Cette implémentation est donc très adaptable et permet des réponses précises avec un sens sémantique. Cependant, cette implémentation est complexe et très longue à mettre en place puisque les choix de l'utilisateur sont nécessaires et les réponses dépendront totalement des données collectées\dots  
+\section{Modèles s'appuyant sur le deep learning}
+Pour proposer des suggestions, ce modèle utilise des algorithmes qui s'appuient sur l'amélioration en temps réel. C'est à l'utilisateur de faire des choix et ces mêmes choix sont mémorisés pour une utilisation personnalisée et plus précise. Cette implémentation est donc très adapatable et permet des réponses précises avec un sens sémentique. Cependant, cette implémentation est complexe et très longue à mettre en place puisque les choix de l'utilisateur sont nécessaires et les réponses dépendront totalement des données collectées\dots  
 
 
 
 \chapter{Les algorithmes de calcul de distance}
 
-\section{Distance d'édition}
+\section{Introduction}
 
-\chapter{Chaîne de Markov}
+Un algorithme de calcul de distance permet de mesurer la similarité et/ou la différence entre deux objets tels que du textes, des vecteurs, des chaînes de caractères. \\
+On utilise ces algorithmes de calcul principalement pour la correction d'orthographe, le traitement de texte, les alignements de séquences ADN ou encore pour la recherche d'informations. \\
 
+\section{Distance d'édition ou de Levenshtein}
+
+L'algorithme de calcul de distance d'édition permet de rechercher le nombre minimal d'opérations élémentaires, tels que les insertions, les suppressions et les substitutions, qui seront nécessaires à la transformation d'une chaîne de caractères en une autre. \\
+L'insertion permet d'ajouter un caractère, la suppression d'en enlever, et la subtitution d'en replacer un caractère par un autre. 
+
+La compexité de l'algorithme est en OP($n \times m$) où n est la longueur de la première chaîne et m la longueur de la seconde. \\
+Sa complexité dans l'espace est équivalente. Dans certaines implémentations avancées, la complexité dans l'espace peut être réduite à O($\min(n,m)$). \\
+
+Il s'agit d'une implémentation simple et intuitive qui est simple de mettre en place. Cependant, elle ne prend pas en compte les permutations et ne peut pas résoudre des erreurs plus complexes que l'insertion, la suppression et la subtitution. \\
+\newpage
+La formule du calcul de la distance de Levenshtein est le suivant : 
+
+\[
+\text{lev}(a, b) =
+\begin{cases}
+\max(|a|, |b|) & \text{si } \min(|a|, |b|) = 0, \\
+\text{lev}(a - 1, b - 1) & \text{si } a[0] = b[0], \\
+1 + \min \begin{cases}
+\text{lev}(a - 1, b) \\
+\text{lev}(a, b - 1) \\
+\text{lev}(a - 1, b - 1)
+\end{cases} & \text{sinon}.
+\end{cases}
+\]
+On cherche le nombre minimal d'opérations pour transformer la chaîne a en chaine b.
+
+\section{Distance de Damerau-Levenshtein}
+
+L'algorithme de calcul de distance de Damerau-Levenshtein permet de faire la même chose que l'algorithme de calcul de distance de Levenshtein en y ajoutant l'opération de transposition de deux caractères adjacents.  \\
+
+Les complexités en temps et dans l'espace de l'algorithme restent les mêmes que la distance de Levenshtein.Cependant, même dans les implémentations avancées, la complexité dans l'espace ne peut pas être réduite. \\
+
+Il s'agit d'une implémentation qui reste simple et intuitive et qui, de plus, a une meilleure gestion des erreurs de type ("ab" et "ba"). Cependant, cette implémentation est plus coûteuse que Levenshtein.  \\
+
+\section{Distance de Hamming}
+
+L'algorithme de calcul de distance de Hamming va rechercher, dans deux chaînes de même longueur, le nombre de positions qui vont différer. \\
+
+Les complexités en temps et dans l'espace de l'algorithme sont en O(n) où n est la longueur des deux chaînes. \\
+
+C'est un algorithme facile à implémenter et très rapide. Cependant, il ne fonctionne que sur des chaînes de même longueur ce qui peut vite s'avérer restrictif.\\
+
+\chapter{Chaine de Markov}
+
+\section{Définition}
+
+Une chaîne de Markov est un modèle mathématique qui représente un sytème où la probabilité de passer d'un état à un autre dépend uniquement de l'état actuel. \\
+Les états sont les différents éléments du système. \\
+Les transitions sont les différentes probabilités de passer d'un état à un autre. \\
+Une matrice de transition est une table qui permet de regrouper les probabilités de transition entre tous les états. \\
+
+\section{Application}
+On utilise les chaînes de Markov pour modéliser des processus aléatoires, pour analyser des séquences données, des prédictions ou encore des historiques de navigation. \\
+
+Nous allons nous concentrer sur les historiques de navigation sur le web ainsi que l'historique des actions de l'utilisateur. \\
+
+Imaginons qu'un utilisateur navigue entre trois pages web A, B et C. \\
+Alors une chaîne de Markov pourrait ressembler à : \\
+
+FAIRE TABLEAU ET MATRICE Ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+L'objectif serait d'utiliser l'historique de navigation ou l'historique des actions de l'utilisateur pour modéliser les transitions probables entre les différentes étapes. \\
+Pour cela, on doit premièrement collecter les données des historiques. Ensuite, on compte les transitions observées entre les états pour calculer les probabilités de transition. Enfin, on construit la matrice de transition. \\
+
+\section{Exemple}
+
+\section{Conclusion}
+
+Les chaînes de Markov permettent de prédire l'étape suivante en se basant sur les actions précédentes. Cela va permettre, par la suite, de personnaliser les suggestions pour chaque utilisateur. \\
+De plus, ce système est facile à mettre en place et à implémenter. Cependant, une chaîne de Markov ne prend pas en compte l'historique complet ce qui mène à un problème de mémoire. Il faut, de plus, un très grand nombre de données et un historique plus grand pour avoir des données fiables .
 \chapter{Notre outil de complétion (semi-)automatique}
 
 \chapter*{Conclusion}
@@ -128,7 +199,9 @@ Pour proposer des suggestions, ce modèle utilisent des algorithmes basés sur l
     \section*{Résumé}
     \addcontentsline{toc}{chapter}{Résumé}
     \begin{justify}
-Le résumé.
+Le resumé
+
+
     \end{justify}
 \end{center}
 
