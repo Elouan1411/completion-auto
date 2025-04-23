@@ -177,12 +177,110 @@ Nous allons nous concentrer sur les historiques de navigation sur le web ainsi q
 Imaginons qu'un utilisateur navigue entre trois pages web A, B et C. \\
 Alors une chaîne de Markov pourrait ressembler à : \\
 
-FAIRE TABLEAU ET MATRICE Ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Depuis} & \textbf{Vers} & \textbf{Probabilité} \\
+\hline
+A & B & 0.6 \\
+A & C & 0.4 \\
+B & A & 0.3 \\
+B & C & 0.7 \\
+C & A & 0.5 \\
+C & B & 0.5 \\
+\hline
+\end{tabular}
+\caption{Probabilités de transition entre les états}
+\end{table}
+La matrice de transition serait donc : \\
+
+\[
+M = 
+\begin{bmatrix}
+0 & 0.6 & 0.4 \\
+0.3 & 0 & 0.7 \\
+0.5 & 0.5 & 0
+\end{bmatrix}
+\]
+
 
 L'objectif serait d'utiliser l'historique de navigation ou l'historique des actions de l'utilisateur pour modéliser les transitions probables entre les différentes étapes. \\
 Pour cela, on doit premièrement collecter les données des historiques. Ensuite, on compte les transitions observées entre les états pour calculer les probabilités de transition. Enfin, on construit la matrice de transition. \\
 
 \section{Exemple}
+
+Prenons l'exemple de l'historique suivant : \\
+\[
+A \Longrightarrow C \Longrightarrow B \Longrightarrow A \Longrightarrow B \Longrightarrow C
+\]
+
+La première chose a faire est d'observer le nombre de transitions : 
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Depuis} & \textbf{Vers} & \textbf{Nombre d'observations} \\
+\hline
+A & C & 1 \\
+C & B & 1 \\
+B & A & 1 \\
+A & B & 1 \\
+B & C & 1 \\
+\hline
+\end{tabular}
+\caption{Transitions observées et leur fréquence}
+\end{table}
+
+Ensuite, il faut calculer les probabilités de transition. \\
+Pour ce faire, on considère la probabilité de transition entre deux états \(X\) et \(Y\). Il s'agit de compter le nombre de fois où la transition de \(X\) vers \(Y\) a été observée, puis de diviser ce nombre par le total des transitions partant de l'état \(X\).
+
+\subsection*{Transitions depuis A}
+\begin{itemize}
+    \item Transitions observées : \( A \rightarrow C \), \( A \rightarrow B \)
+    \item Nombre total de transitions depuis A : \(2\)
+    \item Probabilités :
+    \begin{itemize}
+        \item \( P(A \rightarrow C)  = 0.5 \)
+        \item \( P(A \rightarrow B)  = 0.5 \)
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Transitions depuis B}
+\begin{itemize}
+    \item Transitions observées : \( B \rightarrow A \), \( B \rightarrow C \)
+    \item Nombre total de transitions depuis B : \(2\)
+    \item Probabilités :
+    \begin{itemize}
+        \item \( P(B \rightarrow A) = 0.5 \)
+        \item \( P(B \rightarrow C) = 0.5 \)
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Transitions depuis C}
+\begin{itemize}
+    \item Transition observée : \( C \rightarrow B \)
+    \item Nombre total de transitions depuis C : \(1\)
+    \item Probabilité :
+    \begin{itemize}
+        \item \( P(C \rightarrow B) = 1 \)
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Matrice de transition}
+On obtient donc une matrice de transition. 
+
+\[
+M =
+\begin{bmatrix}
+0 & 0.5 & 0.5 \\
+0.5 & 0 & 0.5 \\
+0 & 1 & 0
+\end{bmatrix}
+\]
+
+
 
 \section{Conclusion}
 
