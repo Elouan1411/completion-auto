@@ -86,10 +86,9 @@ async fn main() {
                             offset::manage_word(&mut letter, &mut word);
                             println!("⌨️ Clavier : {}", word);
                             // Envoie à l'interface graphique
+                            println!("letter :{}:", letter);
 
                             if word.chars().count() > 0{
-                                //TODO: essayer de lancer la fonction en arriere plan pour ne pas que ca fasse ramer
-                                // peut etre en mettant le get_suggestion dans un thread et envoyer avec un cannal
                                 match levenshtein::get_suggestions(&word, "gutenberg.txt") {
                                     Ok(suggestions) => {
                                         let suggestions: Vec<&str> = suggestions.iter().map(|s| s.as_str()).collect();
@@ -101,6 +100,8 @@ async fn main() {
                                     }
                                     Err(e) => eprintln!("Error getting suggestions: {}", e),
                                 }
+                            }else if letter == "space"{
+                                gui_clone.send_words(["|","",""]);
                             }
 
                         }
@@ -134,8 +135,7 @@ async fn main() {
 
                         if let Some(button) = button {
                             if button == 1 {
-                                let _ = sender_canal.send(()); // Envoie un signal au clavier pour effacer `word`
-                                // TODO:supprimer de l'afffexitage les mots de l'interface graphique une fois le clique dessus (pas forcement a traiter ici) plutot dans le programme python
+                                let _ = sender_canal.send(());
                             }
                         }
                     }
@@ -153,5 +153,5 @@ async fn main() {
     }
 
     println!("✅ Programme terminé proprement !");
-    std::process::exit(0); //TODO: essayer de l'enlever /
+    std::process::exit(0);
 }

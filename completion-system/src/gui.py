@@ -27,25 +27,42 @@ def update_buttons(words):
     """Met à jour les boutons avec les nouveaux mots."""
     for widget in frame.winfo_children():
         widget.destroy()
-
+    if words[0] == "" or words[0] == "|":
+        label = tk.Label(
+            frame,
+            text="aucune suggestion",
+            font=("Helvetica", 18),
+            fg="gray",
+            bg="#f5f5f5",
+        )
+        label.pack(padx=10, pady=10)
+        return
+    if words[0] == "-":
+        label = tk.Label(
+            frame,
+            text=words[1],
+            font=("Helvetica", 18),
+            fg="gray",
+            bg="#f5f5f5",
+        )
+        label.pack(padx=10, pady=10)
+        return
     for i, word in enumerate(words):
         btn = tk.Button(
             frame,
             text=word,
             font=("Helvetica", 18),
             command=lambda w=word: send_to_rust(w),
-            bd=0,  # Pas de bordure
+            bd=0,
             highlightthickness=0,
             relief=tk.FLAT,
-            bg="#f5f5f5",  # Couleur de fond douce
+            bg="#f5f5f5",
             activebackground="#f5f5f5",
             padx=15,
             pady=10,
         )
-
         btn.pack(side=tk.LEFT, padx=(10 if i != 0 else 0, 10))
 
-        # Ajout d'un séparateur | sauf après le dernier mot
         if i < len(words) - 1:
             separator = tk.Label(
                 frame, text="|", font=("Helvetica", 18), fg="gray", bg="#f5f5f5"
@@ -75,7 +92,7 @@ root.attributes("-topmost", True)
 frame = tk.Frame(root, bg="#f5f5f5")
 frame.pack(pady=20)
 
-
+update_buttons(["-", "Cliquer sur une touche du clavier"])
 root.protocol("WM_DELETE_WINDOW", on_close)  # Capture le clic sur la croix
 
 # Lancer l'écoute de Rust en arrière-plan
