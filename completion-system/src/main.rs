@@ -17,13 +17,6 @@ mod virtual_input;
 
 use python_gui::PythonGUI;
 
-// Example usage of get_suggestions
-// match levenshtein::get_suggestions("tabls", "gutenberg.txt") {
-//     Ok(suggestions) => println!("Suggestions for 'kilian': {:?}", suggestions),
-//     Err(e) => eprintln!("Error getting suggestions: {}", e),
-// }
-// std::process::exit(0);
-
 #[tokio::main]
 async fn main() {
     // Récupération des chemins des périphériques d'entrée (claviers)
@@ -96,6 +89,7 @@ async fn main() {
 
                             if word.chars().count() > 0{
                                 //TODO: essayer de lancer la fonction en arriere plan pour ne pas que ca fasse ramer
+                                // peut etre en mettant le get_suggestion dans un thread et envoyer avec un cannal
                                 match levenshtein::get_suggestions(&word, "gutenberg.txt") {
                                     Ok(suggestions) => {
                                         let suggestions: Vec<&str> = suggestions.iter().map(|s| s.as_str()).collect();
@@ -160,14 +154,4 @@ async fn main() {
 
     println!("✅ Programme terminé proprement !");
     std::process::exit(0); //TODO: essayer de l'enlever /
-}
-
-/// Checks if the program is running with sudo privileges.
-///
-/// If not, it prints an error message and exits the program.
-fn check_permission() {
-    //TODO: si pas uinput ou input alors exit
-    // if not permission {
-    //     std::process::exit(1);
-    // }
 }
