@@ -84,10 +84,14 @@ async fn main() {
                             }
 
                             offset::manage_word(&mut letter, &mut word);
+                            if  offset::get() == 0{
+                                gui_clone.send_words(["|","",""]);
+                            }
                             println!("⌨️ Clavier : {}", word);
-                            // Envoie à l'interface graphique
-                            println!("letter :{}:", letter);
 
+
+
+                            // Envoie à l'interface graphique
                             if word.chars().count() > 0{
                                 match levenshtein::get_suggestions(&word, "gutenberg.txt") {
                                     Ok(suggestions) => {
