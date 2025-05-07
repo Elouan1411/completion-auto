@@ -1,5 +1,4 @@
 docs/bin/*
 completion-system/target/
 completion-system/Cargo.lock
-!docs/bin/report.pdf
-!completion-system/target/release/completion-system
+
