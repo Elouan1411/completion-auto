@@ -1,39 +1,3 @@
-use std::fs::File;
-use std::io::{self, BufRead};
-// use std::path::Path;
-
-/// Calculates the Levenshtein distance between two strings.
-///
-/// # Arguments
-///
-/// * `a` - The first string.
-/// * `b` - The second string.
-///
-/// # Returns
-///
-/// * `usize` - The Levenshtein distance.
-// pub fn levenshtein_distance(a: &str, b: &str) -> usize {
-//     let n = a.len();
-//     let m = b.len();
-//     let mut dp = vec![vec![0; m + 1]; n + 1];
-
-//     for i in 0..=n {
-//         for j in 0..=m {
-//             if i == 0 {
-//                 dp[i][j] = j;
-//             } else if j == 0 {
-//                 dp[i][j] = i;
-//             } else if a.chars().nth(i - 1) == b.chars().nth(j - 1) {
-//                 dp[i][j] = dp[i - 1][j - 1];
-//             } else {
-//                 dp[i][j] = 1 + dp[i - 1][j].min(dp[i][j - 1]).min(dp[i - 1][j - 1]);
-//             }
-//         }
-//     }
-
-//     dp[n][m]
-// }
-
 /// Calculates the optimized Levenshtein distance between two strings.
 ///
 /// # Arguments
@@ -106,33 +70,13 @@ pub fn suggestions_completion(
         .collect()
 }
 
-/// Reads the dictionary from a file.
-///
-/// # Arguments
-///
-/// * `file_path` - The path to the dictionary file.
-///
-/// # Returns
-///
-/// * `Vec<String>` - A list of words from the dictionary.
-pub fn read_dictionary(file_path: &str) -> io::Result<Vec<String>> {
-    let file = File::open(file_path)?;
-    let reader = io::BufReader::new(file);
-    reader.lines().collect()
+
+
+pub fn get_suggestions(word: &str, dictionary_contents: &str) -> Vec<String> {
+    let dictionary: Vec<String> = dictionary_contents
+        .lines()
+        .map(str::to_string)
+        .collect(); 
+    suggestions_completion(word, &dictionary, 3, 3)
 }
 
-/// Provides suggestions for a given word using a dictionary file.
-///
-/// # Arguments
-///
-/// * `word` - The word to get suggestions for.
-/// * `dictionary_path` - The path to the dictionary file.
-///
-/// # Returns
-///
-/// * `io::Result<Vec<String>>` - A list of suggested words.
-pub fn get_suggestions(word: &str, dictionary_path: &str) -> io::Result<Vec<String>> {
-    let dictionary = read_dictionary(dictionary_path)?;
-    let suggestions = suggestions_completion(word, &dictionary, 3, 3);
-    Ok(suggestions)
-}

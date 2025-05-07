@@ -92,21 +92,17 @@ async fn main() {
 
                             // Envoie à l'interface graphique
                             if word.chars().count() > 0{
-                                match levenshtein::get_suggestions(&word, "gutenberg.txt") {
-                                    Ok(suggestions) => {
-                                        let suggestions: Vec<&str> = suggestions.iter().map(|s| s.as_str()).collect();
-                                        if suggestions.len() == 3 { //TODO: enlever cette ligne et
-                                                                    //gérer la fonction send_word
-                                                                    //pour quelle puisse prendre en
-                                                                    //parametre entre 1 et 3
-                                                                    //arguements (python gere deja
-                                                                    //de son coté)
-                                            gui_clone.send_words([suggestions[0], suggestions[1], suggestions[2]]);
-                                        } else {
-                                            eprintln!("Not enough suggestions found.");
-                                        }
-                                    }
-                                    Err(e) => eprintln!("Error getting suggestions: {}", e),
+                               let dictionary_text = include_str!("../data/gutenberg.txt");
+
+                                let suggestions = levenshtein::get_suggestions(&word, dictionary_text);
+                                let suggestions: Vec<&str> = suggestions.iter().map(|s| s.as_str()).collect();
+
+                                if suggestions.len() == 3 {
+                                    // TODO: enlever cette ligne et gérer la fonction send_word
+                                    // pour qu'elle puisse prendre entre 1 et 3 arguments (le code Python le gère déjà)
+                                    gui_clone.send_words([suggestions[0], suggestions[1], suggestions[2]]);
+                                } else {
+                                    eprintln!("Not enough suggestions found.");
                                 }
                             }else if letter == "space"{
                                 gui_clone.send_words(["|","",""]);
