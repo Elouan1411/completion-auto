@@ -30,7 +30,7 @@ The project is divided into the following tasks:
 
 ## Requirements
 
-This project uses Rust as the backend programming language and Python for the frontend.
+This project uses Rust for the backend and Python for the frontend, with everything handled automatically by make install.
 
 ### Install
 
