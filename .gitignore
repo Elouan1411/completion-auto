@@ -1,4 +1,36 @@
-docs/bin/*
 completion-system/target/
 completion-system/Cargo.lock
 
+# Fichiers de sortie de la compilation
+*.aux
+*.log
+*.toc
+*.out
+*.blg
+*.bbl
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.pdf
+
+# Fichiers de configuration de LaTeX
+*.idx
+*.ind
+*.ilg
+*.gls
+*.glo
+
+# Fichiers générés par les outils de gestion (ex: latexmk, arara)
+*.latexmk
+*.arara
+
+# Dossiers temporaires
+_thumbs/
+*.swp
+*.bak
+*.dvi
+*.ps
+
+# Dossiers générés
+build/
+out/
