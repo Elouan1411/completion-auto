@@ -37,7 +37,8 @@ This project uses Rust as the backend programming language and Python for the fr
 Execute:
 
 ```bash
-cd completion-system
+git clone https://github.com/Elouan1411/completion-auto.github
+cd completion-auto/completion-system
 make install
 ```
 
@@ -56,7 +57,7 @@ Or launch it from the application menu after installation.
 Execute:
 
 ```bash
-cd completion-system
+cd completion-auto/completion-system
 make uninstall
 ```
 
