@@ -7,7 +7,6 @@ use std::{
 // use libc::geteuid;
 use tokio_util::sync::CancellationToken;
 use uinput::{event::keyboard, Device};
-
 mod keylogger;
 mod levenshtein;
 mod mouselogger;
@@ -96,7 +95,12 @@ async fn main() {
                                 match levenshtein::get_suggestions(&word, "gutenberg.txt") {
                                     Ok(suggestions) => {
                                         let suggestions: Vec<&str> = suggestions.iter().map(|s| s.as_str()).collect();
-                                        if suggestions.len() == 3 {
+                                        if suggestions.len() == 3 { //TODO: enlever cette ligne et
+                                                                    //gérer la fonction send_word
+                                                                    //pour quelle puisse prendre en
+                                                                    //parametre entre 1 et 3
+                                                                    //arguements (python gere deja
+                                                                    //de son coté)
                                             gui_clone.send_words([suggestions[0], suggestions[1], suggestions[2]]);
                                         } else {
                                             eprintln!("Not enough suggestions found.");
