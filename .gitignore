@@ -1,6 +1,5 @@
 docs/bin/*
-target/
-
-
-Cargo.lock
+completion-system/target/
+completion-system/Cargo.lock
 !docs/bin/report.pdf
+!completion-system/target/release/completion-system

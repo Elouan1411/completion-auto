@@ -70,13 +70,7 @@ pub fn suggestions_completion(
         .collect()
 }
 
-
-
 pub fn get_suggestions(word: &str, dictionary_contents: &str) -> Vec<String> {
-    let dictionary: Vec<String> = dictionary_contents
-        .lines()
-        .map(str::to_string)
-        .collect(); 
+    let dictionary: Vec<String> = dictionary_contents.lines().map(str::to_string).collect();
     suggestions_completion(word, &dictionary, 3, 3)
 }
-
