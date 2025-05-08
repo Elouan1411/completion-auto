@@ -83,7 +83,7 @@ async fn main() {
 
                             offset::manage_word(&mut letter, &mut word);
                             if  offset::get() == 0{
-                                gui_clone.send_words(["|","",""]);
+                                gui_clone.send_words(&["|"]);
                             }
 
                             // Envoie à l'interface graphique
@@ -92,16 +92,15 @@ async fn main() {
 
                                 let suggestions = suggestions::get_suggestions(&word, dictionary_text);
                                 let suggestions: Vec<&str> = suggestions.iter().map(|s| s.as_str()).collect();
-
-                                if suggestions.len() == 3 {
-                                    // TODO: enlever cette ligne et gérer la fonction send_word
-                                    // pour qu'elle puisse prendre entre 1 et 3 arguments (le code Python le gère déjà)
-                                    gui_clone.send_words([suggestions[0], suggestions[1], suggestions[2]]);
-                                } else {
-                                    eprintln!("Not enough suggestions found.");
+                                let mut padded = ["", "", ""];
+                                for (i, &s) in suggestions.iter().take(3).enumerate() {
+                                    padded[i] = s;
                                 }
+                                gui_clone.send_words(&padded);
+
+
                             }else if letter == "space"{
-                                gui_clone.send_words(["|","",""]);
+                                gui_clone.send_words(&["|"]);
                             }
 
                         }

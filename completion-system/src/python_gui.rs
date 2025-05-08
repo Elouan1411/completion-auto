@@ -104,10 +104,27 @@ impl PythonGUI {
     }
 
     /// Envoie trois mots à l'interface Python
-    pub fn send_words(&self, words: [&str; 3]) {
+    // pub fn send_words(&self, words: [&str; 3]) {
+    //     if let Ok(mut stdin_lock) = self.stdin.lock() {
+    //         if let Some(ref mut stdin) = *stdin_lock {
+    //             if writeln!(stdin, "{} {} {}", words[0], words[1], words[2]).is_err() {
+    //                 eprintln!("Erreur écriture stdin: Broken Pipe (Python fermé ?)");
+    //             }
+    //         }
+    //     }
+    // }
+    pub fn send_words(&self, words: &[&str]) {
+        let mut to_send = ["", "", ""];
+
+        // Remplir avec les mots fournis, jusqu'à 3
+        for (i, &word) in words.iter().take(3).enumerate() {
+            to_send[i] = word;
+        }
+
+        // Écrire les mots dans stdin
         if let Ok(mut stdin_lock) = self.stdin.lock() {
             if let Some(ref mut stdin) = *stdin_lock {
-                if writeln!(stdin, "{} {} {}", words[0], words[1], words[2]).is_err() {
+                if writeln!(stdin, "{} {} {}", to_send[0], to_send[1], to_send[2]).is_err() {
                     eprintln!("Erreur écriture stdin: Broken Pipe (Python fermé ?)");
                 }
             }
