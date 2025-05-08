@@ -12,6 +12,7 @@ mod levenshtein;
 mod mouselogger;
 mod offset;
 mod python_gui;
+mod trie_suggestions;
 mod virtual_input;
 
 use python_gui::PythonGUI;
@@ -92,11 +93,12 @@ async fn main() {
 
                             // Envoie à l'interface graphique
                             if word.chars().count() > 0{
-                               let dictionary_text = include_str!("../data/gutenberg.txt");
+                                let dictionary_text = include_str!("../data/dico_freq.csv");
 
-                                let suggestions = levenshtein::get_suggestions(&word, dictionary_text);
+                                let suggestions = trie_suggestions::get_suggestions(&word, dictionary_text);
                                 let suggestions: Vec<&str> = suggestions.iter().map(|s| s.as_str()).collect();
 
+                                println!("Suggestions: {:?}", suggestions);
                                 if suggestions.len() == 3 {
                                     // TODO: enlever cette ligne et gérer la fonction send_word
                                     // pour qu'elle puisse prendre entre 1 et 3 arguments (le code Python le gère déjà)
