@@ -12,7 +12,7 @@ mod levenshtein;
 mod mouselogger;
 mod offset;
 mod python_gui;
-mod trie_suggestions;
+mod suggestions;
 mod virtual_input;
 
 use python_gui::PythonGUI;
@@ -95,7 +95,7 @@ async fn main() {
                             if word.chars().count() > 0{
                                 let dictionary_text = include_str!("../data/dico_freq.csv");
 
-                                let suggestions = trie_suggestions::get_suggestions(&word, dictionary_text);
+                                let suggestions = suggestions::get_suggestions(&word, dictionary_text);
                                 let suggestions: Vec<&str> = suggestions.iter().map(|s| s.as_str()).collect();
 
                                 println!("Suggestions: {:?}", suggestions);
