@@ -8,7 +8,6 @@ use std::{
 use tokio_util::sync::CancellationToken;
 use uinput::{event::keyboard, Device};
 mod keylogger;
-mod levenshtein;
 mod mouselogger;
 mod offset;
 mod python_gui;
