@@ -22,6 +22,7 @@ Fonction get_suggestions(mot_recherche, contenu_dictionnaire) {
         Si la taille du tas dépasse 3 éléments {
             Retirer l'élément avec la plus grande priorité (élément minimum dans le tas)
         }
+    }
 
     suggestions = Liste vide
     Pour chaque element dans tas {
