@@ -2,8 +2,11 @@ use std::cmp::Reverse;
 use std::collections::BinaryHeap;
 
 pub fn optimized_levenshtein(a: &str, b: &str) -> usize {
-    let n = a.len();
-    let m = b.len();
+    let a_chars: Vec<char> = a.chars().collect();
+    let b_chars: Vec<char> = b.chars().collect();
+    let n = a_chars.len();
+    let m = b_chars.len();
+
     let mut prev: Vec<usize> = (0..=m).collect();
     let mut curr = vec![0; m + 1];
 
@@ -13,7 +16,7 @@ pub fn optimized_levenshtein(a: &str, b: &str) -> usize {
             let insert = curr[j - 1] + 1;
             let delete = prev[j] + 1;
             let substitute = prev[j - 1]
-                + if a.chars().nth(i - 1) == b.chars().nth(j - 1) {
+                + if a_chars[i - 1] == b_chars[j - 1] {
                     0
                 } else {
                     1
@@ -35,6 +38,8 @@ struct Suggestion {
 }
 
 impl Ord for Suggestion {
+    // définir l'ordre des elements dans le BinaryHeap
+    // tri par distance puis is_prefixe puis frequency
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         (
             self.distance,
@@ -50,6 +55,7 @@ impl Ord for Suggestion {
 }
 
 impl PartialOrd for Suggestion {
+    // eviter les bugs
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         Some(self.cmp(other))
     }
@@ -71,6 +77,8 @@ pub fn get_suggestions(word: &str, dictionary_contents: &str) -> Vec<String> {
         let distance = optimized_levenshtein(word, mot);
 
         if distance > MAX_DISTANCE && !is_prefix {
+            // on ignore pas le mot si la distance est trop
+            // grande mais que c'est le même préfixe
             continue;
         }
 
