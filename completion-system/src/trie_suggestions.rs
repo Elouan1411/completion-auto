@@ -1,6 +1,16 @@
 use std::cmp::Reverse;
 use std::collections::BinaryHeap;
 
+/// Calculates the optimized Levenshtein distance between two strings.
+///
+/// # Arguments
+///
+/// * `a` - The first string.
+/// * `b` - The second string.
+///
+/// # Returns
+///
+/// * `usize` - The optimized Levenshtein distance.
 pub fn optimized_levenshtein(a: &str, b: &str) -> usize {
     let a_chars: Vec<char> = a.chars().collect();
     let b_chars: Vec<char> = b.chars().collect();
@@ -84,7 +94,7 @@ pub fn get_suggestions(word: &str, dictionary_contents: &str) -> Vec<String> {
 
         heap.push(Suggestion {
             distance,
-            is_prefix: is_prefix && distance == 0, // Bonus pour le préfixe exact
+            is_prefix,
             frequency: freq,
             word: mot.to_string(),
         });
