@@ -47,7 +47,6 @@ async fn main() {
     let receiver_canal = Arc::new(Mutex::new(receiver_canal)); // Permet de partager `Receiver` entre plusieurs threads
 
     let mut handles = vec![];
-    println!("clavier : {:?}", keyboard_paths);
     // Pour chaque chemin dans `keyboard_paths`, lancer un thread
     for path_str in keyboard_paths {
         let keycode_map = keycode_map.clone();
@@ -86,9 +85,6 @@ async fn main() {
                             if  offset::get() == 0{
                                 gui_clone.send_words(["|","",""]);
                             }
-                            println!("⌨️ Clavier : {}", word);
-
-
 
                             // Envoie à l'interface graphique
                             if word.chars().count() > 0{
@@ -97,7 +93,6 @@ async fn main() {
                                 let suggestions = suggestions::get_suggestions(&word, dictionary_text);
                                 let suggestions: Vec<&str> = suggestions.iter().map(|s| s.as_str()).collect();
 
-                                println!("Suggestions: {:?}", suggestions);
                                 if suggestions.len() == 3 {
                                     // TODO: enlever cette ligne et gérer la fonction send_word
                                     // pour qu'elle puisse prendre entre 1 et 3 arguments (le code Python le gère déjà)
@@ -117,7 +112,6 @@ async fn main() {
 
         handles.push(handle);
     }
-    println!("souris : {:?}", mouse_paths);
     // Pour chaque chemin dans `mouse_paths`, lancer un thread
     for path_str in mouse_paths {
         let path = Path::new(&path_str).to_path_buf();
