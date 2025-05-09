@@ -7,6 +7,7 @@
 \usepackage{float}
 \usepackage{multicol} % Pour faire des multi colonnes
 \usepackage[export]{adjustbox} % Pour la clé 'valign'  (aligner verticalement)
+\usepackage[colorlinks=true,linkcolor=black]{hyperref} % Pour qu'il y est des liens sur la table des matières
 \usepackage{caption} % Utiliser plus de fonction sur caption (caption* pour ne pas afficher FIGURE-1)
 \usepackage{lipsum} % Pour générer du texte pour voir comment ca rend
 \usepackage{ragged2e} % Pour justifier le texte
@@ -24,9 +25,9 @@
 % Configuration de fancyhdr
 \pagestyle{fancy}
 \fancyhf{} % Efface tous les en-têtes et pieds de page précédents
-\fancyhead[C]{Rapport de Stage} % Texte centré en haut de la page
-\fancyfoot[L]{2024} % Texte en bas à gauche du pied de page
-\fancyfoot[C]{Samia BENALI} % Texte au centre du pied de page
+\fancyhead[C]{Rapport de projet} % Texte centré en haut de la page
+\fancyfoot[L]{2024-2025} % Texte en bas à gauche du pied de page
+\fancyfoot[C]{Samia BENALI \& Elouan BOITEUX} % Texte au centre du pied de page
 \fancyfoot[R]{\thepage} % Numéro de page en bas à droite du pied de page
 
 \renewcommand{\headrulewidth}{0.4pt} % Épaisseur de la ligne de séparation de l'en-tête
@@ -43,10 +44,6 @@
   \renewcommand{\headrulewidth}{0.4pt} % Épaisseur de la ligne de séparation de l'en-tête
   \renewcommand{\footrulewidth}{0.4pt} % Épaisseur de la ligne de séparation du pied de page
 }
-
-% Pour la bib
-\usepackage{url}
-\usepackage[colorlinks=true,linkcolor=black]{hyperref} % Pour qu'il y est des liens sur la table des matières
 
 
 
@@ -107,7 +104,7 @@ Cette implémentation permet d'obtenir des résultats rapidement. On a cependant
 Pour proposer des suggestions, ce modèle utilisent des algorithmes qui s'appuient sur l'intelligence artificielle et les réseaux neuronaux. 
 Avec l’apprentissage supervisé et non supervisé, ces modèles apprennent des motifs complexes à partir des données. Ils peuvent inclure des algorithmes comme les forêts aléatoires ou les régressions pour fournir des prédictions plus contextuelles.
 Cette implémentation permet d'être efficace face à des problèmes très complexes et de répondre à des demandes rares. Cependant, ce genre d'implémentation nécéssite énormément de temps de calculs et de ressources\dots
-
+ \newpage
 
 \section{Modèles s'appuyant sur le deep learning}
 Pour proposer des suggestions, ce modèle utilise des algorithmes qui s'appuient sur l'amélioration en temps réel. C'est à l'utilisateur de faire des choix et ces mêmes choix sont mémorisés pour une utilisation personnalisée et plus précise. Cette implémentation est donc très adapatable et permet des réponses précises avec un sens sémentique. Cependant, cette implémentation est complexe et très longue à mettre en place puisque les choix de l'utilisateur sont nécessaires et les réponses dépendront totalement des données collectées\dots  
@@ -248,7 +245,7 @@ Pour ce faire, on considère la probabilité de transition entre deux états \(X
         \item \( P(A \rightarrow C)  = 0.5 \)
         \item \( P(A \rightarrow B)  = 0.5 \)
     \end{itemize}
-\end{itemize}
+\end{itemize}o
 
 \subsection*{Transitions depuis B}
 \begin{itemize}
@@ -286,10 +283,70 @@ M =
 
 
 \section{Conclusion}
-
 Les chaînes de Markov permettent de prédire l'étape suivante en se basant sur les actions précédentes. Cela va permettre, par la suite, de personnaliser les suggestions pour chaque utilisateur. \\
 De plus, ce système est facile à mettre en place et à implémenter. Cependant, une chaîne de Markov ne prend pas en compte l'historique complet ce qui mène à un problème de mémoire. Il faut, de plus, un très grand nombre de données et un historique plus grand pour avoir des données fiables .
 \chapter{Notre outil de complétion (semi-)automatique}
+
+\section{Choix pour l'implémentation}
+
+Tout d'abord, nous avons dû choisir un langage de programmation pour implémenter ce projet semestriel. Il nous fallait un langage permettant d'éviter la latence de calculs de distance entre les mots avec lesquels nous travaillerons. De plus, nous souhaitions utiliser cette occasion pour découvrir un nouveau langage. Rust s'est donc imposé face aux autres langages puisque qu'il permet une excellente vitesse de calcul et évite une latence importante. \\
+
+Nous devions ensuite mettre en place le projet. Nous avons décider d'essayer de recréer l'interface de suggestions orthographiques des téléphones portables sur ordinateur. Nous voulions que l'application soit utilisable sur Ubuntu et sur n'importe quelles applications. En effet, créer une application qui suggère des mots mais qui n'est pas utilisable dans d'autres applications n'est pas d'un grand interêt.\\
+
+\section{Les étapes de la réalisation}
+
+\subsection{Keylogger \& mouselogger}
+TODO : ajouter les defs 
+Dans un premier temps nous avons récupérer tous les évènements clavier de l'utilisateur quelque soit l'application sur laquelle il se trouve. La solution retenue pour ce projet a été de développer un keylogger. Un keylogger intercepte les frappes en lisant directement les évènements clavier du système. Après la détection de chaque touche pressée, le keylogger traduit l'identifiant reçu en caractère grâce au fichier /usr/include/linux/input-event-codes.h que l'on retrouve dans l'OS. Cela permet ainsi de constuire le mot au fur et à mesure. \\
+
+Une fois ajouté à notre programme principal, nous pouvons désormais récupérer les frappes de l'utilisateur. Ensuite, nous pouvons concaténer les lettres et afficher dans un terminal le mot en cours de saisie. Si l'utilisateur clique sur les flèches de navigation droite ou gauche, il navigue dans le mot en cours de saisie et peut ainsi ajouter des lettres à n'importe quelle position du mot. De plus, s'il clique sur la touche retour arrière, il peut supprimer la lettre à gauche du curseur. Enfin si l'utilisateur clique sur n'importe quelle autre touche qu'une lettre (accentuée ou non), le retour arrière ou les flèches de navigation alors, on annule les suggestions de mots. \\
+Nous devons également gérer les déplacements et les clics de la souris. On a donc ajouté un mouselogger qui nous permet d'annuler les suggestions si l'utilisateur clique sur l'écran hors de la fenêtre de suggestions.\\
+
+Une fois cette première partie terminée, nous avons constater qu'un seul clavier et qu'une seule souris étaient détectés. Or, si un utilisateur utilise un ordinateur partable et y branche un lcabier externe, notre détection de saisie de fonctionne plus. \\
+La principale difficulté a été de détecter tous les claviers puis de les faire fonctionner en même temps. On a décidé d'utiliser des threads pour lire les fichiers des claviers et des souris. Les threads sont conçus pour que ce soit compatible avec tous les périphériques branchés et on obtient donc un comportement cohérent et fluide. \\
+
+Cependant, il restait un problème : la fin du programme. En effet, lorsque l'on ferme l'interface graphique, les threads sont encore en train de lire les fichiers des claviers et des souris et les threads Rust ne se ferment donc pas. Pour pallier ce problème, nous avons fait en sorte qu'un signal soit envoyé à Rust lorsque l'interface graphique en Python est fermée. Lorsque le signal est reçu par Rust, ce dernier l'envoie aux threads qui sont gérés de façon asynchrones et qui ferment ainsi la lecture du fichier. On obtient une façon plus propre de fermer le programme. 
+
+
+\subsection{Ecrire et remplacer un mot}
+
+Pour cette deuxième étape, nous devions faire en sorte de pouvoir écrire un mot dans n'importe quelle application, et cela de façon automatique. Pour ce faire,  il nous fallait un clavier virtuel pour simuler les frappes de l'utilisateur et ainsi écrire le mot demandé. 
+Le code écrit fonctionne ainsi : On crée un tableau contenant tous les caractères du clavier avec lesquels on travaille. Ensuite, on crée une fonction permettant de cliquer sur un de ces caractères sur le clavier virtuel. Enfin, on répète cette opération avec chaque lettre du mot pour l'écrire en entier. \\
+
+Lorsque cela a été mis en place, on s'est rendu compte que les lettres précédemment écrites par l'utilisateur n'étaient pas effacées. Pour cela,  nous avons simplement utilisé la fonction permettant de cliquer sur une touche du clavier virtuel que l'on a lance n fois sur la touche retour arrière (où n est la longueur de la chaîne écrite par l'utilisateur). \\
+Puisque tout est automatique, le remplacement du mot n'est pas détectable par l'oeil de l'utilisateur et la suggestion et la réécriture reste fluide. 
+
+\subsection{Algorithme de suggestions}
+
+Maintenant que nous pouvons détecter les frappes de l'utilisateur ainsi qu'écrire et/ou remplacer un mot, nous devons écrire l'algorithme qui nous permettra de faire 3 suggestions à l'utilisateur.\\
+Nous avons décidé de se baser sur un dictionnaire de plus de 300 000 mots trouvé sur (TODO : METTRE SITE) et nous avons choisi de développer l'algorithme de distance de Levenshtein ca il n'a besoin ni d'entraînement ni d'historique pour fonctionner. Il est également le plus simple à mettre en place. Nous avons optimisé l'algorithme car nous ne voulions pas d'attente entre le moment où l'utlisateur tape sur une touche du clavier et le moment où les suggestions s'affichent. \\
+
+Sur Rust, il existe  différents profils de compilation sur Rust mais seulement deux principaux : \og debug \fg et \og release\fg. Nous avons travaillé sur le profil de déboggage qui est beaucoup plus lent que le profil \og release \fg. Nous avons donc eu peur puisque l'algorithme, même optimisé, prenait beaucoup de temps. Avec le profil \og release \fg l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application. 
+
+\subsection{Interface graphique}
+
+L'algorithme est maintenant fonctionnel nous devons l'afficher à l'écran grâce à un interface graphique. Nous voulions dans un premier temps faire cet interface en Rust avec GTK (TODO : def gtk) mais avec cette technique, la fenêtre ne restait pas au premier plan. Cette approche devient donc inutilisable car l'application disparait à chaque fois que l'utilisateur clique sur une fenêtre.\\
+
+On a donc décidé de faire l'interface en Python avec Tkinter. Pour ce faire, notre script Rust lance un programme Python et lui envoie les 3 mots suggérés à l'utilisateur. Python les affiche dans l'interface. Si l'utilisateur clique sur l'un des trois mots, Python envoie l'information au script Rust qui va ensuite l'écrire dans l'application de l'utilisateur.\\
+
+La plus grosse difficulté de l'interface graphique a été la communication de Rust et Python mais également de faire en sorte que la page reste au premier plan. 
+
+\subsection{Installeur de l'application}
+
+Nous avons tout mis en place et l'application est fonctionnelle. Nous avons cependant décider d'ajouter un installeur d'application qui permet de télécharger toutes les dépendances et d'appliquer les droits nécessaires aux bons fonctionnements de l'application car certaines commandes nécessitent les droits de l'utilisateur root. \\
+
+\section{Résultats}
+Nous avons donc implémenter une application utilisable sur Ubuntu permettant une complétion semi-automatique. Cette application peut se lancer depuis un terminal mais également depuis le gestionnaire d'application d'Ubuntu. \\
+Une fois l'application lancée, une fenêtre apparait en premier plan et restera toujours en premier plan tant que l'utilisateur ne ferme pas l'application. Si l'utilisateur commence à écrire un mot, trois suggestions seront affichées sur l'interface graphique. Ces suggestions sont calculées grâce à l'algorithme de Levenstein ainsi que grâce à un tri. Si l'utilisateur ne veut pas l'un des trois mots proposés, il peut continuer à taper son mot. S'il tape sur l'un des mots, celui-ci sera écrit à la place du mot qu'il était en train d'écrire.  
+
+\section{Points à améliorer}
+
+Pour améliorer notre application, nous pourrions faire en sorte qu'elle soit compatible sur d'autres distributions telles que Linux et Mac. \\
+Nous pourrions également changer d'algorithme pour améliorer les suggestions selon l'historique de l'utilisateur par exemple.
+
+\section{Prérequis}
+
+Pour que l'application fonctionne, nous avons besoin d'un système Ubuntu avec Linux qui ne se trouve pas sur une machine virtuelle. De plus, le raccourci alt + tab est nécessaire pour changer d'applications. 
 
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion} 
@@ -305,10 +362,5 @@ Le resumé
 
     \end{justify}
 \end{center}
-
-
-\nocite{*}
-\bibliographystyle{alpha}
-\bibliography{references}
 
 \end{document}
