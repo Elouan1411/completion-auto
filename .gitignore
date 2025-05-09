@@ -1,5 +1,6 @@
 completion-system/target/
 completion-system/Cargo.lock
+venv
 
 # Fichiers de sortie de la compilation
 *.aux
