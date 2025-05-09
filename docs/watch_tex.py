@@ -2,8 +2,8 @@ import time
 import subprocess
 import os
 
-TEX_FILE = "report.tex"  # Remplace par le chemin de ton fichier
-COMMAND = ["texcompiler", TEX_FILE]  # Ou autre commande à lancer
+TEX_FILE = "report.tex" 
+COMMAND = ["texcompiler", TEX_FILE] 
 
 
 def main():
