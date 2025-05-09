@@ -21,6 +21,7 @@
 \usepackage{amssymb}
 \usepackage{fancybox}
 \usepackage{fancyhdr}
+\usepackage{url}
 
 % Configuration de fancyhdr
 \pagestyle{fancy}
@@ -46,6 +47,10 @@
 }
 
 
+\newcommand{\annotation}[1]{\colorbox{yellow}{#1}}
+
+\newcommand{\var}[1]{\texttt{\textbf{#1}}}
+
 
 
 \begin{document}
@@ -53,27 +58,27 @@
 
 % Première page
 \begin{titlepage}
-    \centering
-    \vspace*{2cm}
-    {\Huge \textbf{Université de Franche-Comté} \par}
-    \vspace{1cm}
-    {\huge \texttt{}{Projet d'Initiation à la recherche\\ } \LARGE{\textbf{L2 - CMI}} \par} 
-    \vspace{1.2cm}
-    {\huge \textbf{Complétion (semi-)automatique} \par}
-    \vspace{1.5cm}
-    {\Large BOITEUX Elouan\\BENALI Samia\par}
-    \vspace{5cm}
-    \begin{minipage}[c]{0.40\textwidth}
-        \centering
-        \raisebox{-0.5\height}{\includegraphics[width=\textwidth]{latex-images/logo_univ.png}}
-    \end{minipage}
-    \hfill
-    \begin{minipage}[c]{0.5\textwidth}
-        \centering
-        \raisebox{-0.5\height}{\includegraphics[width=\textwidth]{latex-images/logo_CMI.png}}
-    \end{minipage}
-    \vfill
-    {2024/2025}
+	\centering
+	\vspace*{2cm}
+	{\Huge \textbf{Université de Franche-Comté} \par}
+	\vspace{1cm}
+	{\huge \texttt{}{Projet d'Initiation à la recherche\\ } \LARGE{\textbf{L2 - CMI}} \par}
+	\vspace{1.2cm}
+	{\huge \textbf{Complétion (semi-)automatique} \par}
+	\vspace{1.5cm}
+	{\Large BOITEUX Elouan\\BENALI Samia\par}
+	\vspace{5cm}
+	\begin{minipage}[c]{0.40\textwidth}
+		\centering
+		\raisebox{-0.5\height}{\includegraphics[width=\textwidth]{latex-images/logo_univ.png}}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c]{0.5\textwidth}
+		\centering
+		\raisebox{-0.5\height}{\includegraphics[width=\textwidth]{latex-images/logo_CMI.png}}
+	\end{minipage}
+	\vfill
+	{2024/2025}
 \end{titlepage}
 
 \tableofcontents
@@ -83,12 +88,13 @@
 \chapter*{Introduction} % * pour ne pas avoir de numéro de chapitre
 \addcontentsline{toc}{chapter}{Introduction}
 
-Dans le cadre de notre projet de Recherche du CMI informatique de l’Université de Franche-Comté, encadré par Monsieur Héam, nous avons travaillé sur la complétion (semi-)automatique. \\
+Dans le cadre de notre projet de Recherche du CMI informatique de l’Université de Franche-Comté, encadré par Monsieur Héam, nous avons travaillé sur la complétion (semi-)automatique.\par \vspace{\baselineskip} % pour une ligne vide
 
-Ce projet nous a permis de découvrir ce qu'était la complétion automatique et la complétion semi-automatique et de comprendre sur quoi ce repose ces deux notions. \\ 
-La complétion automatique est un processus par lequel un système va prédire et compléter une entrée en fonction de certaines données et contextes. Cependant, la complétion semi-automatique, est une assistance permettant au système de proposer des options tout en laissant à l'utilisateur la décision finale. \\
-La complétion (semi-)automatique peut etre utilisée dans de nombreuses applications : une saisie sur clavier, une complétion de code, une recherche sur un moteur de recherche, une assistance virtuelle etc\dots \\
-Ce rapport va nous permettre, dans un premier temps, d’étudier les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique. \\
+
+Ce projet nous a permis de découvrir ce qu'était la complétion automatique et la complétion semi-automatique et de comprendre sur quoi ce repose ces deux notions. La complétion automatique est un processus par lequel un système va prédire et compléter une entrée en fonction de certaines données et contextes. Cependant, la complétion semi-automatique, est une assistance permettant au système de proposer des options tout en laissant à l'utilisateur la décision finale. La complétion (semi-)automatique peut être utilisée dans de nombreuses applications : une saisie sur clavier, une complétion de code, une recherche sur un moteur de recherche, une assistance virtuelle etc\dots\par \vspace{\baselineskip} % pour une ligne vide
+
+
+Ce rapport va nous permettre, dans un premier temps, d’étudier les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique.\par
 \vfill
 
 \chapter{Les différentes approches utilisées}
@@ -97,17 +103,17 @@ Ce rapport va nous permettre, dans un premier temps, d’étudier les différent
 Pour proposer des suggestions, ce modèle utilisent des algorithmes simples qui s'appuient sur des règles préprogrammées telles que la correspondance de préfixes ou une séquence donnée en amont. Ces algorithmes vont être gérer principalement grâce à des dictionnaires statiques ou des listes.  Cette implémentation est plutôt rapide et simple à mettre en place, elle est cependant très peu flexible et empêche donc une utilisation complexe\dots
 
 \section{Modèles s'appuyant sur des statistiques}
-Pour proposer des suggestions, ce modèle utilisent des statistiques fournies grâce aux données historiques. Cela permettra de prédire des séquences comme avec le modèle de Markov ou la méthode TD-IDF.
+Pour proposer des suggestions, ce modèle utilisent des statistiques fournies grâce aux données historiques \annotation{je mettrais d'historique}. Cela permettra de prédire des séquences comme avec le modèle de Markov \annotation{peut être dire qu'on l'explque après} ou la méthode TD-IDF\annotation{on dit pas ce que c'est -> abréviation}.
 Cette implémentation permet d'obtenir des résultats rapidement. On a cependant aucune compréhension sémantique donc les suggestions ne conviendront que rarement au contexte\dots
 
 \section{Modèles s'appuyant sur l'intelligence artificielle}
-Pour proposer des suggestions, ce modèle utilisent des algorithmes qui s'appuient sur l'intelligence artificielle et les réseaux neuronaux. 
+Pour proposer des suggestions, ce modèle utilisent des algorithmes qui s'appuient sur l'intelligence artificielle et les réseaux neuronaux.
 Avec l’apprentissage supervisé et non supervisé, ces modèles apprennent des motifs complexes à partir des données. Ils peuvent inclure des algorithmes comme les forêts aléatoires ou les régressions pour fournir des prédictions plus contextuelles.
 Cette implémentation permet d'être efficace face à des problèmes très complexes et de répondre à des demandes rares. Cependant, ce genre d'implémentation nécéssite énormément de temps de calculs et de ressources\dots
- \newpage
+\newpage
 
 \section{Modèles s'appuyant sur le deep learning}
-Pour proposer des suggestions, ce modèle utilise des algorithmes qui s'appuient sur l'amélioration en temps réel. C'est à l'utilisateur de faire des choix et ces mêmes choix sont mémorisés pour une utilisation personnalisée et plus précise. Cette implémentation est donc très adapatable et permet des réponses précises avec un sens sémentique. Cependant, cette implémentation est complexe et très longue à mettre en place puisque les choix de l'utilisateur sont nécessaires et les réponses dépendront totalement des données collectées\dots  
+Pour proposer des suggestions, ce modèle utilise des algorithmes qui s'appuient sur l'amélioration en temps réel. C'est à l'utilisateur de faire des choix et ces mêmes choix sont mémorisés pour une utilisation personnalisée et plus précise. Cette implémentation est donc très adapatable et permet des réponses précises avec un sens sémentique. Cependant, cette implémentation est complexe et très longue à mettre en place puisque les choix de l'utilisateur sont nécessaires et les réponses dépendront totalement \annotation{je remplacerai par 'en grande partie'} des données collectées\dots
 
 
 
@@ -115,42 +121,42 @@ Pour proposer des suggestions, ce modèle utilise des algorithmes qui s'appuient
 
 \section{Introduction}
 
-Un algorithme de calcul de distance permet de mesurer la similarité et/ou la différence entre deux objets tels que du textes, des vecteurs, des chaînes de caractères. \\
-On utilise ces algorithmes de calcul principalement pour la correction d'orthographe, le traitement de texte, les alignements de séquences ADN ou encore pour la recherche d'informations. \\
+Un algorithme de calcul de distance permet de mesurer la similarité et/ou la différence entre deux objets tels que du textes, des vecteurs, des chaînes de caractères. On utilise ces algorithmes de calcul principalement pour la correction d'orthographe, le traitement de texte, les alignements de séquences ADN ou encore pour la recherche d'informations.
 
 \section{Distance d'édition ou de Levenshtein}
 
-L'algorithme de calcul de distance d'édition permet de rechercher le nombre minimal d'opérations élémentaires, tels que les insertions, les suppressions et les substitutions, qui seront nécessaires à la transformation d'une chaîne de caractères en une autre. \\
-L'insertion permet d'ajouter un caractère, la suppression d'en enlever, et la subtitution d'en replacer un caractère par un autre. 
+L'algorithme de calcul de distance d'édition permet de rechercher le nombre minimal d'opérations élémentaires, tels que les insertions, les suppressions et les substitutions, qui seront nécessaires à la transformation d'une chaîne de caractères en une autre. L'insertion permet d'ajouter un caractère, la suppression d'en enlever, et la subtitution d'en replacer un caractère par un autre. \par \vspace{\baselineskip}
 
-La compexité de l'algorithme est en OP($n \times m$) où n est la longueur de la première chaîne et m la longueur de la seconde. \\
-Sa complexité dans l'espace est équivalente. Dans certaines implémentations avancées, la complexité dans l'espace peut être réduite à O($\min(n,m)$). \\
+La compexité de l'algorithme est en OP($n \times m$) \annotation{OP ??? et peut etre mettre le O expres de la complexité} où n est la longueur de la première chaîne et m la longueur de la seconde. Sa complexité dans l'espace est équivalente. Dans certaines implémentations avancées, la complexité dans l'espace peut être réduite à O($\min(n,m)$). \par \vspace{\baselineskip}
 
-Il s'agit d'une implémentation simple et intuitive qui est simple de mettre en place. Cependant, elle ne prend pas en compte les permutations et ne peut pas résoudre des erreurs plus complexes que l'insertion, la suppression et la subtitution. \\
+Il s'agit d'une implémentation simple et intuitive qui est simple \annotation{repetition de simple} de mettre en place. Cependant, elle ne prend pas en compte les permutations et ne peut pas résoudre des erreurs plus complexes que l'insertion, la suppression et la subtitution. \\
+
 \newpage
-La formule du calcul de la distance de Levenshtein est le suivant : 
+
+\noindent{}La formule du calcul de la distance de Levenshtein est le suivant :
 
 \[
-\text{lev}(a, b) =
-\begin{cases}
-\max(|a|, |b|) & \text{si } \min(|a|, |b|) = 0, \\
-\text{lev}(a - 1, b - 1) & \text{si } a[0] = b[0], \\
-1 + \min \begin{cases}
-\text{lev}(a - 1, b) \\
-\text{lev}(a, b - 1) \\
-\text{lev}(a - 1, b - 1)
-\end{cases} & \text{sinon}.
-\end{cases}
+	\text{lev}(a, b) =
+	\begin{cases}
+		\max(|a|, |b|)           & \text{si } \min(|a|, |b|) = 0, \\
+		\text{lev}(a - 1, b - 1) & \text{si } a[0] = b[0],        \\
+		1 + \min \begin{cases}
+			         \text{lev}(a - 1, b) \\
+			         \text{lev}(a, b - 1) \\
+			         \text{lev}(a - 1, b - 1)
+		         \end{cases} & \text{sinon}.
+	\end{cases}
 \]
-On cherche le nombre minimal d'opérations pour transformer la chaîne a en chaine b.
+
+\noindent{}On cherche le nombre minimal d'opérations pour transformer la chaîne \var{a} en chaine \var{b}.
 
 \section{Distance de Damerau-Levenshtein}
 
 L'algorithme de calcul de distance de Damerau-Levenshtein permet de faire la même chose que l'algorithme de calcul de distance de Levenshtein en y ajoutant l'opération de transposition de deux caractères adjacents.  \\
 
-Les complexités en temps et dans l'espace de l'algorithme restent les mêmes que la distance de Levenshtein.Cependant, même dans les implémentations avancées, la complexité dans l'espace ne peut pas être réduite. \\
+Les complexités en temps et dans l'espace de l'algorithme restent les mêmes que la distance de Levenshtein. Cependant, même dans les implémentations avancées, la complexité dans l'espace ne peut pas être réduite. \\
 
-Il s'agit d'une implémentation qui reste simple et intuitive et qui, de plus, a une meilleure gestion des erreurs de type ("ab" et "ba"). Cependant, cette implémentation est plus coûteuse que Levenshtein.  \\
+Il s'agit d'une implémentation qui reste simple et intuitive et qui, de plus, a une meilleure gestion des erreurs de type ("ab" et "ba"). Cependant, \annotation{repetition de cependant} cette implémentation est plus coûteuse que Levenshtein.
 
 \section{Distance de Hamming}
 
@@ -160,77 +166,77 @@ Les complexités en temps et dans l'espace de l'algorithme sont en O(n) où n es
 
 C'est un algorithme facile à implémenter et très rapide. Cependant, il ne fonctionne que sur des chaînes de même longueur ce qui peut vite s'avérer restrictif.\\
 
+\annotation{un peu court, et peut etre rajouter une image comme on avait dans le projet d'algo}
+
+\annotation{y a meme peut etre moyen de trouvé une illustration par point}
+
 \chapter{Chaine de Markov}
 
 \section{Définition}
 
-Une chaîne de Markov est un modèle mathématique qui représente un sytème où la probabilité de passer d'un état à un autre dépend uniquement de l'état actuel. \\
-Les états sont les différents éléments du système. \\
-Les transitions sont les différentes probabilités de passer d'un état à un autre. \\
-Une matrice de transition est une table qui permet de regrouper les probabilités de transition entre tous les états. \\
+Une chaîne de Markov est un modèle mathématique qui représente un sytème où la probabilité de passer d'un état à un autre dépend uniquement de l'état actuel. Les états sont les différents éléments du système. Les transitions sont les différentes probabilités de passer d'un état à un autre. \par
+Une matrice de transition est une table qui permet de regrouper les probabilités de transition entre tous les états.
 
 \section{Application}
-On utilise les chaînes de Markov pour modéliser des processus aléatoires, pour analyser des séquences données, des prédictions ou encore des historiques de navigation. \\
-
-Nous allons nous concentrer sur les historiques de navigation sur le web ainsi que l'historique des actions de l'utilisateur. \\
+On utilise les chaînes de Markov pour modéliser des processus aléatoires, pour analyser des séquences données, des prédictions ou encore des historiques de navigation. Nous allons nous concentrer sur les historiques de navigation sur le web ainsi que l'historique des actions de l'utilisateur. \\
 
 Imaginons qu'un utilisateur navigue entre trois pages web A, B et C. \\
-Alors une chaîne de Markov pourrait ressembler à : \\
+Alors une chaîne de Markov pourrait ressembler à :
 
 
 \begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-\textbf{Depuis} & \textbf{Vers} & \textbf{Probabilité} \\
-\hline
-A & B & 0.6 \\
-A & C & 0.4 \\
-B & A & 0.3 \\
-B & C & 0.7 \\
-C & A & 0.5 \\
-C & B & 0.5 \\
-\hline
-\end{tabular}
-\caption{Probabilités de transition entre les états}
+	\centering
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\textbf{Depuis} & \textbf{Vers} & \textbf{Probabilité} \\
+		\hline
+		A               & B             & 0.6                  \\
+		A               & C             & 0.4                  \\
+		B               & A             & 0.3                  \\
+		B               & C             & 0.7                  \\
+		C               & A             & 0.5                  \\
+		C               & B             & 0.5                  \\
+		\hline
+	\end{tabular}
+	\caption{Probabilités de transition entre les états}
 \end{table}
-La matrice de transition serait donc : \\
+La matrice de transition serait donc :
 
 \[
-M = 
-\begin{bmatrix}
-0 & 0.6 & 0.4 \\
-0.3 & 0 & 0.7 \\
-0.5 & 0.5 & 0
-\end{bmatrix}
+	M =
+	\begin{bmatrix}
+		0   & 0.6 & 0.4 \\
+		0.3 & 0   & 0.7 \\
+		0.5 & 0.5 & 0
+	\end{bmatrix}
 \]
 
 
 L'objectif serait d'utiliser l'historique de navigation ou l'historique des actions de l'utilisateur pour modéliser les transitions probables entre les différentes étapes. \\
-Pour cela, on doit premièrement collecter les données des historiques. Ensuite, on compte les transitions observées entre les états pour calculer les probabilités de transition. Enfin, on construit la matrice de transition. \\
+Pour cela, on doit premièrement collecter les données des historiques. Ensuite, on compte les transitions observées entre les états pour calculer les probabilités de transition. Enfin, on construit la matrice de transition.
 
 \section{Exemple}
 
-Prenons l'exemple de l'historique suivant : \\
+\noindent{}Prenons l'exemple de l'historique suivant :
 \[
-A \Longrightarrow C \Longrightarrow B \Longrightarrow A \Longrightarrow B \Longrightarrow C
+	A \Longrightarrow C \Longrightarrow B \Longrightarrow A \Longrightarrow B \Longrightarrow C
 \]
 
-La première chose a faire est d'observer le nombre de transitions : 
+\noindent{}La première chose a faire est d'observer le nombre de transitions :
 \begin{table}[h!]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-\textbf{Depuis} & \textbf{Vers} & \textbf{Nombre d'observations} \\
-\hline
-A & C & 1 \\
-C & B & 1 \\
-B & A & 1 \\
-A & B & 1 \\
-B & C & 1 \\
-\hline
-\end{tabular}
-\caption{Transitions observées et leur fréquence}
+	\centering
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\textbf{Depuis} & \textbf{Vers} & \textbf{Nombre d'observations} \\
+		\hline
+		A               & C             & 1                              \\
+		C               & B             & 1                              \\
+		B               & A             & 1                              \\
+		A               & B             & 1                              \\
+		B               & C             & 1                              \\
+		\hline
+	\end{tabular}
+	\caption{Transitions observées et leur fréquence}
 \end{table}
 
 Ensuite, il faut calculer les probabilités de transition. \\
@@ -238,52 +244,52 @@ Pour ce faire, on considère la probabilité de transition entre deux états \(X
 
 \subsection*{Transitions depuis A}
 \begin{itemize}
-    \item Transitions observées : \( A \rightarrow C \), \( A \rightarrow B \)
-    \item Nombre total de transitions depuis A : \(2\)
-    \item Probabilités :
-    \begin{itemize}
-        \item \( P(A \rightarrow C)  = 0.5 \)
-        \item \( P(A \rightarrow B)  = 0.5 \)
-    \end{itemize}
+	\item Transitions observées : \( A \rightarrow C \), \( A \rightarrow B \)
+	\item Nombre total de transitions depuis A : \(2\)
+	\item Probabilités :
+	      \begin{itemize}
+		      \item \( P(A \rightarrow C)  = 0.5 \)
+		      \item \( P(A \rightarrow B)  = 0.5 \)
+	      \end{itemize}
 \end{itemize}o
 
 \subsection*{Transitions depuis B}
 \begin{itemize}
-    \item Transitions observées : \( B \rightarrow A \), \( B \rightarrow C \)
-    \item Nombre total de transitions depuis B : \(2\)
-    \item Probabilités :
-    \begin{itemize}
-        \item \( P(B \rightarrow A) = 0.5 \)
-        \item \( P(B \rightarrow C) = 0.5 \)
-    \end{itemize}
+	\item Transitions observées : \( B \rightarrow A \), \( B \rightarrow C \)
+	\item Nombre total de transitions depuis B : \(2\)
+	\item Probabilités :
+	      \begin{itemize}
+		      \item \( P(B \rightarrow A) = 0.5 \)
+		      \item \( P(B \rightarrow C) = 0.5 \)
+	      \end{itemize}
 \end{itemize}
 
 \subsection*{Transitions depuis C}
 \begin{itemize}
-    \item Transition observée : \( C \rightarrow B \)
-    \item Nombre total de transitions depuis C : \(1\)
-    \item Probabilité :
-    \begin{itemize}
-        \item \( P(C \rightarrow B) = 1 \)
-    \end{itemize}
+	\item Transition observée : \( C \rightarrow B \)
+	\item Nombre total de transitions depuis C : \(1\)
+	\item Probabilité :
+	      \begin{itemize}
+		      \item \( P(C \rightarrow B) = 1 \)
+	      \end{itemize}
 \end{itemize}
 
 \subsection*{Matrice de transition}
-On obtient donc une matrice de transition. 
+On obtient donc une matrice de transition.
 
 \[
-M =
-\begin{bmatrix}
-0 & 0.5 & 0.5 \\
-0.5 & 0 & 0.5 \\
-0 & 1 & 0
-\end{bmatrix}
+	M =
+	\begin{bmatrix}
+		0   & 0.5 & 0.5 \\
+		0.5 & 0   & 0.5 \\
+		0   & 1   & 0
+	\end{bmatrix}
 \]
 
 
 
 \section{Conclusion}
-Les chaînes de Markov permettent de prédire l'étape suivante en se basant sur les actions précédentes. Cela va permettre, par la suite, de personnaliser les suggestions pour chaque utilisateur. \\
+Les chaînes de Markov permettent de prédire l'étape suivante en se basant sur les actions précédentes. Cela va permettre, par la suite, de personnaliser les suggestions pour chaque utilisateur. \par
 De plus, ce système est facile à mettre en place et à implémenter. Cependant, une chaîne de Markov ne prend pas en compte l'historique complet ce qui mène à un problème de mémoire. Il faut, de plus, un très grand nombre de données et un historique plus grand pour avoir des données fiables .
 \chapter{Notre outil de complétion (semi-)automatique}
 
@@ -296,7 +302,7 @@ Nous devions ensuite mettre en place le projet. Nous avons décider d'essayer de
 \section{Les étapes de la réalisation}
 
 \subsection{Keylogger \& mouselogger}
-TODO : ajouter les defs 
+TODO : ajouter les defs
 Dans un premier temps nous avons récupérer tous les évènements clavier de l'utilisateur quelque soit l'application sur laquelle il se trouve. La solution retenue pour ce projet a été de développer un keylogger. Un keylogger intercepte les frappes en lisant directement les évènements clavier du système. Après la détection de chaque touche pressée, le keylogger traduit l'identifiant reçu en caractère grâce au fichier /usr/include/linux/input-event-codes.h que l'on retrouve dans l'OS. Cela permet ainsi de constuire le mot au fur et à mesure. \\
 
 Une fois ajouté à notre programme principal, nous pouvons désormais récupérer les frappes de l'utilisateur. Ensuite, nous pouvons concaténer les lettres et afficher dans un terminal le mot en cours de saisie. Si l'utilisateur clique sur les flèches de navigation droite ou gauche, il navigue dans le mot en cours de saisie et peut ainsi ajouter des lettres à n'importe quelle position du mot. De plus, s'il clique sur la touche retour arrière, il peut supprimer la lettre à gauche du curseur. Enfin si l'utilisateur clique sur n'importe quelle autre touche qu'une lettre (accentuée ou non), le retour arrière ou les flèches de navigation alors, on annule les suggestions de mots. \\
@@ -305,23 +311,23 @@ Nous devons également gérer les déplacements et les clics de la souris. On a 
 Une fois cette première partie terminée, nous avons constater qu'un seul clavier et qu'une seule souris étaient détectés. Or, si un utilisateur utilise un ordinateur partable et y branche un lcabier externe, notre détection de saisie de fonctionne plus. \\
 La principale difficulté a été de détecter tous les claviers puis de les faire fonctionner en même temps. On a décidé d'utiliser des threads pour lire les fichiers des claviers et des souris. Les threads sont conçus pour que ce soit compatible avec tous les périphériques branchés et on obtient donc un comportement cohérent et fluide. \\
 
-Cependant, il restait un problème : la fin du programme. En effet, lorsque l'on ferme l'interface graphique, les threads sont encore en train de lire les fichiers des claviers et des souris et les threads Rust ne se ferment donc pas. Pour pallier ce problème, nous avons fait en sorte qu'un signal soit envoyé à Rust lorsque l'interface graphique en Python est fermée. Lorsque le signal est reçu par Rust, ce dernier l'envoie aux threads qui sont gérés de façon asynchrones et qui ferment ainsi la lecture du fichier. On obtient une façon plus propre de fermer le programme. 
+Cependant, il restait un problème : la fin du programme. En effet, lorsque l'on ferme l'interface graphique, les threads sont encore en train de lire les fichiers des claviers et des souris et les threads Rust ne se ferment donc pas. Pour pallier ce problème, nous avons fait en sorte qu'un signal soit envoyé à Rust lorsque l'interface graphique en Python est fermée. Lorsque le signal est reçu par Rust, ce dernier l'envoie aux threads qui sont gérés de façon asynchrones et qui ferment ainsi la lecture du fichier. On obtient une façon plus propre de fermer le programme.
 
 
 \subsection{Ecrire et remplacer un mot}
 
-Pour cette deuxième étape, nous devions faire en sorte de pouvoir écrire un mot dans n'importe quelle application, et cela de façon automatique. Pour ce faire,  il nous fallait un clavier virtuel pour simuler les frappes de l'utilisateur et ainsi écrire le mot demandé. 
+Pour cette deuxième étape, nous devions faire en sorte de pouvoir écrire un mot dans n'importe quelle application, et cela de façon automatique. Pour ce faire,  il nous fallait un clavier virtuel pour simuler les frappes de l'utilisateur et ainsi écrire le mot demandé.
 Le code écrit fonctionne ainsi : On crée un tableau contenant tous les caractères du clavier avec lesquels on travaille. Ensuite, on crée une fonction permettant de cliquer sur un de ces caractères sur le clavier virtuel. Enfin, on répète cette opération avec chaque lettre du mot pour l'écrire en entier. \\
 
 Lorsque cela a été mis en place, on s'est rendu compte que les lettres précédemment écrites par l'utilisateur n'étaient pas effacées. Pour cela,  nous avons simplement utilisé la fonction permettant de cliquer sur une touche du clavier virtuel que l'on a lance n fois sur la touche retour arrière (où n est la longueur de la chaîne écrite par l'utilisateur). \\
-Puisque tout est automatique, le remplacement du mot n'est pas détectable par l'oeil de l'utilisateur et la suggestion et la réécriture reste fluide. 
+Puisque tout est automatique, le remplacement du mot n'est pas détectable par l'oeil de l'utilisateur et la suggestion et la réécriture reste fluide.
 
 \subsection{Algorithme de suggestions}
 
 Maintenant que nous pouvons détecter les frappes de l'utilisateur ainsi qu'écrire et/ou remplacer un mot, nous devons écrire l'algorithme qui nous permettra de faire 3 suggestions à l'utilisateur.\\
 Nous avons décidé de se baser sur un dictionnaire de plus de 300 000 mots trouvé sur (TODO : METTRE SITE) et nous avons choisi de développer l'algorithme de distance de Levenshtein ca il n'a besoin ni d'entraînement ni d'historique pour fonctionner. Il est également le plus simple à mettre en place. Nous avons optimisé l'algorithme car nous ne voulions pas d'attente entre le moment où l'utlisateur tape sur une touche du clavier et le moment où les suggestions s'affichent. \\
 
-Sur Rust, il existe  différents profils de compilation sur Rust mais seulement deux principaux : \og debug \fg et \og release\fg. Nous avons travaillé sur le profil de déboggage qui est beaucoup plus lent que le profil \og release \fg. Nous avons donc eu peur puisque l'algorithme, même optimisé, prenait beaucoup de temps. Avec le profil \og release \fg l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application. 
+Sur Rust, il existe  différents profils de compilation sur Rust mais seulement deux principaux : \og debug \fg et \og release\fg. Nous avons travaillé sur le profil de déboggage qui est beaucoup plus lent que le profil \og release \fg. Nous avons donc eu peur puisque l'algorithme, même optimisé, prenait beaucoup de temps. Avec le profil \og release \fg l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application.
 
 \subsection{Interface graphique}
 
@@ -329,7 +335,7 @@ L'algorithme est maintenant fonctionnel nous devons l'afficher à l'écran grâc
 
 On a donc décidé de faire l'interface en Python avec Tkinter. Pour ce faire, notre script Rust lance un programme Python et lui envoie les 3 mots suggérés à l'utilisateur. Python les affiche dans l'interface. Si l'utilisateur clique sur l'un des trois mots, Python envoie l'information au script Rust qui va ensuite l'écrire dans l'application de l'utilisateur.\\
 
-La plus grosse difficulté de l'interface graphique a été la communication de Rust et Python mais également de faire en sorte que la page reste au premier plan. 
+La plus grosse difficulté de l'interface graphique a été la communication de Rust et Python mais également de faire en sorte que la page reste au premier plan.
 
 \subsection{Installeur de l'application}
 
@@ -337,7 +343,7 @@ Nous avons tout mis en place et l'application est fonctionnelle. Nous avons cepe
 
 \section{Résultats}
 Nous avons donc implémenter une application utilisable sur Ubuntu permettant une complétion semi-automatique. Cette application peut se lancer depuis un terminal mais également depuis le gestionnaire d'application d'Ubuntu. \\
-Une fois l'application lancée, une fenêtre apparait en premier plan et restera toujours en premier plan tant que l'utilisateur ne ferme pas l'application. Si l'utilisateur commence à écrire un mot, trois suggestions seront affichées sur l'interface graphique. Ces suggestions sont calculées grâce à l'algorithme de Levenstein ainsi que grâce à un tri. Si l'utilisateur ne veut pas l'un des trois mots proposés, il peut continuer à taper son mot. S'il tape sur l'un des mots, celui-ci sera écrit à la place du mot qu'il était en train d'écrire.  
+Une fois l'application lancée, une fenêtre apparait en premier plan et restera toujours en premier plan tant que l'utilisateur ne ferme pas l'application. Si l'utilisateur commence à écrire un mot, trois suggestions seront affichées sur l'interface graphique. Ces suggestions sont calculées grâce à l'algorithme de Levenstein ainsi que grâce à un tri. Si l'utilisateur ne veut pas l'un des trois mots proposés, il peut continuer à taper son mot. S'il tape sur l'un des mots, celui-ci sera écrit à la place du mot qu'il était en train d'écrire.
 
 \section{Points à améliorer}
 
@@ -346,21 +352,26 @@ Nous pourrions également changer d'algorithme pour améliorer les suggestions s
 
 \section{Prérequis}
 
-Pour que l'application fonctionne, nous avons besoin d'un système Ubuntu avec Linux qui ne se trouve pas sur une machine virtuelle. De plus, le raccourci alt + tab est nécessaire pour changer d'applications. 
+Pour que l'application fonctionne, nous avons besoin d'un système Ubuntu avec Linux qui ne se trouve pas sur une machine virtuelle. De plus, le raccourci alt + tab est nécessaire pour changer d'applications.
 
 \chapter*{Conclusion}
-\addcontentsline{toc}{chapter}{Conclusion} 
+\addcontentsline{toc}{chapter}{Conclusion}
 % Page de résumé
 \newpage
 \begin{center}
-    \vspace*{\fill} % Espace vertical
-    \section*{Résumé}
-    \addcontentsline{toc}{chapter}{Résumé}
-    \begin{justify}
-Le resumé
+	\vspace*{\fill} % Espace vertical
+	\section*{Résumé}
+	\addcontentsline{toc}{chapter}{Résumé}
+	\begin{justify}
+		Le resumé
 
 
-    \end{justify}
+	\end{justify}
 \end{center}
+
+
+\nocite{*}
+\bibliographystyle{alpha}
+\bibliography{references}
 
 \end{document}
