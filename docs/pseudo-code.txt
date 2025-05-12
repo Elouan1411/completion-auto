@@ -5,7 +5,7 @@ Fonction get_suggestions(mot_recherche, contenu_dictionnaire) {
     Pour chaque ligne dans contenu_dictionnaire {
         Récupérer le mot et la fréquence
         
-        is_prefix = VRAI si le mot commence par mot_recherche
+        estPrefix = VRAI si le mot commence par mot_recherche
         distance = distance_levenshtein(mot_recherche, mot)
 
         Si distance > DISTANCE_MAX et ! is_prefix {
@@ -14,13 +14,13 @@ Fonction get_suggestions(mot_recherche, contenu_dictionnaire) {
 
         Ajouter une suggestion au tas avec :
             - distance
-            - is_prefix
+            - estPrefix
             - fréquence
             - mot
         // Le tas est trié automatiquement selon la priorité (distance, puis is_prefix, puis fréquence)
 
         Si la taille du tas dépasse 3 éléments {
-            Retirer l'élément avec la plus grande priorité (élément minimum dans le tas)
+            Retirer l'élément avec la plus petite priorité (élément minimum dans le tas)
         }
     }
 
