@@ -1,0 +1,10 @@
+#define KEY_I			23
+#define KEY_O			24
+#define KEY_P			25
+#define KEY_LEFTBRACE	26
+#define KEY_RIGHTBRACE	27
+#define KEY_ENTER		28
+#define KEY_LEFTCTRL	29
+#define KEY_A			30
+#define KEY_S			31
+#define KEY_D			32
