@@ -134,7 +134,7 @@ Il s'agit d'une implémentation simple et intuitive qu'il est facile de mettre e
 
 \begin{figure}[H]
 	\begin{center}
-		{\includegraphics[width=0.7\textwidth]{latex-images/levenshtein.png}}
+		{\includegraphics[height=0.45\textwidth]{latex-images/levenshtein.png}}
 	\end{center}
 	\caption{Exemple distance de Levenshtein}
 	\label{fig:levenshtein}
@@ -167,7 +167,7 @@ Il s'agit d'une implémentation qui reste simple et intuitive et qui, de plus, a
 
 \begin{figure}[H]
 	\begin{center}
-		{\includegraphics[width=0.5\textwidth]{latex-images/damerau-levenshtein.png}}
+		{\includegraphics[height=0.45\textwidth]{latex-images/damerau-levenshtein.png}}
 	\end{center}
 	\caption{Exemple distance de Damerau-Levenshtein}
 	\label{fig:damerau}
@@ -182,7 +182,7 @@ C'est un algorithme facile à implémenter et très rapide. Cependant, il ne fon
 
 \begin{figure}[H]
 	\begin{center}
-		{\includegraphics[width=0.7\textwidth]{latex-images/hamming.png}}
+		{\includegraphics[height=0.4\textwidth]{latex-images/hamming.png}}
 	\end{center}
 	\caption{Exemple distance de Hamming}
 	\label{fig:hamming}
@@ -321,7 +321,7 @@ Nous devions ensuite mettre en place le projet. Nous avons décider d'à la fois
 \section{Les étapes de la réalisation}
 
 \subsection{Keylogger \& mouselogger}
-Dans un premier temps, nous voulions pouvoir récupérer tous les évènements clavier de l'utilisateur quelque soit l'application sur laquelle il se trouve. La solution retenue pour ce projet a été de développer un keylogger. Un keylogger (ou enregistreur de frappe) est un programme qui s’exécute en arrière-plan de l'ordinateur et récupère les frappes de l’utilisateur sur son clavier. Après la détection de chaque touche pressée, notre keylogger traduit l'identifiant reçu en caractère grâce au fichier \texttt{\textbf{/usr/include/linux/input-event-codes.h}} que l'on retrouve dans les fichiers de l'\langage{OS}. Cela permet ainsi de constuire le mot au fur et à mesure. \\
+Dans un premier temps, nous voulions pouvoir récupérer tous les évènements clavier de l'utilisateur quelque soit l'application sur laquelle il se trouve. La solution retenue pour ce projet a été de développer un keylogger. Un keylogger (ou enregistreur de frappe) est un programme qui s’exécute en arrière-plan de l'ordinateur et récupère les frappes de l’utilisateur sur son clavier. Après la détection de chaque touche pressée, notre keylogger traduit l'identifiant reçu en caractère grâce au fichier \textbf{/usr/include/linux/input-event-codes.h} que l'on retrouve dans les fichiers de l'\langage{OS}. Cela permet ainsi de constuire le mot au fur et à mesure. \\
 
 Une fois ajouté à notre programme principal, nous pouvons désormais récupérer les frappes de l'utilisateur. Grâce à cela, nous pouvons désormais concaténer les lettres et afficher dans un terminal le mot en cours de saisie. Pour une utilisation plus fluide, nous avons ajouté quelques fonctionnalités supplémentaires. Si l'utilisateur clique sur les flèches de navigation droite ou gauche, il navigue dans le mot en cours de saisie et peut ainsi ajouter des lettres à n'importe quelle position du mot. De plus, s'il clique sur la touche retour arrière, il peut supprimer la lettre à gauche du curseur sans que notre programme perde l'information du mot en cours de saisie. Enfin si l'utilisateur clique sur n'importe quelle autre touche qu'une lettre (accentuée ou non), le retour arrière ou les flèches de navigation alors, on annule les suggestions de mots. \\
 Nous avons décider d'ajouter une détection de clics de souris afin d'annuler la proposition de suggestions lorsque l'utilisateur n'a plus le curseur de texte sur le mot qu'il est en train d'écrire. Cette implémentation a été simple et rapide puisque nous reprenons le même principe que le keylogger. \\
