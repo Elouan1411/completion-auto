@@ -129,15 +129,15 @@ L'algorithme de calcul de distance d'édition permet de rechercher le nombre min
 
 La compexité de l'algorithme est en $\mathcal{O}(n \times m)$  où n est la longueur de la première chaîne et m la longueur de la seconde. Sa complexité dans l'espace est équivalente. Dans certaines implémentations avancées, la complexité dans l'espace peut être réduite à $\mathcal{O}(\min(n,m))$. \par \vspace{\baselineskip}
 
-Il s'agit d'une implémentation simple et intuitive qu'il est facile de mettre en place. Cependant, elle ne prend pas en compte les permutations et ne peut pas résoudre des erreurs plus complexes que l'insertion, la suppression et la subtitution. 
+Il s'agit d'une implémentation simple et intuitive qu'il est facile de mettre en place. Cependant, elle ne prend pas en compte les permutations et ne peut pas résoudre des erreurs plus complexes que l'insertion, la suppression et la subtitution.
 
 
 \begin{figure}[H]
-    \begin{center}
-        {\includegraphics[width=0.7\textwidth]{latex-images/levenshtein .png}}
-    \end{center}
-    \caption{Exemple distance de Levenshtein}
-    \label{fig:levenshtein}
+	\begin{center}
+		{\includegraphics[width=0.7\textwidth]{latex-images/levenshtein.png}}
+	\end{center}
+	\caption{Exemple distance de Levenshtein}
+	\label{fig:levenshtein}
 \end{figure}
 
 \noindent{}La formule du calcul de la distance de Levenshtein est le suivant :
@@ -166,11 +166,11 @@ Les complexités en temps et dans l'espace de l'algorithme restent les mêmes qu
 Il s'agit d'une implémentation qui reste simple et intuitive et qui, de plus, a une meilleure gestion des erreurs de type ("ab" et "ba"). Elle est toute fois plus coûteuse que Levenshtein.
 
 \begin{figure}[H]
-    \begin{center}
-        {\includegraphics[width=0.5\textwidth]{latex-images/damerau-levenshtein .png}}
-    \end{center}
-    \caption{Exemple distance de Damerau-Levenshtein}
-    \label{fig:damerau}
+	\begin{center}
+		{\includegraphics[width=0.5\textwidth]{latex-images/damerau-levenshtein.png}}
+	\end{center}
+	\caption{Exemple distance de Damerau-Levenshtein}
+	\label{fig:damerau}
 \end{figure}
 \section{Distance de Hamming}
 
@@ -181,11 +181,11 @@ Les complexités en temps et dans l'espace de l'algorithme sont en $\mathcal{O}(
 C'est un algorithme facile à implémenter et très rapide. Cependant, il ne fonctionne que sur des chaînes de même longueur ce qui peut vite s'avérer restrictif.\\
 
 \begin{figure}[H]
-    \begin{center}
-        {\includegraphics[width=0.7\textwidth]{latex-images/hamming.png}}
-    \end{center}
-    \caption{Exemple distance de Hamming}
-    \label{fig:hamming}
+	\begin{center}
+		{\includegraphics[width=0.7\textwidth]{latex-images/hamming.png}}
+	\end{center}
+	\caption{Exemple distance de Hamming}
+	\label{fig:hamming}
 \end{figure}
 
 
@@ -321,29 +321,29 @@ Nous devions ensuite mettre en place le projet. Nous avons décider d'à la fois
 \section{Les étapes de la réalisation}
 
 \subsection{Keylogger \& mouselogger}
-Dans un premier temps, nous voulions pouvoir récupérer tous les évènements clavier de l'utilisateur quelque soit l'application sur laquelle il se trouve. La solution retenue pour ce projet a été de développer un keylogger. Un keylogger (ou enregistreur de frappe) est un programme qui s’exécute en arrière-plan de l'ordinateur et récupère les frappes de l’utilisateur sur son clavier. Après la détection de chaque touche pressée, notre keylogger traduit l'identifiant reçu en caractère grâce au fichier \var{/usr/include/linux/input-event-codes.h} que l'on retrouve dans les fichiers de l'\langage{OS}. Cela permet ainsi de constuire le mot au fur et à mesure. \\
+Dans un premier temps, nous voulions pouvoir récupérer tous les évènements clavier de l'utilisateur quelque soit l'application sur laquelle il se trouve. La solution retenue pour ce projet a été de développer un keylogger. Un keylogger (ou enregistreur de frappe) est un programme qui s’exécute en arrière-plan de l'ordinateur et récupère les frappes de l’utilisateur sur son clavier. Après la détection de chaque touche pressée, notre keylogger traduit l'identifiant reçu en caractère grâce au fichier \texttt{\textbf{/usr/include/linux/input-event-codes.h}} que l'on retrouve dans les fichiers de l'\langage{OS}. Cela permet ainsi de constuire le mot au fur et à mesure. \\
 
 Une fois ajouté à notre programme principal, nous pouvons désormais récupérer les frappes de l'utilisateur. Grâce à cela, nous pouvons désormais concaténer les lettres et afficher dans un terminal le mot en cours de saisie. Pour une utilisation plus fluide, nous avons ajouté quelques fonctionnalités supplémentaires. Si l'utilisateur clique sur les flèches de navigation droite ou gauche, il navigue dans le mot en cours de saisie et peut ainsi ajouter des lettres à n'importe quelle position du mot. De plus, s'il clique sur la touche retour arrière, il peut supprimer la lettre à gauche du curseur sans que notre programme perde l'information du mot en cours de saisie. Enfin si l'utilisateur clique sur n'importe quelle autre touche qu'une lettre (accentuée ou non), le retour arrière ou les flèches de navigation alors, on annule les suggestions de mots. \\
 Nous avons décider d'ajouter une détection de clics de souris afin d'annuler la proposition de suggestions lorsque l'utilisateur n'a plus le curseur de texte sur le mot qu'il est en train d'écrire. Cette implémentation a été simple et rapide puisque nous reprenons le même principe que le keylogger. \\
 
 Une fois cette première partie terminée, nous avons constater que notre programme détectait qu'un seul clavier et qu'une seule souris. Or, si un utilisateur utilise un ordinateur portable et y branche un clavier externe, notre détection de saisie de fonctionne plus. \par
-La principale difficulté a été de détecter tous les claviers et souris puis de les faire fonctionner en même temps. On a décidé d'utiliser des threads pour lire les fichiers des claviers et des souris en concurrence. Un thread est une séquence d'instructions qui pourra être exécutée indépendamment au sein d'un programme. Les threads permettent une exécution simultanée et un fonctionnement multitâche au sein d'une même application, cela même avec des périphériques différents. 
+La principale difficulté a été de détecter tous les claviers et souris puis de les faire fonctionner en même temps. On a décidé d'utiliser des threads pour lire les fichiers des claviers et des souris en concurrence. Un thread est une séquence d'instructions qui pourra être exécutée indépendamment au sein d'un programme. Les threads permettent une exécution simultanée et un fonctionnement multitâche au sein d'une même application, cela même avec des périphériques différents.
 
 \begin{figure}[H]
-    \begin{center}
-        {\includegraphics[width=\textwidth]{latex-images/lecture-fichier.png}}
-    \end{center}
-    \caption{Schéma descriptif des lectures fichiers}
-    \label{fig:lecture_fichier}
+	\begin{center}
+		{\includegraphics[width=\textwidth]{latex-images/lecture-fichier.png}}
+	\end{center}
+	\caption{Schéma descriptif des lectures fichiers}
+	\label{fig:lecture_fichier}
 \end{figure}
 
-Cependant, il restait un problème : arrêter proprement notre programme. En effet, lorsque l'on ferme l'interface graphique, les threads sont encore en train de lire les fichiers des claviers et des souris et ils ne se ferment donc pas. Pour pallier ce problème, nous avons fait en sorte qu'un signal soit envoyé à notre code \langage{Rust} lorsque l'interface graphique \langage{Python} est fermée. Lorsque le signal est reçu, ce dernier l'envoie aux threads qui sont gérés de façon asynchrones et qui ferment ainsi la lecture du fichier. Pour que les signaux permettent d'arrêter la lecture des fichiers de périphériques, nous avons dû modifier la structure de notre code. On obtient ainsi une façon plus propre de fermer le programme. 
+Cependant, il restait un problème : arrêter proprement notre programme. En effet, lorsque l'on ferme l'interface graphique, les threads sont encore en train de lire les fichiers des claviers et des souris et ils ne se ferment donc pas. Pour pallier ce problème, nous avons fait en sorte qu'un signal soit envoyé à notre code \langage{Rust} lorsque l'interface graphique \langage{Python} est fermée. Lorsque le signal est reçu, ce dernier l'envoie aux threads qui sont gérés de façon asynchrones et qui ferment ainsi la lecture du fichier. Pour que les signaux permettent d'arrêter la lecture des fichiers de périphériques, nous avons dû modifier la structure de notre code. On obtient ainsi une façon plus propre de fermer le programme.
 
 \subsection{Ecrire et remplacer un mot}
 
 Pour cette deuxième étape, nous devions faire en sorte de pouvoir écrire un mot dans n'importe quelle application, et cela de façon automatique via notre code. Pour ce faire,  noux avons mit en place un clavier virtuel pour simuler les frappes de l'utilisateur et ainsi écrire le mot demandé. Notre code fonctionne ainsi : On crée une fonction permettant de traduire un caractère en l'évènement clavier correspondant. Ensuite, on crée une fonction permettant de cliquer sur un de ces caractères sur le clavier virtuel. Enfin, on répète cette opération avec chaque lettre du mot pour l'écrire en entier.\\
 
-Lorsque cela a été mis en place, on s'est rendu compte que les lettres précédemment écrites par l'utilisateur n'étaient pas effacées. Pour cela,  nous avons simplement utilisé la fonction permettant de cliquer sur une touche du clavier virtuel que l'on a lance n fois sur la touche retour arrière (où n est la longueur du mot écrit par l'utilisateur). Comme tout est automatique, le remplacement du mot est instantané, non visible par l'utilisateur et la réécriture reste fluide et naturelle. 
+Lorsque cela a été mis en place, on s'est rendu compte que les lettres précédemment écrites par l'utilisateur n'étaient pas effacées. Pour cela,  nous avons simplement utilisé la fonction permettant de cliquer sur une touche du clavier virtuel que l'on a lance n fois sur la touche retour arrière (où n est la longueur du mot écrit par l'utilisateur). Comme tout est automatique, le remplacement du mot est instantané, non visible par l'utilisateur et la réécriture reste fluide et naturelle.
 
 \subsection{Algorithme de suggestions}
 
@@ -352,7 +352,7 @@ Nous avons décidé de se baser sur un dictionnaire de plus de 140 000 mots trou
 
 En testant notre algorithme, nous avons donc pris peur puisque, même après notre optimisation, il prenait trop de temps (environ 1 à 2 secondes).Après quelques recherches, nous avons vu qu'il existait  différents profils de compilation tels que : \og debug \fg et \og release\fg. Durant le développement, nous avons travaillé sur le profil de \og debug \fg qui permet une compilation plus rapide mais qui n'est pas optimisé et donc plus lent que le profil \og release \fg. Avec le profil \og release \fg l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application.\\
 
-Pour améliorer les suggestions, nous avons décider d'utiliser une des fréquences présentent dans le dictionnaire. (fréquence d'utilisation dans les livres). Nous avons mis en place un algorithme qui permet 
+Pour améliorer les suggestions, nous avons décider d'utiliser une des fréquences présentent dans le dictionnaire. (fréquence d'utilisation dans les livres). Nous avons mis en place un algorithme qui permet
 \subsection{Interface graphique}
 
 Maintenant que l'algorithme est fonctionnel, nous devons afficher à l'écran les suggestions proposé grâce à une interface graphique. Nous voulions dans un premier temps faire cet interface en \langage{Rust} avec GTK (TODO : def gtk) mais nous n'avons malheureusement pas réussi à garder la fenêtre au premier plan même si l'utilisateur et sur une autre application. Cette approche devient donc inutilisable car l'application disparait à chaque fois que l'utilisateur clique sur une fenêtre Il ne peut ainsi pas voir les différentes suggestions.\\
@@ -363,7 +363,7 @@ La plus grosse difficulté de l'interface graphique a été la communication de 
 
 \subsection{Installeur de l'application}
 
-Une fois que nous avons tout mis en place et que l'application est fonctionnelle, nous avons décider d'ajouter un installeur d'application qui permet de télécharger toutes les dépendances, d'ajouter l'application dans un dossier contenu dans le \langage{PATH}. Le \langage{PATH} est une variable système utilisée par le système d'exploitation pour localiser les fichiers exécutables indispensables depuis une ligne de commande ou une fenêtre de terminal. On crée également un fichier \var{.desktop} pour pouvoir ouvrir l'application depuis le gestionnaire d'application d'\langage{Ubuntu} et appliquer les droits nécessaires aux bons fonctionnements de l'application car certaines commandes nécessitent les droits de l'utilisateur \var{root}, par exemple la lecture des fichiers des périphériques. Nous avons gérer l'installeur grâce à un Makefile (TODO :def) 
+Une fois que nous avons tout mis en place et que l'application est fonctionnelle, nous avons décider d'ajouter un installeur d'application qui permet de télécharger toutes les dépendances, d'ajouter l'application dans un dossier contenu dans le \langage{PATH}. Le \langage{PATH} est une variable système utilisée par le système d'exploitation pour localiser les fichiers exécutables indispensables depuis une ligne de commande ou une fenêtre de terminal. On crée également un fichier \var{.desktop} pour pouvoir ouvrir l'application depuis le gestionnaire d'application d'\langage{Ubuntu} et appliquer les droits nécessaires aux bons fonctionnements de l'application car certaines commandes nécessitent les droits de l'utilisateur \var{root}, par exemple la lecture des fichiers des périphériques. Nous avons gérer l'installeur grâce à un Makefile (TODO :def)
 
 \section{Résultats}
 Nous avons donc implémenter une application utilisable sur \langage{Ubuntu} permettant une complétion semi-automatique. Cette application peut se lancer depuis un terminal mais également depuis le gestionnaire d'application d'\langage{Ubuntu}. \par

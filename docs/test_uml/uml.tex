@@ -1,0 +1,54 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta}
+
+\tikzset{
+    startstop/.style = {ellipse, draw, fill=red!30, minimum width=3cm, align=center},
+    process/.style = {rectangle, draw, fill=blue!30, minimum width=3cm, minimum height=1cm, align=center},
+    decision/.style = {diamond, aspect=1.5, draw, fill=green!30, minimum size=2cm, align=center},
+    arrow/.style = {->, >=Latex}
+}
+
+\begin{document}
+\begin{tikzpicture}[node distance=1.5cm]
+	% Colonne gauche
+	\node (start) [startstop] {Début};
+	\node (init) [process, below of=start] {Initialiser DISTANCE\_MAX = 2 \\ Initialiser tas (capacité 4)};
+	\node (read) [process, below of=init] {Lire mot \\ et fréquence};
+
+	% Centre
+	\node (remaining) [decision, below of=read, yshift=-0.5cm] {Mots \\ restants?};
+
+	% Colonne droite (traitement)
+	\node (compute) [process, right=3cm of remaining] {Calculer \\ estPrefix \\ et distance};
+	\node (distance_check) [decision, below of=compute] {distance > 2 \\ et !estPrefix?};
+	\node (add_heap) [process, below of=distance_check] {Ajouter au tas \\ avec priorité};
+	\node (heap_check) [decision, below of=add_heap] {Taille tas > 3?};
+	\node (remove) [process, right=2cm of heap_check] {Retirer élément \\ priorité min};
+
+	% Colonne gauche (sortie)
+	\node (collect) [process, left=3cm of remaining] {Collecter \\ suggestions};
+	\node (end) [startstop, below of=collect] {Retourner suggestions};
+
+	% Connexions principales
+	\draw [arrow] (start) -- (init);
+	\draw [arrow] (init) -- (read);
+	\draw [arrow] (read) -- (remaining);
+
+	% Branche droite (boucle)
+	\draw [arrow] (remaining) -- node[above] {Oui} (compute);
+	\draw [arrow] (compute) -- (distance_check);
+	\draw [arrow] (distance_check) -- node[left] {Non} (add_heap);
+	\draw [arrow] (distance_check.east) -| ++(1.5,0) node[above right] {Oui} |- (remaining.east);
+
+	% Gestion du tas
+	\draw [arrow] (add_heap) -- (heap_check);
+	\draw [arrow] (heap_check) -- node[above] {Oui} (remove);
+	\draw [arrow] (remove.north) |- ++(0,1.5) -| (remaining.east);
+	\draw [arrow] (heap_check.west) -| node[above] {Non} ++(-1.5,0) |- (remaining.west);
+
+	% Branche gauche (sortie)
+	\draw [arrow] (remaining) -- node[above] {Non} (collect);
+	\draw [arrow] (collect) -- (end);
+\end{tikzpicture}
+\end{document}
