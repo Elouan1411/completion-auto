@@ -1,0 +1,118 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\title{Documentation technique -- Complétion automatique}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Description générale}
+
+Ce projet implémente un outil de complétion semi-automatique de texte, utilisable dans toutes les applications sur un système Ubuntu.
+
+\section*{Installation}
+
+\subsection*{Prérequis}
+
+\begin{itemize}
+	\item Système \textbf{Ubuntu} (testé sur Ubuntu 22.04.2 LTS)
+	\item Le raccourci clavier \textbf{Alt + Tab} doit être actif (natif sur Ubuntu) pour changer d'application facilement
+\end{itemize}
+
+\subsection*{Étapes d'installation}
+
+\begin{lstlisting}[language=bash]
+cd completion-auto/completion-system
+make install
+\end{lstlisting}
+
+Le \texttt{Makefile} s’occupe de :
+\begin{itemize}
+	\item Installer les dépendances nécessaires
+	\item Copier le binaire compilé dans \texttt{/usr/local/bin/completion-system} (inclus dans le PATH)
+	\item Donner les bons droits d’exécution à tous les fichiers nécessaires
+\end{itemize}
+
+\section*{Lancement}
+
+Deux méthodes sont possibles :
+
+\begin{itemize}
+	\item \textbf{Depuis le terminal} :
+	      \begin{lstlisting}[language=bash]
+completion-system
+  \end{lstlisting}
+
+	\item \textbf{Depuis le gestionnaire d'applications Ubuntu} :
+	      Ouvrir le menu et rechercher \texttt{Completion System}, puis appuyer sur Entrée.
+\end{itemize}
+
+\textbf{Remarque :} sur certains ordinateurs, il est possible que le lancement via le gestionnaire d’applications ne fonctionne pas. Dans ce cas, le terminal reste pleinement fonctionnel.
+
+Une fois lancé, le programme tourne en arrière-plan et fonctionne dans \textbf{toutes les applications}.
+
+\section*{Désinstallation}
+
+\begin{lstlisting}[language=bash]
+cd completion-auto/completion-system
+make uninstall
+\end{lstlisting}
+
+\section*{Binaire autonome}
+
+Le fichier binaire \texttt{completion-system}, déjà compilé et fourni dans le dossier \texttt{bin/}, est entièrement autonome après installation.
+
+\begin{itemize}
+	\item Il est copié dans \texttt{/usr/local/bin}, ce qui permet de le lancer depuis n'importe où.
+	\item Il ne dépend plus des fichiers sources ni du scripts Python.
+\end{itemize}
+
+\section*{Structure des fichiers}
+
+L'arborescence du projet est la suivante :
+
+\begin{lstlisting}[basicstyle=\ttfamily]
+.
+|- data/
+|       |- dico\_freq.csv
+|- src/
+|       |- gui.py
+|       |- keylogger.rs
+|       |- main.rs
+|       |- mouselogger.rs
+|       |- offset.rs
+|       |- python_gui.rs
+|       |- suggestions.rs
+|       |- virtual_input.rs
+|- tools/
+|       |- format_dico.py
+|       |- Lexique383.tsv
+|- Cargo.toml
+|- completion-system.png
+|- Makefile
+|- README.md
+\end{lstlisting}
+
+
+\begin{itemize}
+	\item \texttt{src/} : contient tous les fichiers source Rust ainsi que le script Python pour l'interface graphique (\texttt{gui.py}).
+	\item \texttt{data/dico\_freq.csv} : dictionnaire final utilisé pour la complétion.
+	\item \texttt{tools/Lexique383.tsv} : base de données brute téléchargée.
+	\item \texttt{tools/format\_dico.py} : script Python utilisé pour convertir le fichier \texttt{.tsv} en \texttt{.csv}, il permet de plus d'enlever les informations inutiles.
+	\item \texttt{Cargo.toml} : fichier de configuration qui indique les dépendances Rust et leurs versions.
+	\item \texttt{completion-system.png} : icône affichée dans le menu d’applications Ubuntu.
+\end{itemize}
+
+\end{document}
+

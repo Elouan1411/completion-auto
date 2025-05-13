@@ -21631,7 +21631,7 @@ chômée,0.27
 chômés,0.27
 ci,3.65
 ci-après,0.61
-ci-contre,0.07
+complétion,20
 ci-dessous,0.61
 ci-dessus,1.28
 ci-gît,0.34
@@ -67013,6 +67013,7 @@ levantin,0.20
 levantines,0.47
 levantins,0.20
 lever,9.12
+levenshtein,21.33
 levers,9.12
 leveur,0.34
 leveurs,0.34

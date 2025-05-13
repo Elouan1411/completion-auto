@@ -56,7 +56,6 @@ async fn main() {
         let token_clone = token.clone();
 
         // Creation du thread pour chaque clavier
-        println!("path clavier : {:?}", path);
         let handle = tokio::spawn(async move {
             let mut word: String = String::new();
             tokio::select! {
@@ -113,7 +112,6 @@ async fn main() {
         handles.push(handle);
     }
     // Pour chaque chemin dans `mouse_paths`, lancer un thread
-    println!("path souris : {:?}", mouse_paths);
     for path_str in mouse_paths {
         let path = Path::new(&path_str).to_path_buf();
         let sender_canal = sender_canal.clone();
