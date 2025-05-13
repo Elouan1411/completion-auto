@@ -99,7 +99,7 @@
 \chapter*{Introduction} % * pour ne pas avoir de numéro de chapitre
 \addcontentsline{toc}{chapter}{Introduction}
 
-Dans le cadre de notre projet de Recherche du CMI informatique de l’Université de Franche-Comté, encadré par Monsieur Héam, nous avons travaillé sur la complétion (semi-)automatique.\par \vspace{\baselineskip} % pour une ligne vide
+Dans le cadre de notre projet de Recherche du CMI informatique de l’Université de Marie \& Louis Pasteur de Besançon, encadré par Monsieur Héam, nous avons travaillé sur la complétion (semi-)automatique.\par \vspace{\baselineskip} % pour une ligne vide
 
 
 Ce projet nous a permis de découvrir ce qu'était la complétion automatique et la complétion semi-automatique et de comprendre sur quoi ce repose ces deux notions. La complétion automatique est un processus par lequel un système va prédire et compléter une entrée en fonction de certaines données et contextes. Cependant, la complétion semi-automatique, est une assistance permettant au système de proposer des options tout en laissant à l'utilisateur la décision finale. La complétion (semi-)automatique peut être utilisée dans de nombreuses applications : une saisie sur clavier, une complétion de code, une recherche sur un moteur de recherche, une assistance virtuelle etc\dots\par \vspace{\baselineskip} % pour une ligne vide
@@ -337,7 +337,8 @@ Dans un premier temps, nous voulions pouvoir récupérer tous les évènements c
 Une fois ajouté à notre programme principal, nous pouvons désormais récupérer les frappes de l'utilisateur. Grâce à cela, nous pouvons désormais concaténer les lettres et afficher dans un terminal le mot en cours de saisie. Pour une utilisation plus fluide, nous avons ajouté quelques fonctionnalités supplémentaires. Si l'utilisateur clique sur les flèches de navigation droite ou gauche, il navigue dans le mot en cours de saisie et peut ainsi ajouter des lettres à n'importe quelle position du mot. De plus, s'il clique sur la touche retour arrière, il peut supprimer la lettre à gauche du curseur sans que notre programme perde l'information du mot en cours de saisie. Enfin si l'utilisateur clique sur n'importe quelle autre touche qu'une lettre (accentuée ou non), le retour arrière ou les flèches de navigation alors, on annule les suggestions de mots. \\
 Nous avons décider d'ajouter une détection de clics de souris afin d'annuler la proposition de suggestions lorsque l'utilisateur n'a plus le curseur de texte sur le mot qu'il est en train d'écrire. Cette implémentation a été simple et rapide puisque nous reprenons le même principe que le keylogger. \\
 
-Une fois cette première partie terminée, nous avons constater que notre programme détectait qu'un seul clavier et qu'une seule souris. Or, si un utilisateur utilise un ordinateur portable et y branche un clavier externe, notre détection de saisie de fonctionne plus. \par
+Une fois cette première partie terminée, nous avons constater que notre programme détectait qu'un seul clavier et qu'une seule souris. Or, si un utilisateur utilise un ordinateur portable et y branche un clavier externe, notre détection de saisie de fonctionne plus. \\
+
 La principale difficulté a été de détecter tous les claviers et souris puis de les faire fonctionner en même temps. On a décidé d'utiliser des threads pour lire les fichiers des claviers et des souris en concurrence. Un thread est une séquence d'instructions qui pourra être exécutée indépendamment au sein d'un programme. Les threads permettent une exécution simultanée et un fonctionnement multitâche au sein d'une même application, cela même avec des périphériques différents.
 
 \begin{figure}[H]
@@ -366,7 +367,7 @@ En testant notre algorithme, nous avons donc pris peur puisque, même après not
 Pour améliorer les suggestions, nous avons décider d'utiliser une des fréquences présentent dans le dictionnaire. (fréquence d'utilisation dans les livres). Nous avons mis en place un algorithme qui permet
 \subsection{Interface graphique}
 
-Maintenant que l'algorithme est fonctionnel, nous devons afficher à l'écran les suggestions proposé grâce à une interface graphique. Nous voulions dans un premier temps faire cet interface en \langage{Rust} avec GTK (TODO : def gtk) mais nous n'avons malheureusement pas réussi à garder la fenêtre au premier plan même si l'utilisateur et sur une autre application. Cette approche devient donc inutilisable car l'application disparait à chaque fois que l'utilisateur clique sur une fenêtre Il ne peut ainsi pas voir les différentes suggestions.\\
+Maintenant que l'algorithme est fonctionnel, nous devons afficher à l'écran les suggestions proposé grâce à une interface graphique. Nous voulions dans un premier temps faire cet interface en \langage{Rust} avec \langage{GTK}, la boîte à outils de \langage{Rust}  mais nous n'avons malheureusement pas réussi à faire en sorte de garder la fenêtre au premier plan lorsque l'utilisateur est sur une autre application. Cette approche devient donc inutilisable car l'application disparait à chaque fois que l'utilisateur clique sur une fenêtre Il ne peut ainsi pas voir les différentes suggestions.\\
 
 On a donc décidé de faire l'interface en \langage{Python} avec Tkinter car nous l'avions déjà utiliser pour d'autres projets et nous savions comment garder la fenêtre au premier plan. Pour ce faire, notre code \langage{Rust} lance un programme \langage{Python} et lui envoie les 3 mots suggérés via l'entrée strandard du code \langage{Python}. Notre code \langage{Python} les affiche dans l'interface. Si l'utilisateur clique sur l'un des trois mots, \langage{Python} envoie l'information au code \langage{Rust} qui va ensuite l'écrire dans l'application de l'utilisateur grâce à notre clavier virtuel.\\
 
@@ -374,20 +375,34 @@ La plus grosse difficulté de l'interface graphique a été la communication de 
 
 \subsection{Installeur de l'application}
 
-Une fois que nous avons tout mis en place et que l'application est fonctionnelle, nous avons décider d'ajouter un installeur d'application qui permet de télécharger toutes les dépendances, d'ajouter l'application dans un dossier contenu dans le \langage{PATH}. Le \langage{PATH} est une variable système utilisée par le système d'exploitation pour localiser les fichiers exécutables indispensables depuis une ligne de commande ou une fenêtre de terminal. On crée également un fichier \var{.desktop} pour pouvoir ouvrir l'application depuis le gestionnaire d'application d'\langage{Ubuntu} et appliquer les droits nécessaires aux bons fonctionnements de l'application car certaines commandes nécessitent les droits de l'utilisateur \var{root}, par exemple la lecture des fichiers des périphériques. Nous avons gérer l'installeur grâce à un Makefile (TODO :def)
+Une fois que nous avons tout mis en place et que l'application est fonctionnelle, nous avons décider d'ajouter un installeur d'application qui permet de télécharger toutes les dépendances, d'ajouter l'application dans un dossier contenu dans le \langage{PATH}. Le \langage{PATH} est une variable système utilisée par le système d'exploitation pour localiser les fichiers exécutables indispensables depuis une ligne de commande ou une fenêtre de terminal.\\
+On crée également un fichier \var{.desktop} pour pouvoir ouvrir l'application depuis le gestionnaire d'application d'\langage{Ubuntu} et appliquer les droits nécessaires aux bons fonctionnements de l'application car certaines commandes nécessitent les droits de l'utilisateur \var{root}, par exemple la lecture des fichiers des périphériques. \\
+
+Nous avons gérer l'installeur grâce à un Makefile, un fichier permettant d'automatiser un ensemble d'actions telles que la génération de fichiers. Nous avons créer une documentation technique pour installer notre application. Vous pouvez la retrouver à l'annexe de la page \underline{\pageref{annexe}}.
 
 \section{Résultats}
 Nous avons donc implémenter une application utilisable sur \langage{Ubuntu} permettant une complétion semi-automatique. Cette application peut se lancer depuis un terminal mais également depuis le gestionnaire d'application d'\langage{Ubuntu}. \par
 Une fois l'application lancée, une fenêtre apparait en premier plan et restera toujours en premier plan tant que l'utilisateur ne ferme pas l'application. Si l'utilisateur commence à écrire un mot, trois suggestions seront affichées sur l'interface graphique. Ces suggestions sont calculées grâce à l'algorithme de Levenstein complété avec la gestion des préfixes des mots ainsi que la fréquence d'utilisation des mots proposés. Si l'utilisateur ne veut pas l'un des trois mots proposés, il peut continuer à taper son mot. S'il clique sur l'un des mots, celui-ci sera écrit à la place du mot qu'il était en train d'écrire.
 
+
+\chapter{Informations complémentaires}
+
 \section{Points à améliorer}
 
 Pour améliorer notre application, nous pourrions faire en sorte qu'elle soit compatible sur d'autres distributions Linux et sur le systeme d'exploitation MacOS. Nous pourrions également changer d'algorithme pour améliorer les suggestions selon l'historique de l'utilisateur par exemple.
 
-\section{Prérequis}
 
-Pour que l'application fonctionne, nous avons besoin d'un système Linux avec \langage{Ubuntu}  qui ne se trouve pas sur une machine virtuelle. De plus, le raccourci alt + tab permettant de basculer entre les fenêtres ouvertes doit être activé.
+\section{Outils utilisés}
 
+Nous avons eu l'occasion d'utiliser de  nombreux outils pour la communication au sein de notre binôme ainsi que pour la réalisation globale du projet semestriel. Nous avons communiquer sur Discord ainsi que sur WhatsApp et partagé l'avancée des projets sur Git. Nous avons également utilisé \langage{Rust}, \langage{Python} et \langage{Tkinter} pour l'implémentation. Enfin le rapport a été rédigé sur \langage{LaTeX}.  
+
+\begin{figure}[H]
+	\begin{center}
+		{\includegraphics[width=\textwidth]{images/outils.png}}
+	\end{center}
+	\caption{Logos des outils utilisés}
+	\label{fig:outils}
+\end{figure}
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
 % Page de résumé
@@ -427,6 +442,7 @@ Pour que l'application fonctionne, nous avons besoin d'un système Linux avec \l
 	\begingroup
 	\centering
 	\section*{Annexe 1 : Documentation technique}
+        \label{annexe}
 	\endgroup
 	\input{doc_technique.tex} % Inclut ton fichier doc_technique.tex ici
 \end{appendices}
