@@ -22,6 +22,11 @@
 \usepackage{fancybox}
 \usepackage{fancyhdr}
 \usepackage{url}
+\usepackage{appendix}
+
+
+
+
 
 % Configuration de fancyhdr
 \pagestyle{fancy}
@@ -396,5 +401,28 @@ Pour que l'application fonctionne, nous avons besoin d'un système Linux avec \l
 \nocite{*}
 \bibliographystyle{alpha}
 \bibliography{references}
+
+\newpage
+\fancypagestyle{annexes}{
+	\fancyhf{} % Effacer tous les en-têtes et pieds de page
+	\fancyhead[C]{Annexe - Rapport de Stage} % Texte centré en haut de la page
+	\fancyfoot[L]{L2 CMI Informatique} % Texte en bas à gauche
+	\fancyfoot[C]{Samia BENALI \& Elouan BOITEUX} % Texte au centre
+	\fancyfoot[R]{\thepage} % Numéro de page à droite
+	\renewcommand{\headrulewidth}{0.4pt} % Ligne de séparation
+	\renewcommand{\footrulewidth}{0.4pt} % Ligne de séparation
+}
+
+% Appliquer le style "annexes" à partir des annexes
+\pagestyle{annexes}  % Appliquer le style "Annexe" à partir de cette page
+
+\addcontentsline{toc}{section}{Annexe}
+\begin{appendices}  % Démarre la section des annexes
+	\begingroup
+	\centering
+	\section*{Annexe 1 : Documentation technique}
+	\endgroup
+	\input{doc_technique.tex} % Inclut ton fichier doc_technique.tex ici
+\end{appendices}
 
 \end{document}
