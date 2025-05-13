@@ -25,12 +25,16 @@ udev:
 	fi
 
 build:
-	@if [ ! -f ./target/release/$(APP_NAME) ]; then \
+	@if [ ! -f ./bin/$(APP_NAME) ]; then \
 		@echo "" ; \
 		echo "Install cargo..."; \
 		sudo apt install -y cargo; \
 		echo "Building project..."; \
 		cargo build --release || { echo "Build failed"; exit 1; }; \
+		echo "Move binary to bin/"; \
+		rm -rf bin; \
+		mkdir bin; \
+		cp target/release/$(APP_NAME) ./bin/$(APP_NAME); \
 	fi	
 
 run:
@@ -46,11 +50,11 @@ run:
 move_binary:
 	@echo ""
 	@echo "Moving binary to /usr/local/bin..."
-	@if [ -f ./target/release/$(APP_NAME) ]; then \
+	@if [ -f ./bin/$(APP_NAME) ]; then \
 		if [ -f $(BIN_PATH) ]; then \
 			echo "Executable already exists in /usr/local/bin/"; \
 		else \
-			sudo mv target/release/$(APP_NAME) $(BIN_PATH); \
+			sudo cp bin/$(APP_NAME) $(BIN_PATH); \
 			echo "Executable moved to /usr/local/bin/"; \
 		fi \
 	else \
