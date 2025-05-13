@@ -74,11 +74,15 @@
 	{\Huge \textbf{Université de Franche-Comté} \par}
 	\vspace{1cm}
 	{\huge \texttt{}{Projet d'Initiation à la recherche\\ } \LARGE{\textbf{L2 - CMI}} \par}
-	\vspace{1.2cm}
+	\vspace{1cm}
 	{\huge \textbf{Complétion (semi-)automatique} \par}
-	\vspace{1.5cm}
+	\vspace{1cm}
 	{\Large BOITEUX Elouan\\BENALI Samia\par}
-	\vspace{5cm}
+	\vspace{0.5cm}
+	\begin{center}
+		{\includegraphics[height=0.55\textwidth]{images/illustration.png}}
+	\end{center}
+
 	\begin{minipage}[c]{0.40\textwidth}
 		\centering
 		\raisebox{-0.5\height}{\includegraphics[width=\textwidth]{images/logo_univ.png}}
@@ -91,6 +95,18 @@
 	\vfill
 	{2024/2025}
 \end{titlepage}
+
+\chapter*{Remerciements}
+\addcontentsline{toc}{chapter}{Remerciements}
+
+Nous souhaiterions remercier dans un premier temps Pierre-Cyril HEAM de nous avoir permis d'effectuer un projet semestriel sur la complétion semi-automatique et de nous avoir encadré tout au long du semestre. \\
+
+Nous souhaiterions également remercier chaleureusement Jean-Michel HUFFLEN de nous avoir appris le langage \langage{LaTeX} pour la rédaction de nos rapports ainsi que tous les professeurs que nous avons rencontrés et qui nous ont permis d'acquérir nos connaissances actuelles sur les langages utilisés.\\
+
+Nos remerciements vont également à toutes les personnes avec lesquelles nous avons pu discuter et partager autour des projets de recherches et tout spécialement les étudiants du CMI Informatique pour leur gentillesse et leur aide précieuse. \\
+
+
+
 
 \tableofcontents
 
@@ -332,8 +348,16 @@ Nous devions ensuite mettre en place le projet. Nous avons décider d'à la fois
 \section{Les étapes de la réalisation}
 
 \subsection{Keylogger \& mouselogger}
-Dans un premier temps, nous voulions pouvoir récupérer tous les évènements clavier de l'utilisateur quelque soit l'application sur laquelle il se trouve. La solution retenue pour ce projet a été de développer un keylogger. Un keylogger (ou enregistreur de frappe) est un programme qui s’exécute en arrière-plan de l'ordinateur et récupère les frappes de l’utilisateur sur son clavier. Après la détection de chaque touche pressée, notre keylogger traduit l'identifiant reçu en caractère grâce au fichier \textbf{/usr/include/linux/input-event-codes.h} que l'on retrouve dans les fichiers de l'\langage{OS}. Cela permet ainsi de constuire le mot au fur et à mesure. \\
+Dans un premier temps, nous voulions pouvoir récupérer tous les évènements clavier de l'utilisateur quelque soit l'application sur laquelle il se trouve. La solution retenue pour ce projet a été de développer un keylogger. Un keylogger (ou enregistreur de frappe) est un programme qui s’exécute en arrière-plan de l'ordinateur et récupère les frappes de l’utilisateur sur son clavier. Après la détection de chaque touche pressée, notre keylogger traduit l'identifiant reçu en caractère grâce au fichier \textbf{/usr/include/linux/input-event-codes.h} que l'on retrouve dans les fichiers de l'\langage{OS}.Ce fichier associe une touche (lettre I par exemple) en un identifiant (23 pour I). On utilise donc l'identifiant, que l'on traduit à nouveau, et cela permet ainsi de construire le mot au fur et à mesure. \\
 
+\begin{figure}[H]
+	\begin{center}
+		{\includegraphics[width=0.6\textwidth]{images/fichier_touche.png}}
+	\end{center}
+	\caption{Extrait du fichier input-event-codes.h}
+	\label{fig:lecture_touche
+    }
+\end{figure}
 Une fois ajouté à notre programme principal, nous pouvons désormais récupérer les frappes de l'utilisateur. Grâce à cela, nous pouvons désormais concaténer les lettres et afficher dans un terminal le mot en cours de saisie. Pour une utilisation plus fluide, nous avons ajouté quelques fonctionnalités supplémentaires. Si l'utilisateur clique sur les flèches de navigation droite ou gauche, il navigue dans le mot en cours de saisie et peut ainsi ajouter des lettres à n'importe quelle position du mot. De plus, s'il clique sur la touche retour arrière, il peut supprimer la lettre à gauche du curseur sans que notre programme perde l'information du mot en cours de saisie. Enfin si l'utilisateur clique sur n'importe quelle autre touche qu'une lettre (accentuée ou non), le retour arrière ou les flèches de navigation alors, on annule les suggestions de mots. \\
 Nous avons décider d'ajouter une détection de clics de souris afin d'annuler la proposition de suggestions lorsque l'utilisateur n'a plus le curseur de texte sur le mot qu'il est en train d'écrire. Cette implémentation a été simple et rapide puisque nous reprenons le même principe que le keylogger. \\
 
@@ -357,6 +381,7 @@ Pour cette deuxième étape, nous devions faire en sorte de pouvoir écrire un m
 
 Lorsque cela a été mis en place, on s'est rendu compte que les lettres précédemment écrites par l'utilisateur n'étaient pas effacées. Pour cela,  nous avons simplement utilisé la fonction permettant de cliquer sur une touche du clavier virtuel que l'on a lance n fois sur la touche retour arrière (où n est la longueur du mot écrit par l'utilisateur). Comme tout est automatique, le remplacement du mot est instantané, non visible par l'utilisateur et la réécriture reste fluide et naturelle.
 
+\newpage
 \subsection{Algorithme de suggestions}
 
 Maintenant que nous pouvons détecter les frappes de l'utilisateur ainsi qu'écrire et/ou remplacer un mot, nous devons écrire l'algorithme qui nous permettra de faire 3 suggestions à l'utilisateur.\par \vspace{\baselineskip}
@@ -371,14 +396,34 @@ Maintenant que l'algorithme est fonctionnel, nous devons afficher à l'écran le
 
 On a donc décidé de faire l'interface en \langage{Python} avec Tkinter car nous l'avions déjà utiliser pour d'autres projets et nous savions comment garder la fenêtre au premier plan. Pour ce faire, notre code \langage{Rust} lance un programme \langage{Python} et lui envoie les 3 mots suggérés via l'entrée strandard du code \langage{Python}. Notre code \langage{Python} les affiche dans l'interface. Si l'utilisateur clique sur l'un des trois mots, \langage{Python} envoie l'information au code \langage{Rust} qui va ensuite l'écrire dans l'application de l'utilisateur grâce à notre clavier virtuel.\\
 
-La plus grosse difficulté de l'interface graphique a été la communication de \langage{Rust} et \langage{Python} mais également de faire en sorte que la page reste au premier plan.
+La plus grosse difficulté de l'interface graphique a été la communication de \langage{Rust} et \langage{Python} mais également de faire en sorte que la page reste au premier plan.\\
+
+Voici le visuel final de notre interface en utilisant donc \langage{Python} et sa bibliothèque \langage{Tkinter}. 
+
+\begin{figure}[H]
+	\begin{center}
+		{\includegraphics[width=0.7\textwidth]{images/illustration.png}}
+	\end{center}
+	\caption{Illustration de l'application}
+	\label{fig:lecture_fichier}
+\end{figure}
 
 \subsection{Installeur de l'application}
 
 Une fois que nous avons tout mis en place et que l'application est fonctionnelle, nous avons décider d'ajouter un installeur d'application qui permet de télécharger toutes les dépendances, d'ajouter l'application dans un dossier contenu dans le \langage{PATH}. Le \langage{PATH} est une variable système utilisée par le système d'exploitation pour localiser les fichiers exécutables indispensables depuis une ligne de commande ou une fenêtre de terminal.\\
 On crée également un fichier \var{.desktop} pour pouvoir ouvrir l'application depuis le gestionnaire d'application d'\langage{Ubuntu} et appliquer les droits nécessaires aux bons fonctionnements de l'application car certaines commandes nécessitent les droits de l'utilisateur \var{root}, par exemple la lecture des fichiers des périphériques. \\
 
-Nous avons gérer l'installeur grâce à un Makefile, un fichier permettant d'automatiser un ensemble d'actions telles que la génération de fichiers. Nous avons créer une documentation technique pour installer notre application. Vous pouvez la retrouver à l'annexe de la page \underline{\pageref{annexe}}.
+Nous avons gérer l'installeur grâce à un Makefile, un fichier permettant d'automatiser un ensemble d'actions telles que la génération de fichiers. Nous avons créer une documentation technique pour installer notre application. Vous pouvez la retrouver à l'annexe de la page \underline{\pageref{annexe}}.\\
+
+Grâce à toute cette installation, l'application est plus facile d'accès grâce à une icône sur le bureau. 
+
+\begin{figure}[H]
+	\begin{center}
+		{\includegraphics[width=0.5\textwidth]{images/application.png}}
+	\end{center}
+	\caption{Installeur de l'application}
+	\label{fig:lanceur}
+\end{figure}
 
 \section{Résultats}
 Nous avons donc implémenter une application utilisable sur \langage{Ubuntu} permettant une complétion semi-automatique. Cette application peut se lancer depuis un terminal mais également depuis le gestionnaire d'application d'\langage{Ubuntu}. \par
@@ -394,7 +439,7 @@ Pour améliorer notre application, nous pourrions faire en sorte qu'elle soit co
 
 \section{Outils utilisés}
 
-Nous avons eu l'occasion d'utiliser de  nombreux outils pour la communication au sein de notre binôme ainsi que pour la réalisation globale du projet semestriel. Nous avons communiquer sur Discord ainsi que sur WhatsApp et partagé l'avancée des projets sur Git. Nous avons également utilisé \langage{Rust}, \langage{Python} et \langage{Tkinter} pour l'implémentation. Enfin le rapport a été rédigé sur \langage{LaTeX}.  
+Nous avons eu l'occasion d'utiliser de  nombreux outils pour la communication au sein de notre binôme ainsi que pour la réalisation globale du projet semestriel. Nous avons communiquer sur Discord ainsi que sur WhatsApp et partagé l'avancée des projets sur Git. Nous avons également utilisé \langage{Rust}, \langage{Python} et \langage{Tkinter} pour l'implémentation. Enfin le rapport a été rédigé sur \langage{\LaTeX}.  
 
 \begin{figure}[H]
 	\begin{center}
