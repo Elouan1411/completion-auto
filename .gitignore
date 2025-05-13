@@ -1,6 +1,7 @@
 completion-system/target/
 completion-system/Cargo.lock
 venv
+watch_tex.py
 
 # Fichiers de sortie de la compilation
 *.aux
