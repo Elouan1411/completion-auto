@@ -359,7 +359,7 @@ De plus, ce système est facile à mettre en place et à implémenter. Cependant
 
 Tout d'abord, nous avons dû choisir un langage de programmation pour implémenter ce projet semestriel. Il nous fallait un langage permettant de minimiser le temps de calculs de la distance, entre les mots avec lesquels nous travaillons. De plus, nous souhaitions utiliser cette occasion pour découvrir un nouveau langage.~{\langage{Rust} s’est donc révélé plus adapté que les autres langages, puisqu’il offre une excellente vitesse de calcul et limite donc considérablement la latence.\\
 
-Nous devions ensuite mettre en place le projet. Nous avons décider d'à la fois recréer une interface de suggestions de mots comme sur les téléphones portables mais sur ordinateur, et que l'application soit utilisable sur \langage{Ubuntu} et depuis n'importe quelles applications. En effet, créer une application qui suggère des mots mais qui n'est pas utilisable dans d'autres applications n'est pas d'un grand interêt.
+Nous devions ensuite mettre en place le projet. Nous avons décider d'à la fois recréer une interface de suggestions de mots comme sur les téléphones portables mais sur ordinateur, et utilisable depuis n'importe quelles applications. En effet, créer une application qui suggère des mots mais qui n'est pas utilisable dans d'autres applications n'est pas d'un grand interêt. Nous voulions que notre application soit utilisable sur \langage{Ubuntu}.
 
 \section{Les étapes de la réalisation}
 
@@ -405,17 +405,33 @@ Maintenant que nous pouvons détecter les frappes de l'utilisateur ainsi qu'écr
 
 Nous avons décidé de nous baser sur un dictionnaire de plus de 140~000 mots trouvé dans \cite{new2019lexique}. Ce dernier est associé à des fréquences d'utilisation que nous utiliserons pour améliorer nos suggestions. Dans un premier temps, nous avons choisi de développer l'algorithme de distance de Levenshtein car il n'a besoin ni d'entraînement ni d'historique pour fonctionner. C'est également le plus simple à mettre en place. Nous avons essayé d'optimisé l'algorithme afin d'avoir le moins d'attente possible entre le moment où l'utilisateur tape sur une touche du clavier et le moment où les suggestions s'affichent. \\
 
-En testant notre algorithme, nous avons donc pris peur puisque, même après notre optimisation, il prenait trop de temps (environ 1 à 2 secondes). Après quelques recherches, nous avons vu qu'il existait  différents profils de compilation tels que : \og debug \fg{} et \og release\fg{}. Durant le développement, nous avons travaillé sur le profil de \og debug \fg{} qui permet une compilation plus rapide mais qui n'est pas optimisé et donc plus lent que le profil \og release \fg. Avec le profil \og release \fg{} l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application.\\
+En testant notre algorithme, nous avons donc pris peur puisque, même après notre optimisation, il prenait trop de temps (environ 1 à 2 secondes). Après quelques recherches, nous avons vu qu'il existait  différents profils de compilation tels que : \og{} debug \fg{} et \og{} release\fg{}. Durant le développement, nous avons travaillé sur le profil de \og{} debug \fg{} qui permet une compilation plus rapide mais qui n'est pas optimisé et donc plus lent que le profil \og{} release \fg{}. Avec le profil \og{} release \fg{} l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application.\\
 
 Pour améliorer les suggestions, nous avons décider d'utiliser une des fréquences présentent dans le dictionnaire. Nous avons décidé d'utiliser la fréquence d'utilisation dans les livres mais nous avions d'autres possibilités, comme la fréquence d'utilisation dans les films. Nous avons mis en place un algorithme en \langage{Python} qui permet de convertir le fichier .tsv en fichier .csv, un format que nous connaissons. Nous utiliserons la fréquence par la suite. \\
 
-Ensuite, nous avons ajouté, un programme qui permet de déterminer si la chaîne écrite par l'utilisateur est un préfixe d'un mot du dictionnaire. Cela permet d'obtenir des résultats plus cohérent. En effet, si l'utilisateur veut écrire le mot \og bonjour \fg et qu'il a écrit pour l'intant \og bon \fg, alors les suggestions faites par Levenshtein seront des mots plus courts tel que : \og GNGNGN \fg, \og GNGNGNG \fg et \og GNGNGN \fg. \\
+Ensuite, nous avons ajouté, un programme qui permet de déterminer si la chaîne écrite par l'utilisateur est le préfixe du mot du dictionnaire que nous sommes en train de traiter. Nous l'utiliserons également par la suite pour suggérer les mots les plus cohérent avec la chaîne écrite par l'utilisateur.\\
 
-Ensuite, si la distance de Levenshtein est supérieur à 2 entre la chaîne et le mot que l'on est en train de traiter, et que la chaîne écrite n'est pas le prefixe du mot, alors on passe au mot suivant. Sinon, On ajoute le mot à un tas. On trie ce tas selon la distance de Levenshtein, puis selon la préfixation, et enfin selon la fréquence. En effet, imaginons que nous avons le mot \og bonjour \fg et \og bonsoir \fg. Lors du tri par fréquence, c'est le mot \og bonjour \fg qui aura la plus grande priorité car il est beaucoup plus présent dans les livres que le mot \og bonsoir \fg. 
-Si la taille du tas est supérieur à 3 alors on retire l'élément avec la plus petite priorité. \\
+Ensuite, si la chaîne écrite n'est pas le préfixe du mot et que la distance de Levenshtein est supérieur à 3 entre la chaîne et le mot que l'on est en train de traiter, alors on passe au mot suivant. Sinon, On ajoute le mot à un tas de taille 4. On trie ce tas selon la préfixation, puis selon la distance de Levenshtein, et enfin selon la fréquence. On commence par le tri des préfixes car nous voulons que les suggestions complètent le mot en cours plutôt que de le corriger, comme le fait les suggestions sur un téléphone portable. On observe qu'en utilisant d'abord le tri de la distance en premier, on obtient plutôt une correction possible du mot plutôt qu'une complétion.\\
 
-On répète ces opérations jusqu'à ce qu'il n'y ait plus de mots dans le dictionnaire. Enfin, on retourne les 3 suggestions. 
+\begin{figure}[H]
+	\begin{center}
+		{\includegraphics[width=0.8\textwidth]{images/sugg_distance.png}}
+	\end{center}
+	\caption{Tri par distance en premier}
+	\label{fig:tri_dist}
+\end{figure}
+\begin{figure}[H]
+	\begin{center}
+		{\includegraphics[width=0.8\textwidth]{images/sugg_prefixe.png}}
+	\end{center}
+	\caption{Tri par préfixation en premier}
+	\label{fig:tri_prefixe}
+\end{figure}
 
+Prenons l'exemple du mot \og{} bonjour \fg{}. Imaginons que nous avons pour l'instant écrit \ voulons écrire le mot \og{} bonj \fg{}, alors les suggestions faites grâce au tri des préfixes seront des mots tels que \og{} bonjour \fg{}, \og{} bonjours \fg{} et \og{} bons \fg{}.
+Maintenant imaginons que nous faisons une faute : \og{} bpnj\fg{}, on observe qu'aucun mot commence par ce préfixe, on commence donc a trier selon la distance de Levenshtein qui va nous permettre de corriger l'erreur et de proposer, en priorité, des mots qui ont une distance inférieure à 3. Enfin, le tri selon la fréquence permet de gérer le cas d'une égalité face au tri des préfixe et de la distance : avec les mots og{} bonjour \fg{} et og{} bonsoir \fg{}  nous avons le même préfixe og{} bon \fg{} et la même distance. Cependant, c'est le mot og{} bonjour \fg{} qui aura la plus grande priorité car il est beaucoup plus présent dans les livres que le mot og{} bonsoir \fg{}.\\
+Enfin, si la taille du tas est supérieure à 3 alors on retire l'élément avec la plus petite priorité. \\
+On répète ces opérations jusqu'à ce qu'il n'y ait plus de mots dans le dictionnaire. Enfin, on retourne les 3 suggestions. \\
 
 \begin{figure}[H]
 	\begin{center}
@@ -437,7 +453,7 @@ La figure~\ref{fig:lecture_fichier} illustre l’interface finale de notre appli
 
 \begin{figure}[H]
 	\begin{center}
-		{\includegraphics[width=0.7\textwidth]{images/illustration.png}}
+		{\includegraphics[width=0.65\textwidth]{images/illustration.png}}
 	\end{center}
 	\caption{Illustration de l'application}
 	\label{fig:lecture_fichier}
@@ -470,7 +486,7 @@ Une fois l'application lancée, une fenêtre apparait en premier plan et restera
 
 \section{Points à améliorer}
 
-Pour améliorer notre application, nous pourrions faire en sorte qu'elle soit compatible sur d'autres distributions Linux et sur le systeme d'exploitation MacOS. Nous pourrions également changer d'algorithme pour améliorer les suggestions selon l'historique de l'utilisateur par exemple.
+Pour améliorer notre application, nous pourrions faire en sorte qu'elle soit compatible sur d'autres distributions Linux et sur le systeme d'exploitation MacOS. Nous pourrions également changer d'algorithme pour améliorer les suggestions selon l'historique de l'utilisateur par exemple. Enfin, nous aurions également aimer que la fenêtre se place sous le curseur de la souris pour avoir les suggestions toujours sous les yeux mais nous n'avons pas réussi à trouver une solution permettant de récupérer les coordonnées du curseur.
 
 
 \section{Outils utilisés}

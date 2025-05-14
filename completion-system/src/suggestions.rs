@@ -72,7 +72,7 @@ impl PartialOrd for Suggestion {
 }
 
 pub fn get_suggestions(word: &str, dictionary_contents: &str) -> Vec<String> {
-    const MAX_DISTANCE: usize = 2;
+    const MAX_DISTANCE: usize = 3;
     let mut heap = BinaryHeap::with_capacity(4);
 
     for line in dictionary_contents.lines() {
