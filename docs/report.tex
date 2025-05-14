@@ -405,13 +405,13 @@ Maintenant que nous pouvons détecter les frappes de l'utilisateur ainsi qu'écr
 
 Nous avons décidé de nous baser sur un dictionnaire de plus de 140~000 mots trouvé dans \cite{new2019lexique}. Ce dernier est associé à des fréquences d'utilisation que nous utiliserons pour améliorer nos suggestions. Dans un premier temps, nous avons choisi de développer l'algorithme de distance de Levenshtein car il n'a besoin ni d'entraînement ni d'historique pour fonctionner. C'est également le plus simple à mettre en place. Nous avons essayé d'optimisé l'algorithme afin d'avoir le moins d'attente possible entre le moment où l'utilisateur tape sur une touche du clavier et le moment où les suggestions s'affichent. \\
 
-En testant notre algorithme, nous avons donc pris peur puisque, même après notre optimisation, il prenait trop de temps (environ 1 à 2 secondes). Après quelques recherches, nous avons vu qu'il existait  différents profils de compilation tels que : \og{} debug \fg{} et \og{} release\fg{}. Durant le développement, nous avons travaillé sur le profil de \og{} debug \fg{} qui permet une compilation plus rapide mais qui n'est pas optimisé et donc plus lent que le profil \og{} release \fg{}. Avec le profil \og{} release \fg{} l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application.\\
+En testant notre algorithme, nous avons donc pris peur puisque, même après notre optimisation, il prenait trop de temps (environ 1 à 2 secondes). Après quelques recherches, nous avons vu qu'il existait  différents profils de compilation tels que : \og{}debug \fg{} et \og{}release\fg{}. Durant le développement, nous avons travaillé sur le profil de \og{}debug \fg{} qui permet une compilation plus rapide mais qui n'est pas optimisé et donc plus lent que le profil \og{}release \fg{}. Avec le profil \og{}release \fg{} l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application.\\
 
-Pour améliorer les suggestions, nous avons décider d'utiliser une des fréquences présentent dans le dictionnaire. Nous avons décidé d'utiliser la fréquence d'utilisation dans les livres mais nous avions d'autres possibilités, comme la fréquence d'utilisation dans les films. Nous avons mis en place un algorithme en \langage{Python} qui permet de convertir le fichier .tsv en fichier .csv, un format que nous connaissons. Nous utiliserons la fréquence par la suite. \\
+Pour améliorer les suggestions, nous avons décider d'utiliser une des fréquences présentent dans le dictionnaire. Nous avons choisi d'utiliser la fréquence d'utilisation dans les livres mais nous avions d'autres possibilités, comme la fréquence d'utilisation dans les films. Nous avons mis en place un algorithme en \langage{Python} qui permet de convertir le fichier .tsv en fichier .csv, un format que nous connaissons. Nous utiliserons la fréquence par la suite. \\
 
 Ensuite, nous avons ajouté, un programme qui permet de déterminer si la chaîne écrite par l'utilisateur est le préfixe du mot du dictionnaire que nous sommes en train de traiter. Nous l'utiliserons également par la suite pour suggérer les mots les plus cohérent avec la chaîne écrite par l'utilisateur.\\
 
-Ensuite, si la chaîne écrite n'est pas le préfixe du mot et que la distance de Levenshtein est supérieur à 3 entre la chaîne et le mot que l'on est en train de traiter, alors on passe au mot suivant. Sinon, On ajoute le mot à un tas de taille 4. On trie ce tas selon la préfixation, puis selon la distance de Levenshtein, et enfin selon la fréquence. On commence par le tri des préfixes car nous voulons que les suggestions complètent le mot en cours plutôt que de le corriger, comme le fait les suggestions sur un téléphone portable. On observe qu'en utilisant d'abord le tri de la distance en premier, on obtient plutôt une correction possible du mot plutôt qu'une complétion.\\
+Ensuite, si la chaîne écrite n'est pas le préfixe du mot et que la distance de Levenshtein est supérieur à 3 entre la chaîne et le mot que l'on est en train de traiter, alors on passe au mot suivant. Sinon, On ajoute le mot à un tas. On trie ce tas selon la préfixation, puis selon la distance de Levenshtein, et enfin selon la fréquence. On commence par le tri des préfixes car nous voulons que les suggestions complètent le mot en cours plutôt que de le corriger, comme le fait les suggestions sur un téléphone portable. On observe qu'en utilisant d'abord le tri de la distance en premier, on obtient plutôt une correction possible du mot plutôt qu'une complétion.\\
 
 \begin{figure}[H]
 	\begin{center}
@@ -428,10 +428,11 @@ Ensuite, si la chaîne écrite n'est pas le préfixe du mot et que la distance d
 	\label{fig:tri_prefixe}
 \end{figure}
 
-Prenons l'exemple du mot \og{} bonjour \fg{}. Imaginons que nous avons pour l'instant écrit \ voulons écrire le mot \og{} bonj \fg{}, alors les suggestions faites grâce au tri des préfixes seront des mots tels que \og{} bonjour \fg{}, \og{} bonjours \fg{} et \og{} bons \fg{}.
-Maintenant imaginons que nous faisons une faute : \og{} bpnj\fg{}, on observe qu'aucun mot commence par ce préfixe, on commence donc a trier selon la distance de Levenshtein qui va nous permettre de corriger l'erreur et de proposer, en priorité, des mots qui ont une distance inférieure à 3. Enfin, le tri selon la fréquence permet de gérer le cas d'une égalité face au tri des préfixe et de la distance : avec les mots og{} bonjour \fg{} et og{} bonsoir \fg{}  nous avons le même préfixe og{} bon \fg{} et la même distance. Cependant, c'est le mot og{} bonjour \fg{} qui aura la plus grande priorité car il est beaucoup plus présent dans les livres que le mot og{} bonsoir \fg{}.\\
-Enfin, si la taille du tas est supérieure à 3 alors on retire l'élément avec la plus petite priorité. \\
-On répète ces opérations jusqu'à ce qu'il n'y ait plus de mots dans le dictionnaire. Enfin, on retourne les 3 suggestions. \\
+Prenons l'exemple du mot \og{} bonjour \fg{}. Imaginons que nous avons pour l'instant écrit \ voulons écrire le mot \og{} bonj \fg{}, alors les suggestions faites grâce au tri des préfixes seront des mots tels que \og{} bonjour \fg{}, \og{} bonjours \fg{} et \og{} bons \fg{} comme on le voit dans la figure~\ref{fig:tri_prefixe}.
+Maintenant imaginons que nous faisons une faute : \og{} bpnj\fg{}, on observe qu'aucun mot commence par ce préfixe, on commence donc a trier selon la distance de Levenshtein qui va nous permettre de corriger l'erreur et de proposer, en priorité, des mots qui ont une distance inférieure à 3. Enfin, le tri selon la fréquence permet de gérer le cas d'une égalité face au tri des préfixe et de la distance : avec les mots \og{} bonjour \fg{} et \og{} bonsoir \fg{}  nous avons le même préfixe\og{} bon \fg{} et la même distance. Cependant, c'est le mot\og{} bonjour \fg{} qui aura la plus grande priorité car il est beaucoup plus présent dans les livres que le mot\og{} bonsoir \fg{}.\\
+
+Enfin, si la taille du tas est supérieure à 3 alors on retire l'élément avec la plus petite priorité pour garder que 3 suggestions. \\
+On répète ces opérations jusqu'à ce qu'il n'y ait plus de mots dans le dictionnaire. Pour finir, on retourne les 3 suggestions. \\
 
 \begin{figure}[H]
 	\begin{center}
@@ -539,44 +540,44 @@ Ce pojet est donc été une véritable opportunité pour mettre en pratique les 
 % Page de résumé
 \newpage
 \begin{center}
-    \vspace*{\fill} % Espace vertical
-    \section*{Résumé}
-    \addcontentsline
-    {toc}{chapter}{Résumé}
-    \begin{justify}
-    Rapport de notre projet semestriel de deuxième année de licence en Cursus Master Ingénierie Informatique à l’Université de Marie \& Louis Pasteur, portant sur la complétion semi-automatique, les méthodes qui existent, les algorithmes possible pour la mise en place de la complétion semi-automatique et les améliorations possible grâce aux chaînes de Markov. Nous avons ajouter notre implémentation permettant de proposer des suggestions de corrections des mots sur n'importe quelles applications sous Linux. Durant ce projet, plusieurs thèmes ont été abordés : l'utilisation de Git, de \langage{Python} et de \langage{Rust}, les bases informatiques et mathématiques de la complétion semi-automatique.\\
-Dans ce rapport, nous étudierons les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite, nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique.
+	\vspace*{\fill} % Espace vertical
+	\section*{Résumé}
+	\addcontentsline
+	{toc}{chapter}{Résumé}
+	\begin{justify}
+		Rapport de notre projet semestriel de deuxième année de licence en Cursus Master Ingénierie Informatique à l’Université de Marie \& Louis Pasteur, portant sur la complétion semi-automatique, les méthodes qui existent, les algorithmes possible pour la mise en place de la complétion semi-automatique et les améliorations possible grâce aux chaînes de Markov. Nous avons ajouter notre implémentation permettant de proposer des suggestions de corrections des mots sur n'importe quelles applications sous Linux. Durant ce projet, plusieurs thèmes ont été abordés : l'utilisation de Git, de \langage{Python} et de \langage{Rust}, les bases informatiques et mathématiques de la complétion semi-automatique.\\
+		Dans ce rapport, nous étudierons les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite, nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique.
 
-    \end{justify}
-    \vspace*{\fill} % Espace vertical
+	\end{justify}
+	\vspace*{\fill} % Espace vertical
 
-    \section*{Mots-clés}
-    \addcontentsline
-    {toc}{chapter}{Mots-Clés}
-    \begin{justify}
-     Rust - Python - Tkinter - Complétion semi-automatique - Levenshtein - Markov - Résolution de problème - Implémentation -Recherche - Application
-    \end{justify}
-    \vspace*{\fill} % Espace vertical
+	\section*{Mots-clés}
+	\addcontentsline
+	{toc}{chapter}{Mots-Clés}
+	\begin{justify}
+		Rust - Python - Tkinter - Complétion semi-automatique - Levenshtein - Markov - Résolution de problème - Implémentation -Recherche - Application
+	\end{justify}
+	\vspace*{\fill} % Espace vertical
 
-    \section*{Abstract}
-    \addcontentsline
-    {toc}{chapter}{Abstract}
-    \begin{justify}
-    Report on our second-year semester project in the Cursus Master Ingénierie Informatique program at the Université de Marie \& Louis Pasteur, focusing on semi-automatic completion, existing methods, possible algorithms for implementing semi-automatic completion and possible improvements using Markov chains. We've also added our own implementation, enabling us to offer word correction suggestions on any Linux application. During this project, we covered a number of topics, including the use of Git, Python and Rust, and the computational and mathematical foundations of semi-automatic completion. \\
-In this report, we'll look at the different approaches that exist, as well as the different distance algorithms. Then we'll talk about Markov chains for history management, and finally you'll find the application we've created for semi-automatic completion.
+	\section*{Abstract}
+	\addcontentsline
+	{toc}{chapter}{Abstract}
+	\begin{justify}
+		Report on our second-year semester project in the Cursus Master Ingénierie Informatique program at the Université de Marie \& Louis Pasteur, focusing on semi-automatic completion, existing methods, possible algorithms for implementing semi-automatic completion and possible improvements using Markov chains. We've also added our own implementation, enabling us to offer word correction suggestions on any Linux application. During this project, we covered a number of topics, including the use of Git, Python and Rust, and the computational and mathematical foundations of semi-automatic completion. \\
+		In this report, we'll look at the different approaches that exist, as well as the different distance algorithms. Then we'll talk about Markov chains for history management, and finally you'll find the application we've created for semi-automatic completion.
 
-    \end{justify}
-    \vspace*{\fill} % Espace vertical
+	\end{justify}
+	\vspace*{\fill} % Espace vertical
 
-    \section*{Key-Words}
-    \addcontentsline
-    {toc}{chapter}{Key-Words}
-    \begin{justify}
-     Rust - Python - Tkinter - Semi-automatic completion - Levenshtein - Markov - Problem solving - Implementation - Research - Application
-    \end{justify}
-    \vspace*{\fill} % Espace vertical
-    
-    
+	\section*{Key-Words}
+	\addcontentsline
+	{toc}{chapter}{Key-Words}
+	\begin{justify}
+		Rust - Python - Tkinter - Semi-automatic completion - Levenshtein - Markov - Problem solving - Implementation - Research - Application
+	\end{justify}
+	\vspace*{\fill} % Espace vertical
+
+
 \end{center}
 
 \end{document}
