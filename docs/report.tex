@@ -23,6 +23,7 @@
 \usepackage{fancyhdr}
 \usepackage{url}
 \usepackage{appendix}
+\usepackage{texnames}
 
 
 
@@ -64,13 +65,17 @@
 \newcommand{\langage}[1]{\texttt{#1}}
 
 
+\usepackage{tocloft}
+\setlength{\cftbeforetoctitleskip}{1.5cm}  % Ajuste l'espace avant le titre de la table des matières
+
+
 \begin{document}
 
 
 % Première page
 \begin{titlepage}
 	\centering
-	\vspace*{2cm}
+	% \vspace*{2cm}
 	{\Huge \textbf{Université de Franche-Comté} \par}
 	\vspace{1cm}
 	{\huge \texttt{}{Projet d'Initiation à la recherche\\ } \LARGE{\textbf{L2 - CMI}} \par}
@@ -101,13 +106,13 @@
 
 Nous souhaiterions remercier dans un premier temps Pierre-Cyril HEAM de nous avoir permis d'effectuer un projet semestriel sur la complétion semi-automatique et de nous avoir encadré tout au long du semestre. \\
 
-Nous souhaiterions également remercier chaleureusement Jean-Michel HUFFLEN de nous avoir appris le langage \langage{LaTeX} pour la rédaction de nos rapports ainsi que tous les professeurs que nous avons rencontrés et qui nous ont permis d'acquérir nos connaissances actuelles sur les langages utilisés.\\
+Nous souhaiterions également remercier chaleureusement Jean-Michel HUFFLEN de nous avoir appris le langage \LaTeX{} pour la rédaction de nos rapports ainsi que tous les professeurs que nous avons rencontrés et qui nous ont permis d'acquérir nos connaissances actuelles sur les langages utilisés.\\
 
 Nos remerciements vont également à toutes les personnes avec lesquelles nous avons pu discuter et partager autour des projets de recherches et tout spécialement les étudiants du CMI Informatique pour leur gentillesse et leur aide précieuse. \\
 
 
 
-
+\newpage
 \tableofcontents
 
 
@@ -115,13 +120,13 @@ Nos remerciements vont également à toutes les personnes avec lesquelles nous a
 \chapter*{Introduction} % * pour ne pas avoir de numéro de chapitre
 \addcontentsline{toc}{chapter}{Introduction}
 
-Dans le cadre de notre projet de Recherche du CMI informatique de l’Université de Marie \& Louis Pasteur de Besançon, encadré par Monsieur Héam, nous avons travaillé sur la complétion (semi-)automatique.\par \vspace{\baselineskip} % pour une ligne vide
+Dans le cadre de notre projet de recherche du CMI informatique de l’Université de Marie \& Louis Pasteur de Besançon, encadré par Monsieur Héam, nous avons travaillé sur la complétion (semi-)automatique.\par \vspace{\baselineskip} % pour une ligne vide
 
 
 Ce projet nous a permis de découvrir ce qu'était la complétion automatique et la complétion semi-automatique et de comprendre sur quoi ce repose ces deux notions. La complétion automatique est un processus par lequel un système va prédire et compléter une entrée en fonction de certaines données et contextes. Cependant, la complétion semi-automatique, est une assistance permettant au système de proposer des options tout en laissant à l'utilisateur la décision finale. La complétion (semi-)automatique peut être utilisée dans de nombreuses applications : une saisie sur clavier, une complétion de code, une recherche sur un moteur de recherche, une assistance virtuelle etc\dots\par \vspace{\baselineskip} % pour une ligne vide
 
 
-Ce rapport va nous permettre, dans un premier temps, d’étudier les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique.\par
+Ce rapport va nous permettre, dans un premier temps, d’étudier les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite, nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique.\par
 \vfill
 
 \chapter{Les différentes approches utilisées}
@@ -152,7 +157,7 @@ Un algorithme de calcul de distance permet de mesurer la similarité et/ou la di
 
 \section{Distance d'édition ou de Levenshtein}
 
-L'algorithme de calcul de distance d'édition permet de rechercher le nombre minimal d'opérations élémentaires, tels que les insertions, les suppressions et les substitutions, qui seront nécessaires à la transformation d'une chaîne de caractères en une autre. L'insertion permet d'ajouter un caractère, la suppression d'en enlever, et la subtitution d'en replacer un caractère par un autre. \par \vspace{\baselineskip}
+L'algorithme de calcul de distance d'édition permet de rechercher le nombre minimal d'opérations élémentaires, tels que les insertions, les suppressions et les substitutions, qui seront nécessaires à la transformation d'une chaîne de caractères en une autre. L'insertion permet d'ajouter un caractère, la suppression d'en enlever, et la subtitution d'en replacer un caractère par un autre. La figure~\ref{fig:levenshtein} montre un exemple d'illustration de ces opérations. \par \vspace{\baselineskip}
 
 La compexité de l'algorithme est en $\mathcal{O}(n \times m)$  où n est la longueur de la première chaîne et m la longueur de la seconde. Sa complexité dans l'espace est équivalente. Dans certaines implémentations avancées, la complexité dans l'espace peut être réduite à $\mathcal{O}(\min(n,m))$. \par \vspace{\baselineskip}
 
@@ -167,7 +172,7 @@ Il s'agit d'une implémentation simple et intuitive qu'il est facile de mettre e
 	\label{fig:levenshtein}
 \end{figure}
 
-\noindent{}La formule du calcul de la distance de Levenshtein est le suivant :
+\noindent{}La formule du calcul de la distance de Levenshtein est la suivant :
 
 \[
 	\text{lev}(a, b) =
@@ -182,6 +187,7 @@ Il s'agit d'une implémentation simple et intuitive qu'il est facile de mettre e
 	\end{cases}
 \]
 
+\vspace{\baselineskip}
 \noindent{}On cherche le nombre minimal d'opérations pour transformer la chaîne \var{a} en chaine \var{b}.
 
 \section{Distance de Damerau-Levenshtein}
@@ -190,7 +196,7 @@ L'algorithme de calcul de distance de Damerau-Levenshtein permet de faire la mê
 
 Les complexités en temps et dans l'espace de l'algorithme restent les mêmes que la distance de Levenshtein. Cependant, même dans les implémentations avancées, la complexité dans l'espace ne peut pas être réduite. \\
 
-Il s'agit d'une implémentation qui reste simple et intuitive et qui, de plus, a une meilleure gestion des erreurs de type ("ab" et "ba"). Elle est toute fois plus coûteuse que Levenshtein.
+Il s'agit d'une implémentation qui reste simple et intuitive et qui, de plus, a une meilleure gestion des erreurs de type (\og{}ab\fg{} et \og{}ba\fg{}). Elle est toute fois plus coûteuse que Levenshtein.
 
 \begin{figure}[H]
 	\begin{center}
@@ -201,7 +207,7 @@ Il s'agit d'une implémentation qui reste simple et intuitive et qui, de plus, a
 \end{figure}
 \section{Distance de Hamming}
 
-L'algorithme de calcul de distance de Hamming va rechercher, dans deux chaînes de même longueur, le nombre de positions qui vont différer. \\
+L'algorithme de calcul de distance de Hamming va rechercher, dans deux chaînes de même longueur, le nombre de positions qui vont différer. La figure~\ref{fig:hamming} montre un exemple de ce calcul de distance.\\
 
 Les complexités en temps et dans l'espace de l'algorithme sont en $\mathcal{O}(n)$ où n est la longueur des deux chaînes. \\
 
@@ -246,6 +252,9 @@ Alors une chaîne de Markov pourrait ressembler à :
 	\end{tabular}
 	\caption{Probabilités de transition entre les états}
 \end{table}
+
+
+\newpage
 La matrice de transition serait donc :
 
 \[
@@ -343,27 +352,32 @@ De plus, ce système est facile à mettre en place et à implémenter. Cependant
 
 Tout d'abord, nous avons dû choisir un langage de programmation pour implémenter ce projet semestriel. Il nous fallait un langage permettant de minimiser le temps de calculs de la distance, entre les mots avec lesquels nous travaillons. De plus, nous souhaitions utiliser cette occasion pour découvrir un nouveau langage.~{\langage{Rust} s’est donc révélé plus adapté que les autres langages, puisqu’il offre une excellente vitesse de calcul et limite donc considérablement la latence.\\
 
-Nous devions ensuite mettre en place le projet. Nous avons décider d'à la fois recréer l'interface de suggestions orthographiques des téléphones portables sur ordinateur, et que l'application soit utilisable sur \langage{Ubuntu} et depuis n'importe quelles applications. En effet, créer une application qui suggère des mots mais qui n'est pas utilisable dans d'autres applications n'est pas d'un grand interêt.
+Nous devions ensuite mettre en place le projet. Nous avons décider d'à la fois recréer une interface de suggestions de mots comme sur les téléphones portables mais sur ordinateur, et que l'application soit utilisable sur \langage{Ubuntu} et depuis n'importe quelles applications. En effet, créer une application qui suggère des mots mais qui n'est pas utilisable dans d'autres applications n'est pas d'un grand interêt.
 
 \section{Les étapes de la réalisation}
 
 \subsection{Keylogger \& mouselogger}
-Dans un premier temps, nous voulions pouvoir récupérer tous les évènements clavier de l'utilisateur quelque soit l'application sur laquelle il se trouve. La solution retenue pour ce projet a été de développer un keylogger. Un keylogger (ou enregistreur de frappe) est un programme qui s’exécute en arrière-plan de l'ordinateur et récupère les frappes de l’utilisateur sur son clavier. Après la détection de chaque touche pressée, notre keylogger traduit l'identifiant reçu en caractère grâce au fichier \textbf{/usr/include/linux/input-event-codes.h} que l'on retrouve dans les fichiers de l'\langage{OS}.Ce fichier associe une touche (lettre I par exemple) en un identifiant (23 pour I). On utilise donc l'identifiant, que l'on traduit à nouveau, et cela permet ainsi de construire le mot au fur et à mesure. \\
+Dans un premier temps, nous voulions pouvoir récupérer tous les évènements clavier de l'utilisateur quelque soit l'application sur laquelle il se trouve. La solution retenue pour ce projet a été de développer un keylogger. Un keylogger (ou enregistreur de frappe) est un programme qui s’exécute en arrière-plan de l'ordinateur et récupère les frappes de l’utilisateur sur son clavier. Après la détection de chaque touche pressée, notre keylogger traduit l'identifiant reçu en caractère grâce au fichier \textbf{/usr/include/linux/input-event-codes.h} que l'on retrouve dans les fichiers de l'\langage{OS}. Ce fichier associe une touche (lettre I par exemple) en un identifiant (23 pour I). La figure~\ref{fig:lecture_touche} montre un extrait de ce fichier. On utilise donc l'identifiant, que l'on traduit à nouveau, et cela permet ainsi de construire le mot au fur et à mesure. \\
 
 \begin{figure}[H]
 	\begin{center}
 		{\includegraphics[width=0.6\textwidth]{images/fichier_touche.png}}
 	\end{center}
 	\caption{Extrait du fichier input-event-codes.h}
-	\label{fig:lecture_touche
-    }
+	\label{fig:lecture_touche}
 \end{figure}
-Une fois ajouté à notre programme principal, nous pouvons désormais récupérer les frappes de l'utilisateur. Grâce à cela, nous pouvons désormais concaténer les lettres et afficher dans un terminal le mot en cours de saisie. Pour une utilisation plus fluide, nous avons ajouté quelques fonctionnalités supplémentaires. Si l'utilisateur clique sur les flèches de navigation droite ou gauche, il navigue dans le mot en cours de saisie et peut ainsi ajouter des lettres à n'importe quelle position du mot. De plus, s'il clique sur la touche retour arrière, il peut supprimer la lettre à gauche du curseur sans que notre programme perde l'information du mot en cours de saisie. Enfin si l'utilisateur clique sur n'importe quelle autre touche qu'une lettre (accentuée ou non), le retour arrière ou les flèches de navigation alors, on annule les suggestions de mots. \\
+
+En plus des touches alphanumériques, notre programme gère également certaines touches spéciales comme les flèches directionnelles. Lorsqu’une flèche gauche ou droite est détectée, le keylogger met à jour la position du curseur dans le mot en cours de construction. Ainsi, lorsqu’une nouvelle lettre est tapée après un déplacement avec les flèches, elle est insérée à la bonne position dans la chaîne, et non simplement ajoutée à la fin. Cela permet de refléter fidèlement l’intention de l’utilisateur, même s’il modifie le mot partiellement avant de le terminer. Ce comportement permet à notre programme de reconstituer précisément les mots saisis, y compris avec des corrections ou insertions en milieu de mot.
+
+
+
+Une fois ajouté à notre programme principal, nous pouvons désormais récupérer les frappes de l'utilisateur. Grâce à cela, nous pouvons désormais concaténer les lettres et afficher dans un terminal le mot en cours de saisie. Pour une utilisation plus fluide, nous avons ajouté quelques fonctionnalités supplémentaires. Notre programme gère également certaines touches spéciales comme les flèches directionnelles. Lorsque la flèche gauche ou droite est détectée, le keylogger met à jour la position du curseur dans le mot en cours de construction. Ainsi, lorsqu’une nouvelle lettre est tapée après un déplacement avec les flèches, elle est insérée à la bonne position dans la chaîne, et non simplement ajoutée à la fin. Cela permet de refléter fidèlement l’intention de l’utilisateur, même s’il modifie le mot partiellement avant de le terminer. Ce comportement permet à notre programme de reconstituer précisément les mots saisis, y compris avec des corrections ou insertions en milieu de mot. De plus, s'il clique sur la touche retour arrière, il peut supprimer la lettre à gauche du curseur sans que notre programme perde l'information du mot en cours de saisie. Enfin si l'utilisateur clique sur n'importe quelle autre touche qu'une lettre (accentuée ou non), le retour arrière ou les flèches de navigation alors, on annule les suggestions de mots. \\
+
 Nous avons décider d'ajouter une détection de clics de souris afin d'annuler la proposition de suggestions lorsque l'utilisateur n'a plus le curseur de texte sur le mot qu'il est en train d'écrire. Cette implémentation a été simple et rapide puisque nous reprenons le même principe que le keylogger. \\
 
 Une fois cette première partie terminée, nous avons constater que notre programme détectait qu'un seul clavier et qu'une seule souris. Or, si un utilisateur utilise un ordinateur portable et y branche un clavier externe, notre détection de saisie de fonctionne plus. \\
 
-La principale difficulté a été de détecter tous les claviers et souris puis de les faire fonctionner en même temps. On a décidé d'utiliser des threads pour lire les fichiers des claviers et des souris en concurrence. Un thread est une séquence d'instructions qui pourra être exécutée indépendamment au sein d'un programme. Les threads permettent une exécution simultanée et un fonctionnement multitâche au sein d'une même application, cela même avec des périphériques différents.
+La principale difficulté a été de détecter tous les claviers et souris puis de les faire fonctionner en même temps. On a décidé d'utiliser des threads pour lire les fichiers des claviers et des souris en concurrence. Un thread est une séquence d'instructions qui pourra être exécutée indépendamment au sein d'un programme. Les threads permettent une exécution simultanée et un fonctionnement multitâche au sein d'une même application. La figure~\ref{fig:lecture_fichier} montre un schéma de la lecture des fichiers en concurrence grâce aux threads.
 
 \begin{figure}[H]
 	\begin{center}
@@ -379,15 +393,15 @@ Cependant, il restait un problème : arrêter proprement notre programme. En eff
 
 Pour cette deuxième étape, nous devions faire en sorte de pouvoir écrire un mot dans n'importe quelle application, et cela de façon automatique via notre code. Pour ce faire,  noux avons mit en place un clavier virtuel pour simuler les frappes de l'utilisateur et ainsi écrire le mot demandé. Notre code fonctionne ainsi : On crée une fonction permettant de traduire un caractère en l'évènement clavier correspondant. Ensuite, on crée une fonction permettant de cliquer sur un de ces caractères sur le clavier virtuel. Enfin, on répète cette opération avec chaque lettre du mot pour l'écrire en entier.\\
 
-Lorsque cela a été mis en place, on s'est rendu compte que les lettres précédemment écrites par l'utilisateur n'étaient pas effacées. Pour cela,  nous avons simplement utilisé la fonction permettant de cliquer sur une touche du clavier virtuel que l'on a lance n fois sur la touche retour arrière (où n est la longueur du mot écrit par l'utilisateur). Comme tout est automatique, le remplacement du mot est instantané, non visible par l'utilisateur et la réécriture reste fluide et naturelle.
+Lorsque cela a été mis en place, on s'est rendu compte que les lettres précédemment écrites par l'utilisateur n'étaient pas effacées. Pour cela, nous avons simplement utilisé la fonction permettant de cliquer sur une touche du clavier virtuel que l'on a lance \textbf{n} fois sur la touche retour arrière (où \textbf{n} est la longueur du mot écrit par l'utilisateur). Comme tout est automatique, le remplacement du mot est instantané, non visible par l'utilisateur et la réécriture reste fluide et naturelle.
 
-\newpage
 \subsection{Algorithme de suggestions}
 
 Maintenant que nous pouvons détecter les frappes de l'utilisateur ainsi qu'écrire et/ou remplacer un mot, nous devons écrire l'algorithme qui nous permettra de faire 3 suggestions à l'utilisateur.\par \vspace{\baselineskip}
-Nous avons décidé de se baser sur un dictionnaire de plus de 140 000 mots trouvé sur \cite{new2019lexique}. Ce dernier est associé à des fréquences d'utilisation que nous utiliserons pour améliorer nos suggestions. Dans un premier temps, nous avons choisi de développer l'algorithme de distance de Levenshtein car il n'a besoin ni d'entraînement ni d'historique pour fonctionner. C'est également le plus simple à mettre en place. Nous avons essayé d'optimisé l'algorithme afin d'avoir le moins d'attente possible entre le moment où l'utilisateur tape sur une touche du clavier et le moment où les suggestions s'affichent. \\
 
-En testant notre algorithme, nous avons donc pris peur puisque, même après notre optimisation, il prenait trop de temps (environ 1 à 2 secondes).Après quelques recherches, nous avons vu qu'il existait  différents profils de compilation tels que : \og debug \fg et \og release\fg. Durant le développement, nous avons travaillé sur le profil de \og debug \fg qui permet une compilation plus rapide mais qui n'est pas optimisé et donc plus lent que le profil \og release \fg. Avec le profil \og release \fg l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application.\\
+Nous avons décidé de nous baser sur un dictionnaire de plus de 140~000 mots trouvé dans \cite{new2019lexique}. Ce dernier est associé à des fréquences d'utilisation que nous utiliserons pour améliorer nos suggestions. Dans un premier temps, nous avons choisi de développer l'algorithme de distance de Levenshtein car il n'a besoin ni d'entraînement ni d'historique pour fonctionner. C'est également le plus simple à mettre en place. Nous avons essayé d'optimisé l'algorithme afin d'avoir le moins d'attente possible entre le moment où l'utilisateur tape sur une touche du clavier et le moment où les suggestions s'affichent. \\
+
+En testant notre algorithme, nous avons donc pris peur puisque, même après notre optimisation, il prenait trop de temps (environ 1 à 2 secondes). Après quelques recherches, nous avons vu qu'il existait  différents profils de compilation tels que : \og debug \fg{} et \og release\fg{}. Durant le développement, nous avons travaillé sur le profil de \og debug \fg{} qui permet une compilation plus rapide mais qui n'est pas optimisé et donc plus lent que le profil \og release \fg. Avec le profil \og release \fg{} l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application.\\
 
 Pour améliorer les suggestions, nous avons décider d'utiliser une des fréquences présentent dans le dictionnaire. (fréquence d'utilisation dans les livres). Nous avons mis en place un algorithme qui permet
 \subsection{Interface graphique}
@@ -398,7 +412,7 @@ On a donc décidé de faire l'interface en \langage{Python} avec Tkinter car nou
 
 La plus grosse difficulté de l'interface graphique a été la communication de \langage{Rust} et \langage{Python} mais également de faire en sorte que la page reste au premier plan.\\
 
-Voici le visuel final de notre interface en utilisant donc \langage{Python} et sa bibliothèque \langage{Tkinter}. 
+La figure~\ref{fig:lecture_fichier} illustre l’interface finale de notre application, développée en \langage{Python} à l’aide de la bibliothèque \langage{Tkinter}.
 
 \begin{figure}[H]
 	\begin{center}
@@ -410,12 +424,13 @@ Voici le visuel final de notre interface en utilisant donc \langage{Python} et s
 
 \subsection{Installeur de l'application}
 
-Une fois que nous avons tout mis en place et que l'application est fonctionnelle, nous avons décider d'ajouter un installeur d'application qui permet de télécharger toutes les dépendances, d'ajouter l'application dans un dossier contenu dans le \langage{PATH}. Le \langage{PATH} est une variable système utilisée par le système d'exploitation pour localiser les fichiers exécutables indispensables depuis une ligne de commande ou une fenêtre de terminal.\\
-On crée également un fichier \var{.desktop} pour pouvoir ouvrir l'application depuis le gestionnaire d'application d'\langage{Ubuntu} et appliquer les droits nécessaires aux bons fonctionnements de l'application car certaines commandes nécessitent les droits de l'utilisateur \var{root}, par exemple la lecture des fichiers des périphériques. \\
+Une fois que nous avons tout mis en place et que l'application est fonctionnelle, nous avons décider d'ajouter un installeur d'application qui permet de télécharger toutes les dépendances, d'ajouter l'application dans un dossier contenu dans le \langage{PATH}. Le \langage{PATH} est une variable d'environnement utilisée par le système d'exploitation pour localiser les fichiers exécutables utilisable depuis n'importe quel emplacement dans le systeme.\\
+
+Notre installeur crée aussi un fichier \var{.desktop} pour permettre le lancement l'application depuis le menu d'application d'\langage{Ubuntu} (voir figure~\ref{fig:lanceur}). Il applique également les droits nécessaires aux bons fonctionnements de l'application car certaines commandes nécessitent les droits de l'utilisateur \var{root}, par exemple la lecture des fichiers des périphériques. \\
 
 Nous avons gérer l'installeur grâce à un Makefile, un fichier permettant d'automatiser un ensemble d'actions telles que la génération de fichiers. Nous avons créer une documentation technique pour installer notre application. Vous pouvez la retrouver à l'annexe de la page \underline{\pageref{annexe}}.\\
 
-Grâce à toute cette installation, l'application est plus facile d'accès grâce à une icône sur le bureau. 
+Grâce à toute cette installation, l'application est plus facile d'accès grâce à une icône dans la barre des taches par exemple.
 
 \begin{figure}[H]
 	\begin{center}
@@ -439,11 +454,11 @@ Pour améliorer notre application, nous pourrions faire en sorte qu'elle soit co
 
 \section{Outils utilisés}
 
-Nous avons eu l'occasion d'utiliser de  nombreux outils pour la communication au sein de notre binôme ainsi que pour la réalisation globale du projet semestriel. Nous avons communiquer sur Discord ainsi que sur WhatsApp et partagé l'avancée des projets sur Git. Nous avons également utilisé \langage{Rust}, \langage{Python} et \langage{Tkinter} pour l'implémentation. Enfin le rapport a été rédigé sur \langage{\LaTeX}.  
+Nous avons eu l'occasion d'utiliser de  nombreux outils pour la communication au sein de notre binôme ainsi que pour la réalisation globale du projet semestriel. Nous avons communiquer sur Discord ainsi que sur WhatsApp et partagé l'avancée des projets sur Git. Nous avons également utilisé \langage{Rust}, \langage{Python} et \langage{Tkinter} pour l'implémentation. Enfin le rapport a été rédigé sur \LaTeX{}.
 
 \begin{figure}[H]
 	\begin{center}
-		{\includegraphics[width=\textwidth]{images/outils.png}}
+		{\includegraphics[width=0.7\textwidth]{images/outils.png}}
 	\end{center}
 	\caption{Logos des outils utilisés}
 	\label{fig:outils}
@@ -487,7 +502,7 @@ Nous avons eu l'occasion d'utiliser de  nombreux outils pour la communication au
 	\begingroup
 	\centering
 	\section*{Annexe 1 : Documentation technique}
-        \label{annexe}
+	\label{annexe}
 	\endgroup
 	\input{doc_technique.tex} % Inclut ton fichier doc_technique.tex ici
 \end{appendices}
