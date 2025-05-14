@@ -24,15 +24,16 @@ Ce projet implémente un outil de complétion semi-automatique de texte, utilisa
 \subsection*{Étapes d'installation}
 
 \begin{lstlisting}[language=bash]
-cd completion-auto/completion-system
+cd completion-system
 make install
 \end{lstlisting}
 
 Le \texttt{Makefile} s’occupe de :
 \begin{itemize}
 	\item Installer les dépendances nécessaires
-	\item Copier le binaire compilé dans \texttt{/usr/local/bin/completion-system} (inclus dans le PATH)
+	\item Copier le binaire compilé dans \texttt{/usr/local/bin/} (inclus dans le PATH)
 	\item Donner les bons droits d’exécution à tous les fichiers nécessaires
+	\item Créer le fichier .desktop pour le menu d’applications
 \end{itemize}
 
 \section*{Lancement}
@@ -49,6 +50,7 @@ completion-system
 	      Ouvrir le menu et rechercher \texttt{Completion System}, puis appuyer sur Entrée.
 \end{itemize}
 
+
 \textbf{Remarque :} sur certains ordinateurs, il est possible que le lancement via le gestionnaire d’applications ne fonctionne pas. Dans ce cas, le terminal reste pleinement fonctionnel.
 
 Une fois lancé, le programme tourne en arrière-plan et fonctionne dans \textbf{toutes les applications}.
@@ -56,7 +58,7 @@ Une fois lancé, le programme tourne en arrière-plan et fonctionne dans \textbf
 \section*{Désinstallation}
 
 \begin{lstlisting}[language=bash]
-cd completion-auto/completion-system
+cd completion-system
 make uninstall
 \end{lstlisting}
 
