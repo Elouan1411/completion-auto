@@ -199,7 +199,7 @@ Il s'agit d'une implémentation simple et intuitive qu'il est facile de mettre e
 
 \section{Distance de Damerau-Levenshtein}
 
-L'algorithme de calcul de distance de Damerau-Levenshtein permet de faire la même chose que l'algorithme de calcul de distance de Levenshtein en y ajoutant l'opération de transposition de deux caractères adjacents.  \\
+L'algorithme de calcul de distance de Damerau-Levenshtein permet de faire la même chose que l'algorithme de calcul de distance de Levenshtein en y ajoutant l'opération de transposition de deux caractères adjacents (voir la figure~\ref{fig:damerau}).  \\
 
 Les complexités en temps et dans l'espace de l'algorithme restent les mêmes que la distance de Levenshtein. Cependant, même dans les implémentations avancées, la complexité dans l'espace ne peut pas être réduite. \\
 
@@ -313,7 +313,7 @@ Pour ce faire, on considère la probabilité de transition entre deux états \(X
 		      \item \( P(A \rightarrow C)  = 0.5 \)
 		      \item \( P(A \rightarrow B)  = 0.5 \)
 	      \end{itemize}
-\end{itemize}o
+\end{itemize}
 
 \subsection*{Transitions depuis B}
 \begin{itemize}
@@ -411,10 +411,10 @@ Pour améliorer les suggestions, nous avons décider d'utiliser une des fréquen
 
 Ensuite, nous avons ajouté, un programme qui permet de déterminer si la chaîne écrite par l'utilisateur est un préfixe d'un mot du dictionnaire. Cela permet d'obtenir des résultats plus cohérent. En effet, si l'utilisateur veut écrire le mot \og bonjour \fg et qu'il a écrit pour l'intant \og bon \fg, alors les suggestions faites par Levenshtein seront des mots plus courts tel que : \og GNGNGN \fg, \og GNGNGNG \fg et \og GNGNGN \fg. \\
 
-Ensuite, si la distance de Levenshtein est supérieur à 2 entre la chaîne et le mot que l'on est en train de traiter, et que la chaîne écrite n'est pas le prefixe du mot, alors on passe au mot suivant. Sinon, On ajoute le mot à un tas. On trie ce tas selon la distance de Levenshtein, puis selon la préfixation, et enfin selon la fréquence. En effet, imaginons que nous avons le mot \og bonjour \fg et \og bonsoir \fg. Lors du tri par fréquence, c'est le mot \og bonjour \fg qui aura la plus grande priorité car il est beaucoup plus présent dans les livres que le mot \og bonsoir \fg. 
+Ensuite, si la distance de Levenshtein est supérieur à 2 entre la chaîne et le mot que l'on est en train de traiter, et que la chaîne écrite n'est pas le prefixe du mot, alors on passe au mot suivant. Sinon, On ajoute le mot à un tas. On trie ce tas selon la distance de Levenshtein, puis selon la préfixation, et enfin selon la fréquence. En effet, imaginons que nous avons le mot \og bonjour \fg et \og bonsoir \fg. Lors du tri par fréquence, c'est le mot \og bonjour \fg qui aura la plus grande priorité car il est beaucoup plus présent dans les livres que le mot \og bonsoir \fg.
 Si la taille du tas est supérieur à 3 alors on retire l'élément avec la plus petite priorité. \\
 
-On répète ces opérations jusqu'à ce qu'il n'y ait plus de mots dans le dictionnaire. Enfin, on retourne les 3 suggestions. 
+On répète ces opérations jusqu'à ce qu'il n'y ait plus de mots dans le dictionnaire. Enfin, on retourne les 3 suggestions.
 
 
 \begin{figure}[H]
@@ -433,14 +433,14 @@ On a donc décidé de faire l'interface en \langage{Python} avec Tkinter car nou
 
 La plus grosse difficulté de l'interface graphique a été la communication de \langage{Rust} et \langage{Python} mais également de faire en sorte que la page reste au premier plan.\\
 
-La figure~\ref{fig:lecture_fichier} illustre l’interface finale de notre application, développée en \langage{Python} à l’aide de la bibliothèque \langage{Tkinter}.
+La figure~\ref{fig:interface} illustre l’interface finale de notre application, développée en \langage{Python} à l’aide de la bibliothèque \langage{Tkinter}.
 
 \begin{figure}[H]
 	\begin{center}
 		{\includegraphics[width=0.7\textwidth]{images/illustration.png}}
 	\end{center}
 	\caption{Illustration de l'application}
-	\label{fig:lecture_fichier}
+	\label{fig:interface}
 \end{figure}
 
 \subsection{Installeur de l'application}
@@ -523,44 +523,44 @@ Ce pojet est donc été une véritable opportunité pour mettre en pratique les 
 % Page de résumé
 \newpage
 \begin{center}
-    \vspace*{\fill} % Espace vertical
-    \section*{Résumé}
-    \addcontentsline
-    {toc}{chapter}{Résumé}
-    \begin{justify}
-    Rapport de notre projet semestriel de deuxième année de licence en Cursus Master Ingénierie Informatique à l’Université de Marie \& Louis Pasteur, portant sur la complétion semi-automatique, les méthodes qui existent, les algorithmes possible pour la mise en place de la complétion semi-automatique et les améliorations possible grâce aux chaînes de Markov. Nous avons ajouter notre implémentation permettant de proposer des suggestions de corrections des mots sur n'importe quelles applications sous Linux. Durant ce projet, plusieurs thèmes ont été abordés : l'utilisation de Git, de \langage{Python} et de \langage{Rust}, les bases informatiques et mathématiques de la complétion semi-automatique.\\
-Dans ce rapport, nous étudierons les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite, nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique.
+	\vspace*{\fill} % Espace vertical
+	\section*{Résumé}
+	\addcontentsline
+	{toc}{chapter}{Résumé}
+	\begin{justify}
+		Rapport de notre projet semestriel de deuxième année de licence en Cursus Master Ingénierie Informatique à l’Université de Marie \& Louis Pasteur, portant sur la complétion semi-automatique, les méthodes qui existent, les algorithmes possible pour la mise en place de la complétion semi-automatique et les améliorations possible grâce aux chaînes de Markov. Nous avons ajouter notre implémentation permettant de proposer des suggestions de corrections des mots sur n'importe quelles applications sous Linux. Durant ce projet, plusieurs thèmes ont été abordés : l'utilisation de Git, de \langage{Python} et de \langage{Rust}, les bases informatiques et mathématiques de la complétion semi-automatique.\\
+		Dans ce rapport, nous étudierons les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite, nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique.
 
-    \end{justify}
-    \vspace*{\fill} % Espace vertical
+	\end{justify}
+	\vspace*{\fill} % Espace vertical
 
-    \section*{Mots-clés}
-    \addcontentsline
-    {toc}{chapter}{Mots-Clés}
-    \begin{justify}
-     Rust - Python - Tkinter - Complétion semi-automatique - Levenshtein - Markov - Résolution de problème - Implémentation -Recherche - Application
-    \end{justify}
-    \vspace*{\fill} % Espace vertical
+	\section*{Mots-clés}
+	\addcontentsline
+	{toc}{chapter}{Mots-Clés}
+	\begin{justify}
+		Rust - Python - Tkinter - Complétion semi-automatique - Levenshtein - Markov - Résolution de problème - Implémentation -Recherche - Application
+	\end{justify}
+	\vspace*{\fill} % Espace vertical
 
-    \section*{Abstract}
-    \addcontentsline
-    {toc}{chapter}{Abstract}
-    \begin{justify}
-    Report on our second-year semester project in the Cursus Master Ingénierie Informatique program at the Université de Marie \& Louis Pasteur, focusing on semi-automatic completion, existing methods, possible algorithms for implementing semi-automatic completion and possible improvements using Markov chains. We've also added our own implementation, enabling us to offer word correction suggestions on any Linux application. During this project, we covered a number of topics, including the use of Git, Python and Rust, and the computational and mathematical foundations of semi-automatic completion. \\
-In this report, we'll look at the different approaches that exist, as well as the different distance algorithms. Then we'll talk about Markov chains for history management, and finally you'll find the application we've created for semi-automatic completion.
+	\section*{Abstract}
+	\addcontentsline
+	{toc}{chapter}{Abstract}
+	\begin{justify}
+		Report on our second-year semester project in the Cursus Master Ingénierie Informatique program at the Université de Marie \& Louis Pasteur, focusing on semi-automatic completion, existing methods, possible algorithms for implementing semi-automatic completion and possible improvements using Markov chains. We've also added our own implementation, enabling us to offer word correction suggestions on any Linux application. During this project, we covered a number of topics, including the use of Git, Python and Rust, and the computational and mathematical foundations of semi-automatic completion. \\
+		In this report, we'll look at the different approaches that exist, as well as the different distance algorithms. Then we'll talk about Markov chains for history management, and finally you'll find the application we've created for semi-automatic completion.
 
-    \end{justify}
-    \vspace*{\fill} % Espace vertical
+	\end{justify}
+	\vspace*{\fill} % Espace vertical
 
-    \section*{Key-Words}
-    \addcontentsline
-    {toc}{chapter}{Key-Words}
-    \begin{justify}
-     Rust - Python - Tkinter - Semi-automatic completion - Levenshtein - Markov - Problem solving - Implementation - Research - Application
-    \end{justify}
-    \vspace*{\fill} % Espace vertical
-    
-    
+	\section*{Key-Words}
+	\addcontentsline
+	{toc}{chapter}{Key-Words}
+	\begin{justify}
+		Rust - Python - Tkinter - Semi-automatic completion - Levenshtein - Markov - Problem solving - Implementation - Research - Application
+	\end{justify}
+	\vspace*{\fill} % Espace vertical
+
+
 \end{center}
 
 \end{document}
