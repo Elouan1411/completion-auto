@@ -107,7 +107,7 @@
 
 Nous souhaiterions remercier dans un premier temps Pierre-Cyril HEAM de nous avoir permis d'effectuer un projet semestriel sur la complétion semi-automatique et de nous avoir encadré tout au long du semestre. \\
 
-Nous souhaiterions également remercier chaleureusement Jean-Michel HUFFLEN de nous avoir enseigner le langage \LaTeX{} pour la rédaction de nos rapports ainsi que tous les professeurs que nous avons rencontrés et qui nous ont permis d'acquérir nos connaissances actuelles sur les langages utilisés.\\
+Nous souhaiterions également remercier chaleureusement Jean-Michel HUFFLEN de nous avoir enseigné le langage \LaTeX{} pour la rédaction de nos rapports ainsi que tous les professeurs que nous avons rencontrés et qui nous ont permis d'acquérir nos connaissances actuelles sur les langages utilisés.\\
 
 Nos remerciements vont également à toutes les personnes avec lesquelles nous avons pu discuter et partager autour des projets de recherche et tout spécialement les étudiants du CMI Informatique pour leur gentillesse et leur aide précieuse. \\
 
@@ -125,10 +125,10 @@ Nos remerciements vont également à toutes les personnes avec lesquelles nous a
 Dans le cadre de notre projet de recherche du CMI informatique de l’Université de Marie \& Louis Pasteur de Besançon, encadré par Monsieur Héam, nous avons travaillé sur la complétion semi-automatique.\par \vspace{\baselineskip} % pour une ligne vide
 
 
-Ce projet nous a permis de découvrir ce qu'était la complétion automatique et la complétion semi-automatique et de comprendre sur quoi repose ces deux notions. La complétion automatique est un processus par lequel un système va prédire et compléter une entrée en fonction de certaines données et contextes. Tandis que, la complétion semi-automatique est une assistance permettant au système de proposer des options tout en laissant à l'utilisateur la décision finale. La complétion semi-automatique peut être utilisée dans de nombreuses applications : une saisie sur clavier, une complétion de codes, une recherche sur un moteur de recherche, une assistance virtuelle etc\dots\par \vspace{\baselineskip} % pour une ligne vide
+Ce projet nous a permis de découvrir ce qu'était la complétion automatique et la complétion semi-automatique et de comprendre sur quoi repose ces deux notions. La complétion automatique est un processus par lequel un système va prédire et compléter une entrée en fonction de certaines données et contextes. Tandis que, la complétion semi-automatique est une assistance permettant au système de proposer des options tout en laissant à l'utilisateur la décision finale. La complétion semi-automatique peut être utilisée dans de nombreuses applications : une saisie sur clavier, une complétion de codes, une recherche sur un moteur de recherche, une assistance virtuelle etc.\par \vspace{\baselineskip} % pour une ligne vide
 
 
-Ce rapport va nous permettre, dans un premier temps, d’étudier les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite, nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique.\par
+Ce rapport va nous permettre, dans un premier temps, d’étudier les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite, nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créé permettant une complétion semi-automatique.\par
 \vfill
 
 \chapter{Les différentes approches utilisées}
@@ -153,7 +153,7 @@ Cette implémentation permet d'être efficace face à des problèmes très compl
 
 
 \section{Modèles s'appuyant sur le deep learning}
-Pour proposer des suggestions, ce modèle utilise des algorithmes qui s'appuient sur l'amélioration en temps réel. C'est à l'utilisateur de faire des choix et ces mêmes choix sont mémorisés pour une utilisation personnalisée et plus précise. Cette implémentation est donc très adapatable et permet des réponses précises avec un sens sémentique. Cependant, cette implémentation est complexe et très longue à mettre en place puisque les choix de l'utilisateur sont nécessaires et les réponses dépendront en grande partie des données collectées\dots
+Pour proposer des suggestions, ce modèle utilise des algorithmes qui s'appuient sur l'amélioration en temps réel. C'est à l'utilisateur de faire des choix et ces mêmes choix sont mémorisés pour une utilisation personnalisée et plus précise. Cette implémentation est donc très adaptable et permet des réponses précises avec un sens sémantique. Cependant, cette implémentation est complexe et très longue à mettre en place puisque les choix de l'utilisateur sont nécessaires et les réponses dépendront en grande partie des données collectées\dots
 
 
 
@@ -165,11 +165,11 @@ Un algorithme de calcul de distance permet de mesurer la similarité et/ou la di
 
 \section{Distance d'édition ou de Levenshtein}\label{sec:levenshtein}
 
-L'algorithme de calcul de distance d'édition permet de rechercher le nombre minimal d'opérations élémentaires, tels que les insertions, les suppressions et les substitutions, qui seront nécessaires à la transformation d'une chaîne de caractères en une autre. L'insertion permet d'ajouter un caractère, la suppression d'en enlever, et la subtitution de replacer un caractère par un autre. La figure~\ref{fig:levenshtein} montre un exemple d'illustration de ces opérations. \par \vspace{\baselineskip}
+L'algorithme de calcul de distance d'édition permet de rechercher le nombre minimal d'opérations élémentaires, tels que les insertions, les suppressions et les substitutions, qui seront nécessaires à la transformation d'une chaîne de caractères en une autre. L'insertion permet d'ajouter un caractère, la suppression d'en enlever, et la substitution de replacer un caractère par un autre. La figure~\ref{fig:levenshtein} montre un exemple d'illustration de ces opérations. \par \vspace{\baselineskip}
 
 La compexité de l'algorithme est en $\mathcal{O}(n \times m)$  où n est la longueur de la première chaîne et m la longueur de la seconde. Sa complexité dans l'espace est équivalente. Dans certaines implémentations avancées, la complexité dans l'espace peut être réduite à $\mathcal{O}(\min(n,m))$. \par \vspace{\baselineskip}
 
-Il s'agit d'une implémentation simple et intuitive qu'il est facile de mettre en place. Cependant, elle ne prend pas en compte les permutations et ne peut pas résoudre des erreurs plus complexes que l'insertion, la suppression et la subtitution.
+Il s'agit d'une implémentation simple et intuitive qu'il est facile de mettre en place. Cependant, elle ne prend pas en compte les permutations et ne peut pas résoudre des erreurs plus complexes que l'insertion, la suppression et la substitution.
 
 
 \begin{figure}[H]
@@ -275,8 +275,7 @@ La matrice de transition serait donc :
 \]
 
 
-L'objectif serait d'utiliser l'historique de navigation ou l'historique des actions de l'utilisateur pour modéliser les transitions probables entre les différentes étapes. \\
-Pour cela, on doit premièrement collecter les données des historiques. Ensuite, on compte les transitions observées entre les états pour calculer les probabilités de transition. Enfin, on construit la matrice de transition.
+L'objectif serait d'utiliser l'historique de navigation ou l'historique des actions de l'utilisateur pour modéliser les transitions probables entre les différentes étapes. Pour cela, on doit premièrement collecter les données des historiques. Ensuite, on compte les transitions observées entre les états pour calculer les probabilités de transition. Enfin, on construit la matrice de transition.
 
 \section{Exemple}
 
@@ -314,7 +313,7 @@ Pour ce faire, on considère la probabilité de transition entre deux états \(X
 		      \item \( P(A \rightarrow C)  = 0.5 \)
 		      \item \( P(A \rightarrow B)  = 0.5 \)
 	      \end{itemize}
-\end{itemize}o
+\end{itemize}
 
 \subsection*{Transitions depuis B}
 \begin{itemize}
@@ -353,22 +352,22 @@ On obtient donc une matrice de transition.
 
 \section{Conclusion}
 Les chaînes de Markov permettent de prédire l'étape suivante en se basant sur les actions précédentes. Cela va permettre, par la suite, de personnaliser les suggestions pour chaque utilisateur. \par
-De plus, ce système est facile à mettre en place et à implémenter. Cependant, une chaîne de Markov ne prend pas en compte l'historique complet ce qui mène à un problème de mémoire. Il faut, de plus, un très grand nombre de données et un historique plus grand pour avoir des données fiables .
+De plus, ce système est facile à mettre en place et à implémenter. Cependant, une chaîne de Markov ne prend pas en compte l'historique complet ce qui mène à un problème de mémoire. Il faut, de plus, un très grand nombre de données et un historique plus grand pour avoir des données fiables.
 \chapter{Notre outil de complétion semi-automatique}
 
 \section{Choix pour l'implémentation}
 
 Tout d'abord, nous avons dû choisir un langage de programmation pour implémenter ce projet semestriel. Il nous fallait un langage permettant de minimiser le temps de calcul de la distance entre les mots avec lesquels nous travaillons. De plus, nous souhaitions utiliser cette occasion pour découvrir un nouveau langage.~{\langage{Rust} s’est donc révélé plus adapté que les autres langages, puisqu’il offre une excellente vitesse de calcul et limite donc considérablement la latence.\\
 
-Nous devions ensuite mettre en place le projet. Nous avons décider d'à la fois recréer une interface de suggestions de mots comme sur les téléphones portables mais sur ordinateurs, et utilisable depuis n'importe quelles applications. En effet, créer une application qui suggère des mots mais qui n'est pas utilisable dans d'autres applications n'est pas d'un grand interêt. Nous voulions que notre application soit utilisable sur \langage{Ubuntu}.
+Nous devions ensuite mettre en place le projet. Nous avons décidé d'à la fois recréer une interface de suggestions de mots comme sur les téléphones portables mais sur ordinateurs, et utilisable depuis n'importe quelles applications. En effet, créer une application qui suggère des mots mais qui n'est pas utilisable dans d'autres applications n'est pas d'un grand intérêt. Nous voulions que notre application soit utilisable sur \langage{Ubuntu}.
 
 \section{Les étapes de la réalisation}
 
 \subsection{Keylogger \& mouselogger}
 
-\subsubsection{Récupération des évenements clavier}
+\subsubsection{Récupération des évènements clavier}
 
-Dans un premier temps, nous voulions pouvoir récupérer tous les évènements clavier de l'utilisateur quelque soit l'application sur laquelle il se trouvait. La solution retenue pour ce projet a été de développer un keylogger. Un keylogger (ou enregistreur de frappe) est un programme qui s’exécute en arrière-plan de l'ordinateur et récupère les frappes de l’utilisateur sur son clavier. Après la détection de chaque touche pressée, notre keylogger traduit l'identifiant reçu en caractère grâce au fichier \textbf{/usr/include/linux/input-event-codes.h} que l'on retrouve dans les fichiers de l'\langage{OS}. Ce fichier associe une touche (lettre I par exemple) en un identifiant (23 pour I). La figure~\ref{fig:lecture_touche} montre un extrait de ce fichier. On utilise donc l'identifiant, que l'on traduit à nouveau, et cela permet ainsi de construire le mot au fur et à mesure. \\
+Dans un premier temps, nous voulions pouvoir récupérer tous les évènements clavier de l'utilisateur quelle que soit l'application sur laquelle il se trouvait. La solution retenue pour ce projet a été de développer un keylogger. Un keylogger (ou enregistreur de frappe) est un programme qui s’exécute en arrière-plan sur l'ordinateur et récupère les frappes de l’utilisateur sur son clavier. Après la détection de chaque touche pressée, notre keylogger traduit l'identifiant reçu en caractère grâce au fichier \textbf{/usr/include/linux/input-event-codes.h} que l'on retrouve dans les fichiers de l'\langage{OS}. Ce fichier associe une touche (lettre I par exemple) en un identifiant (23 pour I). La figure~\ref{fig:lecture_touche} montre un extrait de ce fichier. On utilise donc l'identifiant, que l'on traduit à nouveau, et cela permet ainsi de construire le mot au fur et à mesure. \\
 
 \begin{figure}[H]
 	\begin{center}
@@ -385,14 +384,14 @@ Une fois ajouté à notre programme principal, nous pouvons désormais récupér
 
 \subsubsection{Détection des clics souris}
 
-Nous avons décider d'ajouter une détection de clics de souris afin d'annuler la proposition de suggestions lorsque l'utilisateur n'a plus le curseur de texte sur le mot qu'il est en train d'écrire. Cette implémentation a été simple et rapide puisque nous reprenons le même principe que le keylogger. \\
+Nous avons décidé d'ajouter une détection de clics de souris afin d'annuler la proposition de suggestions lorsque l'utilisateur n'a plus le curseur de texte sur le mot qu'il est en train d'écrire. Cette implémentation a été simple et rapide puisque nous reprenons le même principe que le keylogger. \\
 
 
 \subsubsection{Prise en charge de plusieurs périphériques}
 
-Une fois cette première partie terminée, nous avons constater que notre programme ne détectait qu'un seul clavier et qu'une seule souris. Si un utilisateur utilise un ordinateur portable et y branche un clavier externe, notre détection de saisie de fonctionnait plus. \\
+Une fois cette première partie terminée, nous avons constaté que notre programme ne détectait qu'un seul clavier et qu'une seule souris. Si un utilisateur utilise un ordinateur portable et y branche un clavier externe, notre détection de saisie ne fonctionnait plus. \\
 
-\subsubsection{Arrêt propre du programme}
+\subsubsection{Gestion de l'arrêt du programme}
 
 La principale difficulté a été de détecter tous les claviers et souris puis de les faire fonctionner en même temps. On a décidé d'utiliser des threads pour lire les fichiers des claviers et des souris en concurrence. Un thread est une séquence d'instructions qui peut être exécutée indépendamment au sein d'un programme. Les threads permettent une exécution simultanée et un fonctionnement multitâche au sein d'une même application. La figure~\ref{fig:lecture_fichier} montre un schéma de la lecture des fichiers en concurrence grâce aux threads.
 
@@ -408,9 +407,10 @@ Cependant, il restait un problème : arrêter proprement notre programme. En eff
 
 \subsection{Ecrire et remplacer un mot}
 
-Pour cette deuxième étape, nous devions faire en sorte de pouvoir écrire un mot dans n'importe quelle application, et cela de façon automatique via notre code. Pour ce faire,  noux avons mis en place un clavier virtuel pour simuler les frappes de l'utilisateur et ainsi écrire le mot demandé. Notre code fonctionne ainsi : On crée une fonction permettant de traduire un caractère en l'évènement clavier correspondant. Ensuite, on crée une fonction permettant de cliquer sur un de ces caractères sur le clavier virtuel. Enfin, on répète cette opération avec chaque lettre du mot pour l'écrire en entier.\\
+Pour cette deuxième étape, nous devions faire en sorte de pouvoir écrire un mot dans n'importe quelle application, et cela de façon automatique via notre code. Pour ce faire,  nous avons mis en place un clavier virtuel pour simuler les frappes de l'utilisateur et ainsi écrire le mot demandé. Notre code fonctionne ainsi : On crée une fonction permettant de traduire un caractère en l'évènement clavier correspondant. Ensuite, on crée une fonction permettant de cliquer sur un de ces caractères sur le clavier virtuel. Enfin, on répète cette opération avec chaque lettre du mot pour l'écrire en entier.\\
 
-Lorsque cela a été mis en place,nous nous sommes rendu compte que les lettres précédemment écrites par l'utilisateur n'étaient pas effacées. Pour pallier à cela, nous avons simplement utilisé la fonction permettant de cliquer sur une touche du clavier virtuel que l'on a lance \textbf{n} fois sur la touche retour arrière (où \textbf{n} est la longueur du mot écrit par l'utilisateur). Comme tout est automatique, le remplacement du mot est instantané, non visible par l'utilisateur et la réécriture reste fluide et naturelle.
+\newpage
+Lorsque cela a été mis en place, nous nous sommes rendu compte que les lettres précédemment écrites par l'utilisateur n'étaient pas effacées. Pour pallier à cela, nous avons simplement utilisé la fonction permettant de cliquer sur une touche du clavier virtuel que l'on a lancé \textbf{n} fois sur la touche retour arrière (où \textbf{n} est la longueur du mot écrit par l'utilisateur). Comme tout est automatique, le remplacement du mot est instantané, non visible par l'utilisateur et la réécriture reste fluide et naturelle.
 
 \subsection{Algorithme de suggestions}
 
@@ -422,9 +422,9 @@ Nous avons décidé de nous baser sur un dictionnaire de plus de 140~000 mots tr
 En testant notre algorithme, nous avons pris peur puisque, même après notre optimisation, il prenait trop de temps (environ 1 à 2 secondes). Après quelques recherches, nous avons vu qu'il existait  différents profils de compilation tels que : \og{}debug \fg{} et \og{}release\fg{}. Durant le développement, nous avons travaillé sur le profil de \og{}debug \fg{} qui permet une compilation plus rapide mais qui n'est pas optimisée et donc plus lent que le profil \og{}release \fg{}. Avec le profil \og{}release \fg{} l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application.\\
 
 \subsubsection{Ajout du filtrage par préfixe}
-Ensuite, nous avons ajouté, une fonction qui permet de déterminer si la chaîne écrite par l'utilisateur est le préfixe du mot du dictionnaire que nous sommes en train de traiter. Nous l'utiliserons par la suite pour suggérer les mots les plus cohérents avec la chaîne écrite par l'utilisateur, et non pas pour corriger la chaîne écrite.\\
+Ensuite, nous avons ajouté une fonction qui permet de déterminer si la chaîne écrite par l'utilisateur est le préfixe du mot du dictionnaire que nous sommes en train de traiter. Nous l'utiliserons par la suite pour suggérer les mots les plus cohérents avec la chaîne écrite par l'utilisateur, et non pas pour corriger la chaîne écrite.\\
 
-
+\newpage
 \subsubsection{Combinaison des critères}
 Maintenant que nous disposons de deux outils permettant de suggérer un mot plutôt qu’un autre, nous les avons combinés pour construire notre algorithme de suggestions. Au départ, nous avions choisi de prioriser la distance de Levenshtein, puis d'utiliser le préfixe en cas d’égalité entre deux mots, comme le montre la figure~\ref{fig:tri_dist}. Cependant, nous avons constaté que les résultats étaient bien meilleurs lorsque l’on inversait cette logique (voir figure~\ref{fig:tri_prefixe}). D'abord filtrer par préfixe, puis départager par distance de Levenshtein. En effet, en privilégiant le préfixe, on obtient des mots qui commencent par la chaîne écrite et qui peuvent être bien plus longs que le mot tapé. Si l'utilisateur fait une faute de frappe (par exemple en inversant deux lettres), la chaîne erronée ne sera probablement pas un préfixe commun avec l'un des différents mots du dictionnaire. Dans ce cas, le filtre par préfixe échoue, et c'est à ce moment que le tri par la distance de Levenshtein prend le relais afin de proposer les suggestions les plus proches.\\
 
@@ -444,54 +444,55 @@ Maintenant que nous disposons de deux outils permettant de suggérer un mot plut
 \end{figure}
 
 \subsubsection{Ajout du critère de fréquence d'usage}
-Cependant, un autre problème est apparu : beaucoup de mots ont la même distance de Levenshtein. Pour les départager, nous avons alors intégré un critère supplémentaire : la fréquence d’usage des mots. Pour cela, nous avons choisi d’utiliser la fréquence d’apparition des mots dans les livres, parmi les différentes options possibles telles que la fréquence d'apparition dans les films ou dans les médias. Nous avons développé un programme en \langage{Python} permettant de convertir les fichiers au format \var{.tsv} en fichier au format \var{.csv}, un format que nous maîtrisons mieux. Ce programme nettoie également les données en supprimant les doublons, les mots contenant des espaces, ainsi que les colonnes inutiles. Notre but étant de conserver uniquement le mot et sa fréquence. Ce programme retire donc toutes les autres informations telles que la catégorie grammaticale, l’infinitif ou encore GNGNGNGNGN. Nous utiliserons cette fréquence comme critère final dans notre algorithme de suggestion.
+Cependant, un autre problème est apparu : beaucoup de mots ont la même distance de Levenshtein. Pour les départager, nous avons alors intégré un critère supplémentaire : la fréquence d’usage des mots. Pour cela, nous avons choisi d’utiliser la fréquence d’apparition des mots dans les livres, parmi les différentes options possibles telles que la fréquence d'apparition dans les films ou dans les médias. Nous avons développé un programme en \langage{Python} permettant de convertir les fichiers au format \var{.tsv} en fichier au format \var{.csv}, un format que nous maîtrisons mieux. Ce programme nettoie également les données en supprimant les doublons, les mots contenant des espaces, ainsi que les colonnes inutiles. Notre but étant de conserver uniquement le mot et sa fréquence. Ce programme retire donc toutes les autres informations telles que la classe grammaticale, l’infinitif ou encore le nombre de lettres. Nous utiliserons cette fréquence comme critère final de tri dans notre algorithme de suggestions.
 
 
-\subsubsection{Exemple illustraif du fonctionnement de l'algorithme}
+\subsubsection{Exemple illustratif du fonctionnement de l'algorithme}
 
-Prenons l'exemple du mot \og{}bonjour \fg{}. Imaginons que nous avons pour l'instant l'utilisateur a écrit le mot \og{} bonj \fg{}, alors les suggestions faites grâce au tri des préfixes seront des mots tels que \og{} bonjour \fg{}, \og{}bonjours \fg{} et \og{}bons \fg{} comme on le voit dans la figure~\ref{fig:tri_prefixe}.
-Maintenant imaginons que nous faisons une faute : \og{}bpnj\fg{}, on remarque qu'aucun mot commence par ce préfixe, on trie alors selon la distance de Levenshtein qui va nous permettre de corriger la faute de frappe. Enfin, le tri selon la fréquence permet de gérer le cas d'une égalité face au tri des préfixe et de la distance : avec les mots \og{}bonjour \fg{} et \og{}bonsoir \fg{}  nous avons le même préfixe \og{}bon \fg{} et la même distance. Cependant, c'est le mot \og{}bonjour \fg{} qui aura la plus grande priorité car il est beaucoup plus présent dans les livres que le mot \og{}bonsoir \fg{}.\\
+Prenons l'exemple du mot \og{}bonjour \fg{}. Imaginons que, pour l'instant, l'utilisateur a écrit le mot \og{}bonj \fg{}, alors les suggestions faites grâce au tri des préfixes seront des mots tels que \og{}bonjour \fg{}, \og{}bonjours \fg{} et \og{}bons \fg{} comme on le voit dans la figure~\ref{fig:tri_prefixe}.
+Maintenant imaginons que nous faisons une faute : \og{}bpnj\fg{}, on remarque qu'aucun mot commence par ce préfixe, on trie alors selon la distance de Levenshtein qui va nous permettre de corriger la faute de frappe. Enfin, le tri selon la fréquence permet de gérer le cas d'une égalité face au tri des préfixes et de la distance : avec les mots \og{}bonjour \fg{} et \og{}bonsoir \fg{} nous observons que nous avons le même préfixe \og{}bon \fg{} et la même distance. Cependant, c'est le mot \og{}bonjour \fg{} qui aura la plus grande priorité puisqu'il est beaucoup plus présent dans les livres que le mot \og{}bonsoir \fg{}.\\
 
 La figure~\ref{fig:uml} présente un récapitulatif de notre algorithme de suggestion sous la forme d'un diagramme UML.\\
 \begin{figure}[H]
 	\begin{center}
-		{\includegraphics[width=0.8\textwidth]{images/uml_algo.png}}
+		{\includegraphics[width=0.9\textwidth]{images/uml_algo.png}}
 	\end{center}
 	\caption{Schéma UML de l'algorithme de suggestion}
 	\label{fig:uml}
 \end{figure}
 
+\newpage
 \subsection{Interface graphique}
 
 Maintenant que l'algorithme est fonctionnel, nous devons afficher à l'écran les suggestions proposées grâce à une interface graphique. Nous voulions dans un premier temps faire cette interface en \langage{Rust} avec \langage{GTK}, la boîte à outils de \langage{Rust}  mais nous n'avons malheureusement pas réussi à faire en sorte de garder la fenêtre au premier plan lorsque l'utilisateur est sur une autre application. Cette approche devient donc inutilisable car l'application disparait à chaque fois que l'utilisateur clique sur une fenêtre Il ne peut ainsi pas voir les différentes suggestions.\\
 
-On a donc décidé de faire l'interface en \langage{Python} avec Tkinter car nous l'avions déjà utilisée pour d'autres projets et nous savions comment garder la fenêtre au premier plan. Pour ce faire, notre code \langage{Rust} lance un programme \langage{Python} et lui envoie les 3 mots suggérés via l'entrée strandard du code \langage{Python}. Notre code \langage{Python} les affiche dans l'interface. Si l'utilisateur clique sur l'un des trois mots, \langage{Python} envoie l'information au code \langage{Rust} qui va ensuite l'écrire dans l'application de l'utilisateur grâce à notre clavier virtuel.\\
+On a donc décidé de faire l'interface en \langage{Python} avec Tkinter car nous l'avions déjà utilisée pour d'autres projets et nous savions comment garder la fenêtre au premier plan. Pour ce faire, notre code \langage{Rust} lance un programme \langage{Python} et lui envoie les 3 mots suggérés via l'entrée standard du code \langage{Python}. Notre code \langage{Python} les affiche dans l'interface. Si l'utilisateur clique sur l'un des trois mots, \langage{Python} envoie l'information au code \langage{Rust} qui va ensuite l'écrire dans l'application de l'utilisateur grâce à notre clavier virtuel.\\
 
 La plus grosse difficulté de l'interface graphique a été la communication de \langage{Rust} et \langage{Python} mais également de faire en sorte que la page reste au premier plan.\\
 
-La figure~\ref{fig:lecture_fichier} illustre l’interface finale de notre application, développée en \langage{Python} à l’aide de la bibliothèque \langage{Tkinter}.
+La figure~\ref{fig:interface} illustre l’interface finale de notre application, développée en \langage{Python} à l’aide de la bibliothèque \langage{Tkinter}.
 
 \begin{figure}[H]
 	\begin{center}
-		{\includegraphics[width=0.65\textwidth]{images/illustration.png}}
+		{\includegraphics[width=0.75\textwidth]{images/illustration.png}}
 	\end{center}
 	\caption{Illustration de l'application}
-	\label{fig:lecture_fichier}
+	\label{fig:interface}
 \end{figure}
 
 \subsection{Installeur de l'application}
 
-Une fois que nous avons tout mis en place et que l'application a été fonctionnelle, nous avons décidé d'ajouter un installeur d'application qui permet de télécharger toutes les dépendances, d'ajouter l'application dans un dossier contenu dans le \langage{PATH}. Le \langage{PATH} est une variable d'environnement utilisée par le système d'exploitation pour localiser les fichiers exécutables utilisable depuis n'importe quel emplacement dans le systeme.\\
+Une fois que nous avons tout mis en place et que l'application a été fonctionnelle, nous avons décidé d'ajouter un installeur d'application qui permet de télécharger toutes les dépendances, d'ajouter l'application dans un dossier contenu dans le \langage{PATH}. Le \langage{PATH} est une variable d'environnement utilisée par le système d'exploitation pour localiser les fichiers exécutables utilisable depuis n'importe quel emplacement dans le système.\\
 
 Notre installeur crée aussi un fichier \var{.desktop} pour permettre le lancement l'application depuis le menu d'application d'\langage{Ubuntu} (voir figure~\ref{fig:lanceur}). Il applique également les droits nécessaires au bon fonctionnement de l'application car certaines commandes nécessitent les droits de l'utilisateur \var{root}, par exemple la lecture des fichiers des périphériques. \\
 
-Nous avons gérés l'installeur grâce à un Makefile, un fichier permettant d'automatiser un ensemble d'actions telles que la génération de fichiers. Nous avons créé une documentation technique pour installer notre application. Vous pouvez la retrouver à l'annexe de la page \underline{\pageref{annexe}}.\\
+Nous avons géré l'installeur grâce à un Makefile, un fichier permettant d'automatiser un ensemble d'actions telles que la génération de fichiers. Nous avons créé une documentation technique pour installer notre application. Vous pouvez la retrouver à l'annexe de la page \underline{\pageref{annexe}}.\\
 
 Grâce à toute cette installation et à une icône dans la barre des tâches, l'application est plus facile d'accès.
 
 \begin{figure}[H]
 	\begin{center}
-		{\includegraphics[width=0.5\textwidth]{images/application.png}}
+		{\includegraphics[width=0.65\textwidth]{images/application.png}}
 	\end{center}
 	\caption{Installeur de l'application}
 	\label{fig:lanceur}
@@ -506,7 +507,7 @@ Une fois l'application lancée, une fenêtre apparait en premier plan et restera
 
 \section{Points à améliorer}
 
-Pour améliorer notre application, nous pourrions faire en sorte qu'elle soit compatible sur d'autres distributions Linux et sur le systeme d'exploitation MacOS. Nous pourrions également changer d'algorithme pour améliorer les suggestions selon l'historique de l'utilisateur par exemple. Enfin, nous aurions également aimer que la fenêtre se place sous le curseur de la souris pour avoir les suggestions toujours sous les yeux mais nous n'avons pas réussi à trouver une solution permettant de récupérer les coordonnées du curseur.
+Pour améliorer notre application, nous pourrions faire en sorte qu'elle soit compatible sur d'autres distributions Linux et sur le système d'exploitation MacOS. Nous pourrions également changer d'algorithme pour améliorer les suggestions selon l'historique de l'utilisateur par exemple. Enfin, nous aurions également aimé que la fenêtre se place sous le curseur de la souris pour avoir les suggestions toujours sous les yeux mais nous n'avons pas réussi à trouver une solution permettant de récupérer les coordonnées du curseur.
 
 
 \section{Outils utilisés}
@@ -524,8 +525,10 @@ Nous avons eu l'occasion d'utiliser de  nombreux outils pour la communication au
 \addcontentsline{toc}{chapter}{Conclusion}
 
 Pour conclure, ce projet semestriel nous a permis de mettre en pratique des compétences techniques variées, allant de la découverte du monde de la recherche et la mise en place de recherche d'informations, à la mise en application du sujet de nos recherches grâce à \langage{Rust} et \langage{Python}. \\
+
 La mise en place d'une application après la compréhension du sujet nous ont permis de renforcer nos compétences techniques et nous ont également offert une précieuse expérience en gestion de projet et de collaboration au sein d'un binôme. \\
-Ce pojet a donc été une véritable opportunité pour mettre en pratique les compétences que nous avons acquises durant nos deux premières années en CMI informatique, de développer de nouvelles compétences et de découvrir un domaine que nous n'avions jamais abordé auparavant. \\
+
+Ce projet a donc été une véritable opportunité pour mettre en pratique les compétences que nous avons acquises durant nos deux premières années en CMI informatique, de développer de nouvelles compétences et de découvrir un domaine que nous n'avions jamais abordé auparavant. \\
 
 \nocite{*}
 \bibliographystyle{alpha}
@@ -566,7 +569,7 @@ Ce pojet a donc été une véritable opportunité pour mettre en pratique les co
 	{toc}{chapter}{Résumé}
 	\begin{justify}
 		Rapport de notre projet semestriel de deuxième année de licence en Cursus Master Ingénierie Informatique à l’Université de Marie \& Louis Pasteur, portant sur la complétion semi-automatique, les méthodes qui existent, les algorithmes possibles pour la mise en place de la complétion semi-automatique et les améliorations possibles grâce aux chaînes de Markov. Nous avons ajouté notre implémentation permettant de proposer des suggestions de corrections des mots sur n'importe quelles applications sous Linux. Durant ce projet, plusieurs thèmes ont été abordés : l'utilisation de Git, de \langage{Python} et de \langage{Rust}, les bases informatiques et mathématiques de la complétion semi-automatique.\\
-		Dans ce rapport, nous étudions les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite, nous parlons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique.
+		Dans ce rapport, nous étudions les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite, nous parlons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créé permettant une complétion semi-automatique.
 
 	\end{justify}
 	\vspace*{\fill} % Espace vertical
