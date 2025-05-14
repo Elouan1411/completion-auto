@@ -80,7 +80,7 @@
 	\vspace{1cm}
 	{\huge \texttt{}{Projet d'Initiation à la recherche\\ } \LARGE{\textbf{L2 - CMI}} \par}
 	\vspace{1cm}
-	{\huge \textbf{Complétion (semi-)automatique} \par}
+	{\huge \textbf{Complétion semi-automatique} \par}
 	\vspace{1cm}
 	{\Large BOITEUX Elouan\\BENALI Samia\par}
 	\vspace{0.5cm}
@@ -114,16 +114,17 @@ Nos remerciements vont également à toutes les personnes avec lesquelles nous a
 
 \newpage
 \tableofcontents
+\listoffigures
 
 
 
 \chapter*{Introduction} % * pour ne pas avoir de numéro de chapitre
 \addcontentsline{toc}{chapter}{Introduction}
 
-Dans le cadre de notre projet de recherche du CMI informatique de l’Université de Marie \& Louis Pasteur de Besançon, encadré par Monsieur Héam, nous avons travaillé sur la complétion (semi-)automatique.\par \vspace{\baselineskip} % pour une ligne vide
+Dans le cadre de notre projet de recherche du CMI informatique de l’Université de Marie \& Louis Pasteur de Besançon, encadré par Monsieur Héam, nous avons travaillé sur la complétion semi-automatique.\par \vspace{\baselineskip} % pour une ligne vide
 
 
-Ce projet nous a permis de découvrir ce qu'était la complétion automatique et la complétion semi-automatique et de comprendre sur quoi ce repose ces deux notions. La complétion automatique est un processus par lequel un système va prédire et compléter une entrée en fonction de certaines données et contextes. Cependant, la complétion semi-automatique, est une assistance permettant au système de proposer des options tout en laissant à l'utilisateur la décision finale. La complétion (semi-)automatique peut être utilisée dans de nombreuses applications : une saisie sur clavier, une complétion de code, une recherche sur un moteur de recherche, une assistance virtuelle etc\dots\par \vspace{\baselineskip} % pour une ligne vide
+Ce projet nous a permis de découvrir ce qu'était la complétion automatique et la complétion semi-automatique et de comprendre sur quoi ce repose ces deux notions. La complétion automatique est un processus par lequel un système va prédire et compléter une entrée en fonction de certaines données et contextes. Cependant, la complétion semi-automatique, est une assistance permettant au système de proposer des options tout en laissant à l'utilisateur la décision finale. La complétion semi-automatique peut être utilisée dans de nombreuses applications : une saisie sur clavier, une complétion de code, une recherche sur un moteur de recherche, une assistance virtuelle etc\dots\par \vspace{\baselineskip} % pour une ligne vide
 
 
 Ce rapport va nous permettre, dans un premier temps, d’étudier les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite, nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique.\par
@@ -131,18 +132,24 @@ Ce rapport va nous permettre, dans un premier temps, d’étudier les différent
 
 \chapter{Les différentes approches utilisées}
 
+\section{Introduction}
+
+Il existe de nombreuses façons de proposer des suggestions automatiques ou semi-automatiques dans les outils numériques. Certaines méthodes sont simples et rapides, d’autres plus complexes et plus précises. Ce chapitre présente quatre grandes approches : les modèles basés s'appuyant sur des règles, ceux utilisant des statistiques, ceux qui s’appuient sur l’intelligence artificielle, et enfin les modèles de deep learning. \\
+
+Chacune de ces approches a ses avantages et ses inconvénients, selon ce que l’on cherche à faire. Nous allons voir comment ces méthodes fonctionnent et dans quels cas sont elles efficaces ou non.
+
 \section{Modèles s'appuyant sur des règles}
 Pour proposer des suggestions, ce modèle utilisent des algorithmes simples qui s'appuient sur des règles préprogrammées telles que la correspondance de préfixes ou une séquence donnée en amont. Ces algorithmes vont être gérer principalement grâce à des dictionnaires statiques ou des listes.  Cette implémentation est plutôt rapide et simple à mettre en place, elle est cependant très peu flexible et empêche donc une utilisation complexe\dots
 
 \section{Modèles s'appuyant sur des statistiques}
 Pour proposer des suggestions, ce modèle utilisent des statistiques fournies grâce aux données d'un historique. Cela permettra de prédire des séquences comme avec le modèle de Markov (expliqué dans le chapitre \ref{Markov}) ou la méthode TF-IDF \textit{(term frequency-inverse document frequency)}
 Cette implémentation permet d'obtenir des résultats rapidement. On a cependant aucune compréhension sémantique donc les suggestions ne conviendront que rarement au contexte\dots
-
+\newpage
 \section{Modèles s'appuyant sur l'intelligence artificielle}
 Pour proposer des suggestions, ce modèle utilisent des algorithmes qui s'appuient sur l'intelligence artificielle et les réseaux neuronaux.
 Avec l’apprentissage supervisé et non supervisé, ces modèles apprennent des motifs complexes à partir des données. Ils peuvent inclure des algorithmes comme les forêts aléatoires ou les régressions pour fournir des prédictions plus contextuelles.
 Cette implémentation permet d'être efficace face à des problèmes très complexes et de répondre à des demandes rares. Cependant, ce genre d'implémentation nécéssite énormément de temps de calculs et de ressources\dots
-\newpage
+
 
 \section{Modèles s'appuyant sur le deep learning}
 Pour proposer des suggestions, ce modèle utilise des algorithmes qui s'appuient sur l'amélioration en temps réel. C'est à l'utilisateur de faire des choix et ces mêmes choix sont mémorisés pour une utilisation personnalisée et plus précise. Cette implémentation est donc très adapatable et permet des réponses précises avec un sens sémentique. Cependant, cette implémentation est complexe et très longue à mettre en place puisque les choix de l'utilisateur sont nécessaires et les réponses dépendront en grande partie des données collectées\dots
@@ -346,7 +353,7 @@ On obtient donc une matrice de transition.
 \section{Conclusion}
 Les chaînes de Markov permettent de prédire l'étape suivante en se basant sur les actions précédentes. Cela va permettre, par la suite, de personnaliser les suggestions pour chaque utilisateur. \par
 De plus, ce système est facile à mettre en place et à implémenter. Cependant, une chaîne de Markov ne prend pas en compte l'historique complet ce qui mène à un problème de mémoire. Il faut, de plus, un très grand nombre de données et un historique plus grand pour avoir des données fiables .
-\chapter{Notre outil de complétion (semi-)automatique}
+\chapter{Notre outil de complétion semi-automatique}
 
 \section{Choix pour l'implémentation}
 
@@ -357,6 +364,7 @@ Nous devions ensuite mettre en place le projet. Nous avons décider d'à la fois
 \section{Les étapes de la réalisation}
 
 \subsection{Keylogger \& mouselogger}
+
 Dans un premier temps, nous voulions pouvoir récupérer tous les évènements clavier de l'utilisateur quelque soit l'application sur laquelle il se trouve. La solution retenue pour ce projet a été de développer un keylogger. Un keylogger (ou enregistreur de frappe) est un programme qui s’exécute en arrière-plan de l'ordinateur et récupère les frappes de l’utilisateur sur son clavier. Après la détection de chaque touche pressée, notre keylogger traduit l'identifiant reçu en caractère grâce au fichier \textbf{/usr/include/linux/input-event-codes.h} que l'on retrouve dans les fichiers de l'\langage{OS}. Ce fichier associe une touche (lettre I par exemple) en un identifiant (23 pour I). La figure~\ref{fig:lecture_touche} montre un extrait de ce fichier. On utilise donc l'identifiant, que l'on traduit à nouveau, et cela permet ainsi de construire le mot au fur et à mesure. \\
 
 \begin{figure}[H]
@@ -367,11 +375,7 @@ Dans un premier temps, nous voulions pouvoir récupérer tous les évènements c
 	\label{fig:lecture_touche}
 \end{figure}
 
-En plus des touches alphanumériques, notre programme gère également certaines touches spéciales comme les flèches directionnelles. Lorsqu’une flèche gauche ou droite est détectée, le keylogger met à jour la position du curseur dans le mot en cours de construction. Ainsi, lorsqu’une nouvelle lettre est tapée après un déplacement avec les flèches, elle est insérée à la bonne position dans la chaîne, et non simplement ajoutée à la fin. Cela permet de refléter fidèlement l’intention de l’utilisateur, même s’il modifie le mot partiellement avant de le terminer. Ce comportement permet à notre programme de reconstituer précisément les mots saisis, y compris avec des corrections ou insertions en milieu de mot.
-
-
-
-Une fois ajouté à notre programme principal, nous pouvons désormais récupérer les frappes de l'utilisateur. Grâce à cela, nous pouvons désormais concaténer les lettres et afficher dans un terminal le mot en cours de saisie. Pour une utilisation plus fluide, nous avons ajouté quelques fonctionnalités supplémentaires. Notre programme gère également certaines touches spéciales comme les flèches directionnelles. Lorsque la flèche gauche ou droite est détectée, le keylogger met à jour la position du curseur dans le mot en cours de construction. Ainsi, lorsqu’une nouvelle lettre est tapée après un déplacement avec les flèches, elle est insérée à la bonne position dans la chaîne, et non simplement ajoutée à la fin. Cela permet de refléter fidèlement l’intention de l’utilisateur, même s’il modifie le mot partiellement avant de le terminer. Ce comportement permet à notre programme de reconstituer précisément les mots saisis, y compris avec des corrections ou insertions en milieu de mot. De plus, s'il clique sur la touche retour arrière, il peut supprimer la lettre à gauche du curseur sans que notre programme perde l'information du mot en cours de saisie. Enfin si l'utilisateur clique sur n'importe quelle autre touche qu'une lettre (accentuée ou non), le retour arrière ou les flèches de navigation alors, on annule les suggestions de mots. \\
+Une fois ajouté à notre programme principal, nous pouvons désormais récupérer les frappes de l'utilisateur. Grâce à cela, nous pouvons désormais concaténer les lettres et afficher dans un terminal le mot en cours de saisie. Pour une utilisation plus fluide, nous avons ajouté quelques fonctionnalités supplémentaires. Notre programme gère également certaines touches spéciales comme les flèches directionnelles. Lorsque la flèche gauche ou droite est détectée, le keylogger met à jour la position du curseur dans le mot en cours de construction. Ainsi, lorsqu’une nouvelle lettre est tapée après un déplacement avec les flèches, elle est insérée à la bonne position dans la chaîne, et non simplement ajoutée à la fin. Ce comportement permet à notre programme de reconstituer précisément les mots saisis, y compris avec des corrections ou insertions en milieu de mot. De plus, s'il clique sur la touche retour arrière, il peut supprimer la lettre à gauche du curseur sans que notre programme perde l'information du mot en cours de saisie. Enfin, si l'utilisateur clique sur n'importe quelle autre touche qu'une lettre (accentuée ou non), le retour arrière ou les flèches de navigation alors, on annule les suggestions de mots. \\
 
 Nous avons décider d'ajouter une détection de clics de souris afin d'annuler la proposition de suggestions lorsque l'utilisateur n'a plus le curseur de texte sur le mot qu'il est en train d'écrire. Cette implémentation a été simple et rapide puisque nous reprenons le même principe que le keylogger. \\
 
@@ -403,11 +407,27 @@ Nous avons décidé de nous baser sur un dictionnaire de plus de 140~000 mots tr
 
 En testant notre algorithme, nous avons donc pris peur puisque, même après notre optimisation, il prenait trop de temps (environ 1 à 2 secondes). Après quelques recherches, nous avons vu qu'il existait  différents profils de compilation tels que : \og debug \fg{} et \og release\fg{}. Durant le développement, nous avons travaillé sur le profil de \og debug \fg{} qui permet une compilation plus rapide mais qui n'est pas optimisé et donc plus lent que le profil \og release \fg. Avec le profil \og release \fg{} l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application.\\
 
-Pour améliorer les suggestions, nous avons décider d'utiliser une des fréquences présentent dans le dictionnaire. (fréquence d'utilisation dans les livres). Nous avons mis en place un algorithme qui permet
+Pour améliorer les suggestions, nous avons décider d'utiliser une des fréquences présentent dans le dictionnaire. Nous avons décidé d'utiliser la fréquence d'utilisation dans les livres mais nous avions d'autres possibilités, comme la fréquence d'utilisation dans les films. Nous avons mis en place un algorithme en \langage{Python} qui permet de convertir le fichier .tsv en fichier .csv, un format que nous connaissons. Nous utiliserons la fréquence par la suite. \\
+
+Ensuite, nous avons ajouté, un programme qui permet de déterminer si la chaîne écrite par l'utilisateur est un préfixe d'un mot du dictionnaire. Cela permet d'obtenir des résultats plus cohérent. En effet, si l'utilisateur veut écrire le mot \og bonjour \fg et qu'il a écrit pour l'intant \og bon \fg, alors les suggestions faites par Levenshtein seront des mots plus courts tel que : \og GNGNGN \fg, \og GNGNGNG \fg et \og GNGNGN \fg. \\
+
+Ensuite, si la distance de Levenshtein est supérieur à 2 entre la chaîne et le mot que l'on est en train de traiter, et que la chaîne écrite n'est pas le prefixe du mot, alors on passe au mot suivant. Sinon, On ajoute le mot à un tas. On trie ce tas selon la distance de Levenshtein, puis selon la préfixation, et enfin selon la fréquence. En effet, imaginons que nous avons le mot \og bonjour \fg et \og bonsoir \fg. Lors du tri par fréquence, c'est le mot \og bonjour \fg qui aura la plus grande priorité car il est beaucoup plus présent dans les livres que le mot \og bonsoir \fg. 
+Si la taille du tas est supérieur à 3 alors on retire l'élément avec la plus petite priorité. \\
+
+On répète ces opérations jusqu'à ce qu'il n'y ait plus de mots dans le dictionnaire. Enfin, on retourne les 3 suggestions. 
+
+
+\begin{figure}[H]
+	\begin{center}
+		{\includegraphics[width=0.8\textwidth]{images/uml_algo.png}}
+	\end{center}
+	\caption{Schéma UML tri des suggestions}
+	\label{fig:uml}
+\end{figure}
 
 \subsection{Interface graphique}
 
-Maintenant que l'algorithme est fonctionnel, nous devons afficher à l'écran les suggestions proposé grâce à une interface graphique. Nous voulions dans un premier temps faire cet interface en \langage{Rust} avec \langage{GTK}, la boîte à outils de \langage{Rust}  mais nous n'avons malheureusement pas réussi à faire en sorte de garder la fenêtre au premier plan lorsque l'utilisateur est sur une autre application. Cette approche devient donc inutilisable car l'application disparait à chaque fois que l'utilisateur clique sur une fenêtre Il ne peut ainsi pas voir les différentes suggestions.\\
+Maintenant que l'algorithme est fonctionnel, nous devons afficher à l'écran les suggestions proposé grâce à une interface graphique. Nous voulions dans un premier temps faire cette interface en \langage{Rust} avec \langage{GTK}, la boîte à outils de \langage{Rust}  mais nous n'avons malheureusement pas réussi à faire en sorte de garder la fenêtre au premier plan lorsque l'utilisateur est sur une autre application. Cette approche devient donc inutilisable car l'application disparait à chaque fois que l'utilisateur clique sur une fenêtre Il ne peut ainsi pas voir les différentes suggestions.\\
 
 On a donc décidé de faire l'interface en \langage{Python} avec Tkinter car nous l'avions déjà utiliser pour d'autres projets et nous savions comment garder la fenêtre au premier plan. Pour ce faire, notre code \langage{Rust} lance un programme \langage{Python} et lui envoie les 3 mots suggérés via l'entrée strandard du code \langage{Python}. Notre code \langage{Python} les affiche dans l'interface. Si l'utilisateur clique sur l'un des trois mots, \langage{Python} envoie l'information au code \langage{Rust} qui va ensuite l'écrire dans l'application de l'utilisateur grâce à notre clavier virtuel.\\
 
@@ -466,19 +486,10 @@ Nous avons eu l'occasion d'utiliser de  nombreux outils pour la communication au
 \end{figure}
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
-% Page de résumé
-\newpage
-\begin{center}
-	\vspace*{\fill} % Espace vertical
-	\section*{Résumé}
-	\addcontentsline{toc}{chapter}{Résumé}
-	\begin{justify}
-		Le resumé
 
-
-	\end{justify}
-\end{center}
-
+Pour conclure, ce projet semestriel nous a permis de mettre en pratique des compétences techniques variées, allant de la découverte du monde de la recherche et la mise en place de recherche d'informations à la mise en application du sujet de nos recherches grâce à \langage{Rust} et \langage{Python}. \\
+La mise en place d'une application après la compréhension du sujet nous ont permis de renforcer nos compétences techniques et nous ont également offert une précieuse expérience en gestion de projet et de collaboration au sein d'un binôme. \\
+Ce pojet est donc été une véritable opportunité pour mettre en pratique les compétences que nous avons acquises durant nos deux premières années en CMI informatique et de développer de nouvelles compétences et de découvrir un domaine que nous n'avions jamais abordé auparavant. \\
 
 \nocite{*}
 \bibliographystyle{alpha}
@@ -507,5 +518,49 @@ Nous avons eu l'occasion d'utiliser de  nombreux outils pour la communication au
 	\endgroup
 	\input{doc_technique.tex} % Inclut ton fichier doc_technique.tex ici
 \end{appendices}
+
+
+% Page de résumé
+\newpage
+\begin{center}
+    \vspace*{\fill} % Espace vertical
+    \section*{Résumé}
+    \addcontentsline
+    {toc}{chapter}{Résumé}
+    \begin{justify}
+    Rapport de notre projet semestriel de deuxième année de licence en Cursus Master Ingénierie Informatique à l’Université de Marie \& Louis Pasteur, portant sur la complétion semi-automatique, les méthodes qui existent, les algorithmes possible pour la mise en place de la complétion semi-automatique et les améliorations possible grâce aux chaînes de Markov. Nous avons ajouter notre implémentation permettant de proposer des suggestions de corrections des mots sur n'importe quelles applications sous Linux. Durant ce projet, plusieurs thèmes ont été abordés : l'utilisation de Git, de \langage{Python} et de \langage{Rust}, les bases informatiques et mathématiques de la complétion semi-automatique.\\
+Dans ce rapport, nous étudierons les différentes approches qui existent ainsi que  les différents algorithmes de distance. Ensuite, nous parlerons  des chaînes de Markov pour la gestion d'historique et enfin vous retrouverez l'application que nous avons créer permettant une complétion semi-automatique.
+
+    \end{justify}
+    \vspace*{\fill} % Espace vertical
+
+    \section*{Mots-clés}
+    \addcontentsline
+    {toc}{chapter}{Mots-Clés}
+    \begin{justify}
+     Rust - Python - Tkinter - Complétion semi-automatique - Levenshtein - Markov - Résolution de problème - Implémentation -Recherche - Application
+    \end{justify}
+    \vspace*{\fill} % Espace vertical
+
+    \section*{Abstract}
+    \addcontentsline
+    {toc}{chapter}{Abstract}
+    \begin{justify}
+    Report on our second-year semester project in the Cursus Master Ingénierie Informatique program at the Université de Marie \& Louis Pasteur, focusing on semi-automatic completion, existing methods, possible algorithms for implementing semi-automatic completion and possible improvements using Markov chains. We've also added our own implementation, enabling us to offer word correction suggestions on any Linux application. During this project, we covered a number of topics, including the use of Git, Python and Rust, and the computational and mathematical foundations of semi-automatic completion. \\
+In this report, we'll look at the different approaches that exist, as well as the different distance algorithms. Then we'll talk about Markov chains for history management, and finally you'll find the application we've created for semi-automatic completion.
+
+    \end{justify}
+    \vspace*{\fill} % Espace vertical
+
+    \section*{Key-Words}
+    \addcontentsline
+    {toc}{chapter}{Key-Words}
+    \begin{justify}
+     Rust - Python - Tkinter - Semi-automatic completion - Levenshtein - Markov - Problem solving - Implementation - Research - Application
+    \end{justify}
+    \vspace*{\fill} % Espace vertical
+    
+    
+\end{center}
 
 \end{document}
