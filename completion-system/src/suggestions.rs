@@ -52,13 +52,13 @@ impl Ord for Suggestion {
     // tri par distance puis is_prefixe puis frequency
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         (
-            self.distance,
             Reverse(self.is_prefix),
+            self.distance,
             Reverse(self.frequency),
         )
             .cmp(&(
-                other.distance,
                 Reverse(other.is_prefix),
+                other.distance,
                 Reverse(other.frequency),
             ))
     }
