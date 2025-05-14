@@ -401,22 +401,19 @@ Lorsque cela a été mis en place,nous nous sommes rendu compte que les lettres 
 
 \subsection{Algorithme de suggestions}
 
-Maintenant que nous pouvons détecter les frappes de l'utilisateur ainsi qu'écrire et/ou remplacer un mot, nous devons écrire l'algorithme qui nous permettra de faire 3 suggestions à l'utilisateur.\par \vspace{\baselineskip}
+Maintenant que nous pouvons détecter les frappes de l'utilisateur ainsi qu'écrire et/ou remplacer un mot, nous devons écrire l'algorithme qui nous permettra de faire 3 suggestions à l'utilisateur.\par
 
-Nous avons décidé de nous baser sur un dictionnaire de plus de 140~000 mots trouvé dans \cite{new2019lexique}. Dans un premier temps, nous avons choisi de développer l'algorithme de distance de Levenshtein (présenté dans la partie~\ref{sec:levenshtein}) car il n'a besoin ni d'entraînement ni d'historique pour fonctionner. C'est également le plus simple à mettre en place. Nous avons essayé d'optimiser l'algorithme afin d'avoir le moins d'attente possible entre le moment où l'utilisateur tape sur une touche du clavier et le moment où les suggestions s'affichent. \\
+\subsubsection{Choix du dictionnaire et premier algorithme}
+Nous avons décidé de nous baser sur un dictionnaire de plus de 140~000 mots trouvé dans \cite{new2019lexique} qui contient des informations utiles que nous exploiterons par la suite. Dans un premier temps, nous avons choisi de développer l'algorithme de distance de Levenshtein (présenté dans la partie~\ref{sec:levenshtein}) car il n'a besoin ni d'entraînement ni d'historique pour fonctionner. C'est également le plus simple à mettre en place. Nous avons essayé d'optimiser l'algorithme afin d'avoir le moins d'attente possible entre le moment où l'utilisateur tape sur une touche du clavier et le moment où les suggestions s'affichent. \\
 
 En testant notre algorithme, nous avons pris peur puisque, même après notre optimisation, il prenait trop de temps (environ 1 à 2 secondes). Après quelques recherches, nous avons vu qu'il existait  différents profils de compilation tels que : \og{}debug \fg{} et \og{}release\fg{}. Durant le développement, nous avons travaillé sur le profil de \og{}debug \fg{} qui permet une compilation plus rapide mais qui n'est pas optimisée et donc plus lent que le profil \og{}release \fg{}. Avec le profil \og{}release \fg{} l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application.\\
 
-
+\subsubsection{Ajout du filtrage par préfixe}
 Ensuite, nous avons ajouté, une fonction qui permet de déterminer si la chaîne écrite par l'utilisateur est le préfixe du mot du dictionnaire que nous sommes en train de traiter. Nous l'utiliserons également par la suite pour suggérer les mots les plus cohérents avec la chaîne écrite par l'utilisateur.\\
 
 
-Maintenant que nous disposons de deux outils permettant de suggérer un mot plutôt qu’un autre, nous les avons combinés pour construire notre algorithme de suggestion. Au départ, nous avions choisi de prioriser la distance de Levenshtein, puis d'utiliser le préfixe en cas d’égalité entre deux mots. Cependant, nous avons constaté que les résultats étaient bien meilleurs lorsque l’on inversait cette logique : d’abord filtrer par préfixe, puis départager par distance de Levenshtein. En effet, en privilégiant le préfixe, on obtient en priorité des mots plus longs qui commencent exactement comme le mot tapé. Et si l'utilisateur fait une faute de frappe (par exemple en inversant deux lettres), il est rare que le mot erroné partage encore un préfixe commun avec les mots du dictionnaire. Dans ce cas, le filtre par préfixe échoue, et c’est là que la distance de Levenshtein prend le relais pour proposer les suggestions les plus proches.\\
-
-Cependant, un autre problème est apparu : beaucoup de mots ont la même distance de Levenshtein. Pour les départager, nous avons alors intégré un critère supplémentaire : la fréquence d’usage des mots. Pour cela, nous avons choisi d’utiliser la fréquence d’apparition des mots dans les livres, parmi les différentes options possibles (comme les films, les médias, etc.). Nous avons développé un programme en \langage{Python} permettant de convertir les fichiers au format \var{.tsv} en \var{.csv}, un format que nous maîtrisons mieux. Ce programme nettoie également les données : il supprime les doublons, les mots contenant des espaces, ainsi que les colonnes inutiles. Notre but étant uniquement de conserver le mot et sa fréquence, nous avons retiré les autres informations comme la catégorie grammaticale (verbe, nom...), l’infinitif, etc. Nous utiliserons cette fréquence comme critère final dans notre algorithme de suggestion.
-
-
-% Ensuite, si la chaîne écrite n'est pas le préfixe du mot et que la distance de Levenshtein est supérieur à 3 entre la chaîne et le mot que l'on est en train de traiter, alors on passe au mot suivant. Sinon, On ajoute le mot à un tas. On trie ce tas selon la préfixation, puis selon la distance de Levenshtein, et enfin selon la fréquence. On commence par le tri des préfixes car nous voulons que les suggestions complètent le mot en cours plutôt que de le corriger, comme le fait les suggestions sur un téléphone portable. On observe qu'en utilisant d'abord le tri de la distance en premier, on obtient plutôt une correction possible du mot plutôt qu'une complétion.\\
+\subsubsection{Combinaison des critères}
+Maintenant que nous disposons de deux outils permettant de suggérer un mot plutôt qu’un autre, nous les avons combinés pour construire notre algorithme de suggestion. Au départ, nous avions choisi de prioriser la distance de Levenshtein, puis d'utiliser le préfixe en cas d’égalité entre deux mots, comme le montre la figure~\ref{fig:tri_dist}. Cependant, nous avons constaté que les résultats étaient bien meilleurs lorsque l’on inversait cette logique (voir figure~\ref{fig:tri_prefixe}) : d’abord filtrer par préfixe, puis départager par distance de Levenshtein. En effet, en privilégiant le préfixe, on obtient en priorité des mots plus longs qui commencent exactement comme le mot tapé. Et si l'utilisateur fait une faute de frappe (par exemple en inversant deux lettres), il est rare que le mot erroné partage encore un préfixe commun avec les mots du dictionnaire. Dans ce cas, le filtre par préfixe échoue, et c’est là que la distance de Levenshtein prend le relais pour proposer les suggestions les plus proches.\\
 
 \begin{figure}[H]
 	\begin{center}
@@ -433,17 +430,21 @@ Cependant, un autre problème est apparu : beaucoup de mots ont la même distanc
 	\label{fig:tri_prefixe}
 \end{figure}
 
-Prenons l'exemple du mot \og{} bonjour \fg{}. Imaginons que nous avons pour l'instant écrit \ voulons écrire le mot \og{} bonj \fg{}, alors les suggestions faites grâce au tri des préfixes seront des mots tels que \og{} bonjour \fg{}, \og{} bonjours \fg{} et \og{} bons \fg{} comme on le voit dans la figure~\ref{fig:tri_prefixe}.
-Maintenant imaginons que nous faisons une faute : \og{} bpnj\fg{}, on observe qu'aucun mot commence par ce préfixe, on commence donc a trier selon la distance de Levenshtein qui va nous permettre de corriger l'erreur et de proposer, en priorité, des mots qui ont une distance inférieure à 3. Enfin, le tri selon la fréquence permet de gérer le cas d'une égalité face au tri des préfixe et de la distance : avec les mots \og{} bonjour \fg{} et \og{} bonsoir \fg{}  nous avons le même préfixe\og{} bon \fg{} et la même distance. Cependant, c'est le mot \og{} bonjour \fg{} qui aura la plus grande priorité car il est beaucoup plus présent dans les livres que le mot \og{} bonsoir \fg{}.\\
+\subsubsection{Ajout du critère de fréquence d'usage}
+Cependant, un autre problème est apparu : beaucoup de mots ont la même distance de Levenshtein. Pour les départager, nous avons alors intégré un critère supplémentaire : la fréquence d’usage des mots. Pour cela, nous avons choisi d’utiliser la fréquence d’apparition des mots dans les livres, parmi les différentes options possibles (comme les films, les médias, etc.). Nous avons développé un programme en \langage{Python} permettant de convertir les fichiers au format \var{.tsv} en \var{.csv}, un format que nous maîtrisons mieux. Ce programme nettoie également les données : il supprime les doublons, les mots contenant des espaces, ainsi que les colonnes inutiles. Notre but étant uniquement de conserver le mot et sa fréquence, nous avons retiré les autres informations comme la catégorie grammaticale (verbe, nom...), l’infinitif, etc. Nous utiliserons cette fréquence comme critère final dans notre algorithme de suggestion.
 
-Enfin, si la taille du tas est supérieure à 3 alors on retire l'élément avec la plus petite priorité pour garder que 3 suggestions. \\
-On répète ces opérations jusqu'à ce qu'il n'y ait plus de mots dans le dictionnaire. Pour finir, on retourne les 3 suggestions. On résume ce processus dans le diagramme UML ci-dessous,figure \ref{fig:uml}\\
 
+\subsubsection{Exemple illustraif du fonctionnement de l'algorithme}
+
+Prenons l'exemple du mot \og{}bonjour \fg{}. Imaginons que nous avons pour l'instant l'utilisateur a écrit le mot \og{} bonj \fg{}, alors les suggestions faites grâce au tri des préfixes seront des mots tels que \og{} bonjour \fg{}, \og{}bonjours \fg{} et \og{}bons \fg{} comme on le voit dans la figure~\ref{fig:tri_prefixe}.
+Maintenant imaginons que nous faisons une faute : \og{}bpnj\fg{}, on remarque qu'aucun mot commence par ce préfixe, on trie alors selon la distance de Levenshtein qui va nous permettre de corriger la faute de frappe. Enfin, le tri selon la fréquence permet de gérer le cas d'une égalité face au tri des préfixe et de la distance : avec les mots \og{}bonjour \fg{} et \og{}bonsoir \fg{}  nous avons le même préfixe \og{}bon \fg{} et la même distance. Cependant, c'est le mot \og{}bonjour \fg{} qui aura la plus grande priorité car il est beaucoup plus présent dans les livres que le mot \og{}bonsoir \fg{}.\\
+
+La figure~\ref{fig:uml} présente un récapitulatif de notre algorithme de suggestion sous la forme d'un diagramme UML.\\
 \begin{figure}[H]
 	\begin{center}
 		{\includegraphics[width=0.8\textwidth]{images/uml_algo.png}}
 	\end{center}
-	\caption{Schéma UML tri des suggestions}
+	\caption{Schéma UML de l'algorithme de suggestion}
 	\label{fig:uml}
 \end{figure}
 
@@ -560,7 +561,7 @@ Ce pojet a donc été une véritable opportunité pour mettre en pratique les co
 	\addcontentsline
 	{toc}{chapter}{Mots-Clés}
 	\begin{justify}
-    \centering
+		\centering
 		Rust - Python - Tkinter - Complétion semi-automatique - Levenshtein - Markov - Résolution de problème - Implémentation -Recherche - Application
 	\end{justify}
 	\vspace*{\fill} % Espace vertical
@@ -570,7 +571,7 @@ Ce pojet a donc été une véritable opportunité pour mettre en pratique les co
 	{toc}{chapter}{Abstract}
 	\begin{justify}
 		Report on our semester-long project for the second year of the Cursus Master Ingénierie Informatique degree program at the Université de Marie \& Louis Pasteur, focusing on semi-automatic completion, existing methods, possible algorithms for implementing semi-automatic completion and possible improvements using Markov chains. We have also added our own implementation, enabling us to offer word correction suggestions on any Linux application. During this project, several topics were covered: the use of Git, \langage{Python} and \langage{Rust}, the computational and mathematical foundations of semi-automatic completion.\\
-        In this report, we study the different approaches that exist, as well as the different distance algorithms. Then we'll talk about Markov chains for history management, and finally you'll find the application we've created for semi-automatic completion.
+		In this report, we study the different approaches that exist, as well as the different distance algorithms. Then we'll talk about Markov chains for history management, and finally you'll find the application we've created for semi-automatic completion.
 
 	\end{justify}
 	\vspace*{\fill} % Espace vertical
@@ -579,7 +580,7 @@ Ce pojet a donc été une véritable opportunité pour mettre en pratique les co
 	\addcontentsline
 	{toc}{chapter}{Key-Words}
 	\begin{justify}
-    \centering
+		\centering
 		Rust - Python - Tkinter - Semi-automatic completion - Levenshtein - Markov - Problem solving - Implementation - Research - Application
 	\end{justify}
 	\vspace*{\fill} % Espace vertical
