@@ -404,6 +404,7 @@ Nous avons décidé de nous baser sur un dictionnaire de plus de 140~000 mots tr
 En testant notre algorithme, nous avons donc pris peur puisque, même après notre optimisation, il prenait trop de temps (environ 1 à 2 secondes). Après quelques recherches, nous avons vu qu'il existait  différents profils de compilation tels que : \og debug \fg{} et \og release\fg{}. Durant le développement, nous avons travaillé sur le profil de \og debug \fg{} qui permet une compilation plus rapide mais qui n'est pas optimisé et donc plus lent que le profil \og release \fg. Avec le profil \og release \fg{} l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application.\\
 
 Pour améliorer les suggestions, nous avons décider d'utiliser une des fréquences présentent dans le dictionnaire. (fréquence d'utilisation dans les livres). Nous avons mis en place un algorithme qui permet
+
 \subsection{Interface graphique}
 
 Maintenant que l'algorithme est fonctionnel, nous devons afficher à l'écran les suggestions proposé grâce à une interface graphique. Nous voulions dans un premier temps faire cet interface en \langage{Rust} avec \langage{GTK}, la boîte à outils de \langage{Rust}  mais nous n'avons malheureusement pas réussi à faire en sorte de garder la fenêtre au premier plan lorsque l'utilisateur est sur une autre application. Cette approche devient donc inutilisable car l'application disparait à chaque fois que l'utilisateur clique sur une fenêtre Il ne peut ainsi pas voir les différentes suggestions.\\
