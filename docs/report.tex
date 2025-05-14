@@ -66,7 +66,8 @@
 
 
 \usepackage{tocloft}
-\setlength{\cftbeforetoctitleskip}{1.5cm}  % Ajuste l'espace avant le titre de la table des matières
+\setlength{\cftbeforetoctitleskip}{1cm}  % Ajuste l'espace avant le titre de la table des matières
+\setlength{\cftaftertoctitleskip}{0.5cm} % Réduit ou supprime l'espace après le titre
 
 
 \begin{document}
@@ -365,6 +366,8 @@ Nous devions ensuite mettre en place le projet. Nous avons décider d'à la fois
 
 \subsection{Keylogger \& mouselogger}
 
+\subsubsection{Récupération des évenements clavier}
+
 Dans un premier temps, nous voulions pouvoir récupérer tous les évènements clavier de l'utilisateur quelque soit l'application sur laquelle il se trouvait. La solution retenue pour ce projet a été de développer un keylogger. Un keylogger (ou enregistreur de frappe) est un programme qui s’exécute en arrière-plan de l'ordinateur et récupère les frappes de l’utilisateur sur son clavier. Après la détection de chaque touche pressée, notre keylogger traduit l'identifiant reçu en caractère grâce au fichier \textbf{/usr/include/linux/input-event-codes.h} que l'on retrouve dans les fichiers de l'\langage{OS}. Ce fichier associe une touche (lettre I par exemple) en un identifiant (23 pour I). La figure~\ref{fig:lecture_touche} montre un extrait de ce fichier. On utilise donc l'identifiant, que l'on traduit à nouveau, et cela permet ainsi de construire le mot au fur et à mesure. \\
 
 \begin{figure}[H]
@@ -375,11 +378,21 @@ Dans un premier temps, nous voulions pouvoir récupérer tous les évènements c
 	\label{fig:lecture_touche}
 \end{figure}
 
+\subsubsection{Gestion du mot en cours de saisie}
+
 Une fois ajouté à notre programme principal, nous pouvons désormais récupérer les frappes de l'utilisateur. Grâce à cela, nous pouvons désormais concaténer les lettres et afficher dans un terminal le mot en cours de saisie. Pour une utilisation plus fluide, nous avons ajouté quelques fonctionnalités supplémentaires. Notre programme gère également certaines touches spéciales comme les flèches directionnelles. Lorsque la flèche gauche ou droite est détectée, le keylogger met à jour la position du curseur dans le mot en cours de construction. Ainsi, lorsqu’une nouvelle lettre est tapée après un déplacement avec les flèches, elle est insérée à la bonne position dans la chaîne, et non simplement ajoutée à la fin. Ce comportement permet à notre programme de reconstituer précisément les mots saisis, y compris avec des corrections ou insertions en milieu de mot. De plus, s'il clique sur la touche retour arrière, il peut supprimer la lettre à gauche du curseur sans que notre programme perde l'information du mot en cours de saisie. Enfin, si l'utilisateur clique sur n'importe quelle autre touche qu'une lettre (accentuée ou non), le retour arrière ou les flèches de navigation alors, on annule les suggestions de mots. \\
+
+
+\subsubsection{Détection des clics souris}
 
 Nous avons décider d'ajouter une détection de clics de souris afin d'annuler la proposition de suggestions lorsque l'utilisateur n'a plus le curseur de texte sur le mot qu'il est en train d'écrire. Cette implémentation a été simple et rapide puisque nous reprenons le même principe que le keylogger. \\
 
+
+\subsubsection{Prise en charge de plusieurs périphériques}
+
 Une fois cette première partie terminée, nous avons constater que notre programme ne détectait qu'un seul clavier et qu'une seule souris. Si un utilisateur utilise un ordinateur portable et y branche un clavier externe, notre détection de saisie de fonctionnait plus. \\
+
+\subsubsection{Arrêt propre du programme}
 
 La principale difficulté a été de détecter tous les claviers et souris puis de les faire fonctionner en même temps. On a décidé d'utiliser des threads pour lire les fichiers des claviers et des souris en concurrence. Un thread est une séquence d'instructions qui peut être exécutée indépendamment au sein d'un programme. Les threads permettent une exécution simultanée et un fonctionnement multitâche au sein d'une même application. La figure~\ref{fig:lecture_fichier} montre un schéma de la lecture des fichiers en concurrence grâce aux threads.
 
@@ -409,11 +422,11 @@ Nous avons décidé de nous baser sur un dictionnaire de plus de 140~000 mots tr
 En testant notre algorithme, nous avons pris peur puisque, même après notre optimisation, il prenait trop de temps (environ 1 à 2 secondes). Après quelques recherches, nous avons vu qu'il existait  différents profils de compilation tels que : \og{}debug \fg{} et \og{}release\fg{}. Durant le développement, nous avons travaillé sur le profil de \og{}debug \fg{} qui permet une compilation plus rapide mais qui n'est pas optimisée et donc plus lent que le profil \og{}release \fg{}. Avec le profil \og{}release \fg{} l'algorithme s'est déroulé de façon instantanée et était donc utilisable pour notre application.\\
 
 \subsubsection{Ajout du filtrage par préfixe}
-Ensuite, nous avons ajouté, une fonction qui permet de déterminer si la chaîne écrite par l'utilisateur est le préfixe du mot du dictionnaire que nous sommes en train de traiter. Nous l'utiliserons également par la suite pour suggérer les mots les plus cohérents avec la chaîne écrite par l'utilisateur.\\
+Ensuite, nous avons ajouté, une fonction qui permet de déterminer si la chaîne écrite par l'utilisateur est le préfixe du mot du dictionnaire que nous sommes en train de traiter. Nous l'utiliserons par la suite pour suggérer les mots les plus cohérents avec la chaîne écrite par l'utilisateur, et non pas pour corriger la chaîne écrite.\\
 
 
 \subsubsection{Combinaison des critères}
-Maintenant que nous disposons de deux outils permettant de suggérer un mot plutôt qu’un autre, nous les avons combinés pour construire notre algorithme de suggestion. Au départ, nous avions choisi de prioriser la distance de Levenshtein, puis d'utiliser le préfixe en cas d’égalité entre deux mots, comme le montre la figure~\ref{fig:tri_dist}. Cependant, nous avons constaté que les résultats étaient bien meilleurs lorsque l’on inversait cette logique (voir figure~\ref{fig:tri_prefixe}) : d’abord filtrer par préfixe, puis départager par distance de Levenshtein. En effet, en privilégiant le préfixe, on obtient en priorité des mots plus longs qui commencent exactement comme le mot tapé. Et si l'utilisateur fait une faute de frappe (par exemple en inversant deux lettres), il est rare que le mot erroné partage encore un préfixe commun avec les mots du dictionnaire. Dans ce cas, le filtre par préfixe échoue, et c’est là que la distance de Levenshtein prend le relais pour proposer les suggestions les plus proches.\\
+Maintenant que nous disposons de deux outils permettant de suggérer un mot plutôt qu’un autre, nous les avons combinés pour construire notre algorithme de suggestions. Au départ, nous avions choisi de prioriser la distance de Levenshtein, puis d'utiliser le préfixe en cas d’égalité entre deux mots, comme le montre la figure~\ref{fig:tri_dist}. Cependant, nous avons constaté que les résultats étaient bien meilleurs lorsque l’on inversait cette logique (voir figure~\ref{fig:tri_prefixe}). D'abord filtrer par préfixe, puis départager par distance de Levenshtein. En effet, en privilégiant le préfixe, on obtient des mots qui commencent par la chaîne écrite et qui peuvent être bien plus longs que le mot tapé. Si l'utilisateur fait une faute de frappe (par exemple en inversant deux lettres), la chaîne erronée ne sera probablement pas un préfixe commun avec l'un des différents mots du dictionnaire. Dans ce cas, le filtre par préfixe échoue, et c'est à ce moment que le tri par la distance de Levenshtein prend le relais afin de proposer les suggestions les plus proches.\\
 
 \begin{figure}[H]
 	\begin{center}
@@ -431,7 +444,7 @@ Maintenant que nous disposons de deux outils permettant de suggérer un mot plut
 \end{figure}
 
 \subsubsection{Ajout du critère de fréquence d'usage}
-Cependant, un autre problème est apparu : beaucoup de mots ont la même distance de Levenshtein. Pour les départager, nous avons alors intégré un critère supplémentaire : la fréquence d’usage des mots. Pour cela, nous avons choisi d’utiliser la fréquence d’apparition des mots dans les livres, parmi les différentes options possibles (comme les films, les médias, etc.). Nous avons développé un programme en \langage{Python} permettant de convertir les fichiers au format \var{.tsv} en \var{.csv}, un format que nous maîtrisons mieux. Ce programme nettoie également les données : il supprime les doublons, les mots contenant des espaces, ainsi que les colonnes inutiles. Notre but étant uniquement de conserver le mot et sa fréquence, nous avons retiré les autres informations comme la catégorie grammaticale (verbe, nom...), l’infinitif, etc. Nous utiliserons cette fréquence comme critère final dans notre algorithme de suggestion.
+Cependant, un autre problème est apparu : beaucoup de mots ont la même distance de Levenshtein. Pour les départager, nous avons alors intégré un critère supplémentaire : la fréquence d’usage des mots. Pour cela, nous avons choisi d’utiliser la fréquence d’apparition des mots dans les livres, parmi les différentes options possibles telles que la fréquence d'apparition dans les films ou dans les médias. Nous avons développé un programme en \langage{Python} permettant de convertir les fichiers au format \var{.tsv} en fichier au format \var{.csv}, un format que nous maîtrisons mieux. Ce programme nettoie également les données en supprimant les doublons, les mots contenant des espaces, ainsi que les colonnes inutiles. Notre but étant de conserver uniquement le mot et sa fréquence. Ce programme retire donc toutes les autres informations telles que la catégorie grammaticale, l’infinitif ou encore GNGNGNGNGN. Nous utiliserons cette fréquence comme critère final dans notre algorithme de suggestion.
 
 
 \subsubsection{Exemple illustraif du fonctionnement de l'algorithme}
@@ -545,6 +558,7 @@ Ce pojet a donc été une véritable opportunité pour mettre en pratique les co
 
 % Page de résumé
 \newpage
+\pagestyle{plain}
 \begin{center}
 	\vspace*{\fill} % Espace vertical
 	\section*{Résumé}
@@ -567,8 +581,6 @@ Ce pojet a donc été une véritable opportunité pour mettre en pratique les co
 	\vspace*{\fill} % Espace vertical
 
 	\section*{Abstract}
-	\addcontentsline
-	{toc}{chapter}{Abstract}
 	\begin{justify}
 		Report on our semester-long project for the second year of the Cursus Master Ingénierie Informatique degree program at the Université de Marie \& Louis Pasteur, focusing on semi-automatic completion, existing methods, possible algorithms for implementing semi-automatic completion and possible improvements using Markov chains. We have also added our own implementation, enabling us to offer word correction suggestions on any Linux application. During this project, several topics were covered: the use of Git, \langage{Python} and \langage{Rust}, the computational and mathematical foundations of semi-automatic completion.\\
 		In this report, we study the different approaches that exist, as well as the different distance algorithms. Then we'll talk about Markov chains for history management, and finally you'll find the application we've created for semi-automatic completion.
@@ -577,8 +589,6 @@ Ce pojet a donc été une véritable opportunité pour mettre en pratique les co
 	\vspace*{\fill} % Espace vertical
 
 	\section*{Key-Words}
-	\addcontentsline
-	{toc}{chapter}{Key-Words}
 	\begin{justify}
 		\centering
 		Rust - Python - Tkinter - Semi-automatic completion - Levenshtein - Markov - Problem solving - Implementation - Research - Application
