@@ -1,0 +1,441 @@
+
+
+\section{Déroulement du Travail}
+
+\begin{frame}{Approche et répartition du développement}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+    
+    \textbf{Division du travail selon les envies et compétences de chacun}
+        \begin{itemize}
+            \item Efficacité
+            \item Meilleur résultat
+        \end{itemize}
+
+    \vspace*{0.5cm}
+    \begin{center}
+        \hspace*{-0.05\textwidth}
+        \includegraphics[width=1.1\textwidth]{images/branch.png}
+    \end{center}
+    % \textbf{Interactions avec les salariés de Cibest}
+    % \begin{itemize}
+    %     \item Maitre de stage
+    %     \item Assistante chef de projet
+    %     \item Support
+    % \end{itemize}
+
+        \column{0.5\textwidth}
+
+    \textbf{Revue de code}
+        \begin{itemize}
+            \item Garder une cohérence
+            \item Gagner en compétence
+        \end{itemize}
+        \vspace{0.3cm}
+
+        \includegraphics[width=0.9\textwidth]{images/revue_code.png}
+\end{columns}
+  \end{frame}
+  
+
+\begin{frame}{Définition et Développement du MVP project}
+\textbf{MVP project~:} Minimum Viable Product (Produit Minimum Viable)
+\begin{center}
+    \includegraphics[width=\textwidth]{images/MVP_projet.png}
+\end{center}
+
+\vfill
+\hrule 
+\vspace*{0.4cm}
+
+\begin{columns}[t]
+    \column{0.5\textwidth}
+    \vspace*{0.3cm}
+        \textbf{Besoins~:}
+\begin{itemize}
+    \item Interagir avec une API
+    \item Formater des données
+    \item Automatiser un générateur de PDF
+\end{itemize}
+    \column{0.5\textwidth}
+    \vspace*{-0.5cm}
+        \begin{center}
+            \includegraphics[width=0.7\textwidth]{images/recherche.png}
+        \end{center}
+    
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Besoins pour le MVP projet}
+\vspace*{-0.4cm}
+\hspace*{-0.43cm}
+\textbf{Interagir avec une API~:}
+\vspace*{-0.3cm}
+% \begin{columns}
+%     \column{0.7\textwidth}
+%     \begin{center}
+%         \includegraphics[width=\textwidth]{images/schema_api.png}
+%     \end{center}
+
+%     \column{0.4\textwidth}
+%     \begin{itemize}
+%         \item Documentation
+%         \item Authentification
+%         \item Erreurs, Timeouts
+%         \item Traitement des réponses
+%     \end{itemize}
+% \end{columns}
+        \begin{center}
+            \includegraphics[width=0.7\textwidth]{images/schema_api.png}
+        \end{center}
+
+\vspace{0.3cm}
+\vfill
+\hrule
+\vfill
+\vspace{0.5cm}
+
+\begin{columns}[T]
+    \column{0.5\textwidth}
+    \textbf{Formater des données~:}
+    \begin{itemize}
+    %     \item Créer une structure hiérarchique
+        \item Conversion type/format
+        \item Gestion exceptions
+        \begin{itemize}
+            \item Caractères spéciaux
+            \item Erreurs dans l'API
+        \end{itemize}
+    \end{itemize}
+
+
+    \column{0.5\textwidth}
+    \vspace*{-0.3cm}
+    \includegraphics[width=1\textwidth]{images/formatage.png}
+    
+\end{columns}
+    
+\end{frame}
+
+\begin{frame}{Besoins pour le MVP projet}
+    
+
+    \begin{columns}
+        \column{0.4\textwidth}
+        \textbf{Automatiser un générateur de PDF~:}
+        \begin{enumerate}
+            \item Conception
+        \end{enumerate}
+        \column{0.6\textwidth}
+        \fbox{\includegraphics[width=0.85\textwidth,page=1,trim=0 0 0 0,clip]{images/schema_pdf.pdf}}
+        
+    \end{columns}
+    
+\end{frame}
+
+\begin{frame}{Besoins pour le MVP projet}
+    
+
+    \begin{columns}
+        \column{0.3\textwidth}
+        \textbf{Automatiser un générateur de PDF~:}
+        \begin{enumerate}
+            \item Conception
+            \item Développement
+        \end{enumerate}
+        \column{0.7\textwidth}
+        \fbox{\includegraphics[width=\textwidth,page=1,trim=0 0 0 0,clip]{images/pdf_csniff_sans_style.png}}
+        
+    \end{columns}
+    
+\end{frame}
+
+\begin{frame}{Besoins pour le MVP projet}
+    
+
+    \begin{columns}
+        \column{0.3\textwidth}
+        \textbf{Automatiser un générateur de PDF~:}
+        \begin{enumerate}
+            \item Conception
+            \item Développement
+            \item Amélioration
+        \end{enumerate}
+        \column{0.7\textwidth}
+        \fbox{\includegraphics[width=\textwidth,page=1,trim=0 0 0 0,clip]{images/annexe_1_exemple_pdf_01-1.png}}
+        
+    \end{columns}
+    
+\end{frame}
+
+\begin{frame}{Interface utilisateur}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \textbf{Menu}
+        \vspace{-0.5cm}
+        \begin{center}
+            \hspace*{-0.05\textwidth}
+            \includegraphics[width=1.1\textwidth]{images/visuel_menu.png}
+        \end{center}
+        \vspace{-0.2cm}
+        \begin{itemize}
+            \item Système de menu réutilisable
+            \item Analyse des touches pressées
+            \begin{itemize}
+                \item + Efficacité
+                \item + Stabilité
+            \end{itemize}
+        \end{itemize}
+        \hspace*{-0.05\textwidth}
+        \includegraphics[width=1.1\textwidth]{images/message_dynamique.png}
+
+        \column{0.5\textwidth}
+        \textbf{Entrée Utilisateur}
+        \begin{center}
+            \includegraphics[width=\textwidth]{images/visuel_auto_completion.png}
+        \end{center}
+        \begin{itemize}
+            \item Sauvegarde dans fichiers texte
+            \begin{itemize}
+                \item IP / Ports / Nom / MDP
+            \end{itemize}
+        \end{itemize}
+        \vspace*{-0.3cm}
+        \begin{center}
+            \includegraphics[width=\textwidth]{images/schema_auto_completion.png}
+        \end{center}
+        \vspace{-0.1cm}
+        \emph{Les dernières réponses sont aussi sauvegardées}
+
+    \end{columns}
+    
+\end{frame}
+
+
+\begin{frame}{Intégration à GLPI/G4C}
+    \begin{columns}
+        \column{0.5\textwidth}
+            \textbf{Passage via API}
+            \begin{itemize}
+                \item Automatisé
+                \item Retro-compatible
+                \item Maintenance
+            \end{itemize}
+            \vspace*{0.3cm}
+            \emph{\textbf{Problème~:} Impossible sans connexion}
+
+        \column{0.5\textwidth}
+        \textbf{Lecture facile}
+        \begin{itemize}
+            \item Via interface web
+        \end{itemize}
+        \vspace*{-0.7cm}
+        \begin{center}
+            \hspace*{-0.4cm}
+            \includegraphics[width=1.2\textwidth]{images/glpi.png}
+        \end{center}
+
+    \end{columns}
+    \vspace*{-1.2cm}
+    \begin{center}
+        \includegraphics[width=\textwidth]{images/integration_glpi_schema_sans_co.png}
+    \end{center}
+\end{frame}
+\begin{frame}{Intégration à GLPI/G4C}
+    \emph{\textbf{Solution~:} Stocker temporairement les informations}
+    \begin{itemize}
+        \item Stockage local
+        \item Synchronisation instantanée
+    \end{itemize}
+    \begin{center}
+        \vspace*{-0.2cm}
+        \includegraphics[width=\textwidth]{images/integration_glpi_schema_avec_co.png}
+    \end{center}
+\end{frame}
+
+
+\begin{frame}{Elargissement du Champs d'Action de CSniff}
+    \vspace*{-0.45cm}
+    \textbf{Caméras}
+    \hspace*{-0.05\textwidth}
+        \includegraphics[width=1.1\textwidth]{images/onvif.png}
+
+        \vfill
+        \hrule
+        \vfill
+
+        \textbf{Switch}
+        \vspace*{0.1cm}
+        \begin{columns}
+            \column{0.3\textwidth}
+            \begin{itemize}
+                \item \textbf{But~:} Configuration lisible
+                \item 2 solutions
+                \item Pas de PDF
+            \end{itemize}
+
+            \column{0.7\textwidth}
+            \includegraphics[width=\textwidth]{images/switch.png}
+        \end{columns}
+        
+    
+\end{frame}
+
+\begin{frame}{Elargissement du Champs d'Action de CSniff}
+        \vspace*{-0.5cm}
+        \textbf{Cellules de Comptage}
+        \vspace*{-0.2cm}
+        \begin{center}
+            \includegraphics[width=\textwidth]{images/cellule_comptage.png}
+        \end{center}
+
+        \hrule
+        \textbf{DataMatrix GS1}
+        \begin{columns}
+            \column{0.5\textwidth}
+            \begin{itemize}
+            \item Identification
+            \item Traçabilité
+            \item Intégration au PDF + PNG
+        \end{itemize}
+            \column{0.5\textwidth}
+            
+            \begin{center}
+                \includegraphics[width=0.4\textwidth]{images/DataMatrixGS1.png}
+            \end{center}
+            
+        \end{columns}
+        \emph{CSV pour impression~:}
+        \includegraphics[width=\textwidth]{images/csv.png}
+        
+\end{frame}
+
+
+
+
+\begin{frame}{Création de l'exécutable}
+    \vspace*{-0.3cm}
+    \textbf{Exécutable sans dépendance (difficultés ++)}
+    \begin{columns}
+        \column{0.6\textwidth}
+        \vspace*{-0.5cm}
+        \begin{center}
+            \includegraphics[height=0.85\textheight]{images/exe.png}
+        \end{center}
+
+        \column{0.5\textwidth}
+        \begin{center}
+            \includegraphics[width=2cm]{images/probleme.png}
+            
+            \emph{Nombreuses étapes fastidieuses}
+        \end{center}
+        \vspace{0.3cm}
+        
+        
+        \textbf{Création solution automatique (script bash)} 
+        \begin{itemize}
+            \item Eviter les erreurs
+            \item Gagner du temps
+        \end{itemize}
+            % \begin{enumerate} 
+            %     \item Suppression fichiers cache 
+            %     \item Modification chemin accès fichiers \item Commande création .spec 
+            %     \item Ajout icon
+            %     \item Modification fichier .spec ajout dépendances 
+            %     \item Commande exécution .spec 
+            %     \item Renommage logiciel
+            % \end{enumerate}
+    \end{columns}
+    
+
+    
+\end{frame}
+
+\begin{frame}{Optimisations et phases de tests}
+    
+    \vspace*{-0.5cm}
+    \textbf{Correction du code}
+        \begin{center}
+            \includegraphics[width=0.8\textwidth]{images/sonarqube.png}
+        \end{center}
+
+
+   
+    
+    \textbf{Mode Automatique}
+    \vspace*{-0.5cm}
+    \begin{columns}
+        \column{0.3\textwidth}
+        \begin{itemize}
+            \item Via IP enregistreur
+            \item Via fichier texte
+        \end{itemize}
+        \column{0.7\textwidth} 
+    \begin{center}
+        \hspace*{-0.4cm}
+        \includegraphics[width=1.1\textwidth]{images/mode_auto.png}
+    \end{center}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Optimisations et phases de tests}
+    \vspace*{-0.5cm}
+    \textbf{Utilisation réelle}
+    \begin{center}
+        \vspace*{-0.3cm}
+        \includegraphics[width=0.9\textwidth]{images/test_reel.png}
+    \end{center}
+    \vspace*{-0.3cm}
+    \textbf{Diminution du temps de chargement}
+    \begin{columns}[t]
+        \column{0.5\textwidth}
+        \begin{itemize}
+            \item Détection IP non valide
+            \item Amélioration vitesse génération PDF
+        \end{itemize}
+        \column{0.5\textwidth}
+        \begin{center}
+            \vspace*{-1cm}
+            \includegraphics[width=0.3\textwidth]{images/temps_ip_pdf.png}
+        \end{center}
+    \end{columns}
+    
+    
+\end{frame}
+
+
+\section{Démonstration}
+
+\section{Conclusion}
+\begin{frame}{Conclusion}
+    
+
+\begin{columns}[t]
+    \column{0.5\textwidth}
+    \textbf{Professionnel}
+    \begin{itemize}
+        \item Expérience
+        \item Compétences techniques
+        \begin{itemize}
+            \item Gestion de projet
+            \item Outils
+        \end{itemize}
+    \end{itemize}
+
+    \column{0.5\textwidth}
+    \textbf{Personnel}
+    \begin{itemize}
+        \item Autonomie / Prise d'initiative
+        \item Esprit d'équipe
+        \item Responsabilité
+    \end{itemize}
+\end{columns}
+\begin{center}
+    \includegraphics[width=4cm]{images/conclusion.png}
+\end{center}
+\end{frame}
+
+
+

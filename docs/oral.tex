@@ -1,0 +1,71 @@
+\documentclass[10pt]{beamer}
+
+
+\usepackage{graphicx} % Pour les images
+
+
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage{appendixnumberbeamer}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+\usepackage{xspace}
+\usepackage{tikz} % Pour les flèches et les diagrammes
+\usepackage{array} % Pour les tableaux
+\usepackage{eurosym}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{fontenc}
+
+
+% Redéfinir la commande \insertframenumber pour inclure le logo
+\addtobeamertemplate{frametitle}{}{
+  \tikz[remember picture,overlay] 
+    \node[anchor=north east,inner sep=0cm] at (current page.north east) {
+      \includegraphics[height=0.97cm]{images/logo.png}
+    };
+}
+% Définir les styles par défaut
+\setlist[itemize,1]{label=\textbullet} % Premier niveau : point plein
+\setlist[itemize,3]{label=\textendash} % Deuxième niveau : tiret long
+\setlist[itemize,2]{label=$\circ$} % Troisième niveau : cercle vide
+
+% Définir les styles par défaut pour enumerate
+\setlist[enumerate,1]{label=\arabic*.} % Premier niveau : chiffres arabes
+\setlist[enumerate,2]{label=\Alph*.} % Deuxième niveau : lettres majuscules
+\setlist[enumerate,3]{label=\alph*.} % Troisième niveau : lettres minuscules
+
+% Logo à gauche et à droite
+\titlegraphic{
+  \includegraphics[height=1.3cm]{images/logo_univ.png}\hfill
+  \includegraphics[height=1.3cm]{images/logo_CMI.png}\\[3cm] % Espace entre les logos du haut et le logo Cibest
+  \vspace{0.1cm} % Ajoute un espace vertical pour descendre le logo Cibest plus bas
+  \hfill\includegraphics[height=3.3cm]{images/illustration.png}
+}
+
+
+
+\title{\vspace{1cm}Complétion semi-automatique\\Projet d'Initiation à la recherche}
+\author{Samia Benali \& Elouan BOITEUX\\[0.3cm]Année universitaire 2024 -- 2025 \\[0.3cm]CMI Informatique Deuxième Année}
+\date{}
+
+
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Table des matières}
+	\setbeamertemplate{section in toc}[sections numbered]
+	\tableofcontents%[hideallsubsections]
+\end{frame}
+
+\input{parties_oral/intro.tex}
+\input{parties_oral/approches.tex}
+\input{parties_oral/algo_distance.tex}
+\input{parties_oral/markov.tex}
+\input{parties_oral/implem.tex}
+\input{parties_oral/conclusion.tex}
+
+\end{document}

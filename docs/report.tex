@@ -25,8 +25,6 @@
 \usepackage{appendix}
 \usepackage{texnames}
 
-
-
 % Définir une couleur pour les citations
 \definecolor{citationcolor}{rgb}{0.0, 0.5, 1.0}  % Couleur bleue par exemple
 
@@ -50,7 +48,7 @@
 
 \fancypagestyle{plain}{
   \fancyhf{} % Effacer tous
-  \fancyhead[C]{Rapport de Stage} % Texte centré en haut de la page
+  \fancyhead[C]{Rapport de Projet} % Texte centré en haut de la page
   \fancyfoot[L]{L2 CMI Informatique} % Texte en bas à gauche du pied de page
   \fancyfoot[C]{Samia BENALI \& Elouan BOITEUX} % Texte au centre du pied de page
   \fancyfoot[R]{\thepage} % Numéro de page en bas à droite du pied de page
@@ -140,20 +138,20 @@ Il existe de nombreuses façons de proposer des suggestions automatiques ou semi
 Chacune de ces approches a ses avantages et ses inconvénients, selon ce que l’on cherche à faire. Nous allons voir comment ces méthodes fonctionnent et dans quels cas elles sont efficaces ou non.
 
 \section{Modèles s'appuyant sur des règles}
-Pour proposer des suggestions, ce modèle utilisent des algorithmes simples qui s'appuient sur des règles préprogrammées telles que la correspondance de préfixes ou une séquence donnée en amont. Ces algorithmes vont être gérer principalement grâce à des dictionnaires statiques ou des listes.  Cette implémentation est plutôt rapide et simple à mettre en place, elle est cependant très peu flexible et empêche donc une utilisation complexe\dots
+Pour proposer des suggestions, ce modèle utilisent des algorithmes simples qui s'appuient sur des règles préprogrammées telles que la correspondance de préfixes ou une séquence donnée en amont. Ces algorithmes vont être gérer principalement grâce à des dictionnaires statiques ou des listes.  Cette implémentation est plutôt rapide et simple à mettre en place, elle est cependant très peu flexible et empêche donc une utilisation complexe.
 
 \section{Modèles s'appuyant sur des statistiques}
 Pour proposer des suggestions, ce modèle utilisent des statistiques fournies grâce aux données d'un historique. Cela permet de prédire des séquences comme avec le modèle de Markov (expliqué dans le chapitre \ref{Markov}) ou la méthode TF-IDF \textit{(term frequency-inverse document frequency)}.\\
-Cette implémentation permet d'obtenir des résultats rapidement. On a cependant aucune compréhension sémantique donc les suggestions ne conviennent que rarement au contexte\dots
+Cette implémentation permet d'obtenir des résultats rapidement. On a cependant aucune compréhension sémantique donc les suggestions ne conviennent que rarement au contexte.
 \newpage
 \section{Modèles s'appuyant sur l'intelligence artificielle}
 Pour proposer des suggestions, ce modèle utilise des algorithmes qui s'appuient sur l'intelligence artificielle et les réseaux neuronaux.
 Avec l’apprentissage supervisé et non supervisé, ces modèles apprennent des motifs complexes à partir des données. Ils peuvent inclure des algorithmes comme les forêts aléatoires ou les régressions pour fournir des prédictions plus contextuelles.
-Cette implémentation permet d'être efficace face à des problèmes très complexes et de répondre à des demandes rares. Cependant, ce genre d'implémentation nécéssite énormément de temps de calcul et de ressources\dots
+Cette implémentation permet d'être efficace face à des problèmes très complexes et de répondre à des demandes rares. Cependant, ce genre d'implémentation nécéssite énormément de temps de calcul et de ressources.
 
 
 \section{Modèles s'appuyant sur le deep learning}
-Pour proposer des suggestions, ce modèle utilise des algorithmes qui s'appuient sur l'amélioration en temps réel. C'est à l'utilisateur de faire des choix et ces mêmes choix sont mémorisés pour une utilisation personnalisée et plus précise. Cette implémentation est donc très adaptable et permet des réponses précises avec un sens sémantique. Cependant, cette implémentation est complexe et très longue à mettre en place puisque les choix de l'utilisateur sont nécessaires et les réponses dépendront en grande partie des données collectées\dots
+Pour proposer des suggestions, ce modèle utilise des algorithmes qui s'appuient sur l'amélioration en temps réel. C'est à l'utilisateur de faire des choix et ces mêmes choix sont mémorisés pour une utilisation personnalisée et plus précise. Cette implémentation est donc très adaptable et permet des réponses précises avec un sens sémantique. Cependant, cette implémentation est complexe et très longue à mettre en place puisque les choix de l'utilisateur sont nécessaires et les réponses dépendront en grande partie des données collectées.
 
 
 
@@ -165,7 +163,7 @@ Un algorithme de calcul de distance permet de mesurer la similarité et/ou la di
 
 \section{Distance d'édition ou de Levenshtein}\label{sec:levenshtein}
 
-L'algorithme de calcul de distance d'édition permet de rechercher le nombre minimal d'opérations élémentaires, tels que les insertions, les suppressions et les substitutions, qui seront nécessaires à la transformation d'une chaîne de caractères en une autre. L'insertion permet d'ajouter un caractère, la suppression d'en enlever, et la substitution de replacer un caractère par un autre. La figure~\ref{fig:levenshtein} montre un exemple d'illustration de ces opérations. \par \vspace{\baselineskip}
+L'algorithme de calcul de distance d'édition permet de rechercher le nombre minimal d'opérations élémentaires, tels que les insertions, les suppressions et les substitutions, qui seront nécessaires à la transformation d'une chaîne de caractères en une autre. L'insertion permet d'ajouter un caractère, la suppression d'en enlever, et la substitution de remplacer un caractère par un autre. La figure~\ref{fig:levenshtein} montre un exemple d'illustration de ces opérations. \par \vspace{\baselineskip}
 
 La compexité de l'algorithme est en $\mathcal{O}(n \times m)$  où n est la longueur de la première chaîne et m la longueur de la seconde. Sa complexité dans l'espace est équivalente. Dans certaines implémentations avancées, la complexité dans l'espace peut être réduite à $\mathcal{O}(\min(n,m))$. \par \vspace{\baselineskip}
 
@@ -537,7 +535,7 @@ Ce projet a donc été une véritable opportunité pour mettre en pratique les c
 \newpage
 \fancypagestyle{annexes}{
 	\fancyhf{} % Effacer tous les en-têtes et pieds de page
-	\fancyhead[C]{Annexe - Rapport de Stage} % Texte centré en haut de la page
+	\fancyhead[C]{Annexe - Rapport de Projet} % Texte centré en haut de la page
 	\fancyfoot[L]{L2 CMI Informatique} % Texte en bas à gauche
 	\fancyfoot[C]{Samia BENALI \& Elouan BOITEUX} % Texte au centre
 	\fancyfoot[R]{\thepage} % Numéro de page à droite
