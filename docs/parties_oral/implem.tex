@@ -94,6 +94,42 @@
 \end{frame}
 
 
-\begin{frame}{Interface graphique}
+
+
+\begin{frame}{L'interface graphique}
+	\begin{columns}
+		\column{0.45\textwidth}
+		\begin{itemize}
+			\item Initialement, interface prévue en \textbf{Rust avec GTK}
+			\item Problème : impossible de garder la fenêtre au premier plan constamment
+			\item Solution : interface réalisée en \textbf{Python avec Tkinter}
+			\item Communication entre Rust et Python via leur \textbf{entrée standard}
+		\end{itemize}
+
+		\column{0.50\textwidth}
+		\centering
+		\textbf{Interface finale :} \\
+		\includegraphics[width=\textwidth]{images/illustration.png}
+	\end{columns}
+\end{frame}
+
+
+\begin{frame}{Installeur de l'application}
+	\begin{itemize}
+		\item Création d'un installeur pour l'application
+		\item Utilisation d'un \textbf{Makefile}
+		\item Pour
+		      \begin{itemize}
+			      \item Compiler le code
+			      \item Attribuer les droits nécessaire
+			      \item Créer le fichier \textbf{.desktop}
+			      \item Déplacer le binaire
+		      \end{itemize}
+	\end{itemize}
+	\begin{center}
+		\includegraphics[width=0.5\textwidth]{images/application.png}
+	\end{center}
 
 \end{frame}
+
+\section{Démonstration}% montrer la video
