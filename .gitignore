@@ -14,7 +14,9 @@ watch_tex.py
 *.fls
 *.fdb_latexmk
 *.synctex.gz
-*.pdf
+*.nav
+*.snm
+*.lof
 
 # Fichiers de configuration de LaTeX
 *.idx
@@ -37,3 +39,8 @@ _thumbs/
 # Dossiers générés
 build/
 out/
+
+
+
+pseudo-code.txt
+subject.pdf

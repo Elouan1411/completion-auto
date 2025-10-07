@@ -1,6 +1,6 @@
 # Completion auto
 
-This repository explores the techniques and algorithms used in semi-automatic text completion. The project is part of our coursework for the CMI-L2 program and was completed in collaboration with Samia BENALI.
+This repository explores the techniques and algorithms used in semi-automatic text completion. This is a research project I carried out in my second year (L2) as part of the Cursus Master Ingénierie (CMI) program, with research conducted together with Samia BENALI. Thanks to these research efforts, I personally developed an application to implement the theoretical concepts.
 
 ## Overview
 
@@ -17,7 +17,7 @@ The project is divided into the following tasks:
 1. **Study**: Review different approaches used in text auto-completion.
 2. **Edit Distance Algorithms**: Understand and implement simple edit distance calculations.
 3. **Markov Chains**: Study the basic principles and their use in adapting suggestions based on user history.
-4. **Implementation**: Develop a small text auto-completion tool using the studied techniques.
+4. **Implementation**: Develop text auto-completion tool using the studied techniques.
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/24ce49f6-1d3c-4cbf-bcc2-6232eaa5478e" width="50%"/>
@@ -25,8 +25,8 @@ The project is divided into the following tasks:
 
 ## Contents
 
-- **docs/**: Documentation and references.
-- **completion-system/**: Main project directory containing the Rust and Python code.
+-   **docs/**: Documentation and references.
+-   **completion-system/**: Main project directory containing the Rust and Python code.
 
 ## Requirements
 
@@ -63,5 +63,5 @@ make uninstall
 
 ## Authors
 
-- Elouan BOITEUX
-- Samia BENALI
+-   Elouan BOITEUX
+-   Samia BENALI

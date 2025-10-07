@@ -1,62 +1,62 @@
-# Documentation technique — Complétion automatique
+# Technical Documentation — Auto-Completion
 
-## Description générale
+## General Description
 
-Ce projet implémente un outil de complétion semi-automatique de texte, utilisable dans toutes les applications sur un système Ubuntu.
+This project implements a semi-automatic text completion tool that can be used in any application on an Ubuntu system.
 
 ## Installation
 
-### Prérequis
+### Prerequisites
 
-- Système **Ubuntu** (testé sur Ubuntu 22.04.2 LTS)  
-- Le raccourci clavier **Alt + Tab** doit être actif (natif sur Ubuntu) pour changer d'application facilement
+-   **Ubuntu** system (tested on Ubuntu 22.04.2 LTS)
+-   The keyboard shortcut **Alt + Tab** must be enabled (default in Ubuntu) to switch between applications easily.
 
-### Étapes d'installation
+### Installation Steps
 
 ```bash
 cd completion-auto/completion-system
 make install
-````
+```
 
-Le `Makefile` s’occupe de :
+The `Makefile` takes care of:
 
-* Installer les dépendances nécessaires
-* Copier le binaire compilé dans `/usr/local/bin/completion-system` (inclus dans le PATH)
-* Donner les bons droits d’exécution à tous les fichiers nécessaires
+-   Installing necessary dependencies
+-   Copying the compiled binary to `/usr/local/bin/completion-system` (already in the PATH)
+-   Setting the correct execution permissions for all required files
 
-## Lancement
+## Launching
 
-Deux méthodes sont possibles :
+Two methods are available:
 
-* **Depuis le terminal** :
+-   **From the terminal**:
 
 ```bash
 completion-system
 ```
 
-* **Depuis le gestionnaire d'applications Ubuntu** :
-  Ouvrir le menu et rechercher `Completion System`, puis appuyer sur Entrée.
+-   **From the Ubuntu application launcher**:
+    Open the menu, search for `Completion System`, and press Enter.
 
-**Remarque :** sur certains ordinateurs, il est possible que le lancement via le gestionnaire d’applications ne fonctionne pas. Dans ce cas, le terminal reste pleinement fonctionnel.
-Une fois lancé, le programme tourne en arrière-plan et fonctionne dans **toutes les applications**.
+**Note:** On some systems, launching from the application launcher may not work. In that case, launching from the terminal works fully.
+Once launched, the program runs in the background and works across **all applications**.
 
-## Désinstallation
+## Uninstallation
 
 ```bash
 cd completion-auto/completion-system
 make uninstall
 ```
 
-## Binaire autonome
+## Standalone Binary
 
-Le fichier binaire `completion-system`, déjà compilé et fourni dans le dossier `bin/`, est entièrement autonome après installation.
+The compiled binary file `completion-system`, already provided in the `bin/` folder, is completely standalone after installation.
 
-* Il est copié dans `/usr/local/bin`, ce qui permet de le lancer depuis n'importe où.
-* Il ne dépend plus des fichiers sources ni du script Python.
+-   It is copied to `/usr/local/bin`, allowing it to be run from anywhere.
+-   It no longer depends on source files or the Python script.
 
-## Structure des fichiers
+## Project Structure
 
-L'arborescence du projet est la suivante :
+The project directory structure is as follows:
 
 ```
 .
@@ -80,12 +80,11 @@ L'arborescence du projet est la suivante :
 |- README.md
 ```
 
-### Détail des dossiers et fichiers
+### Folder and File Details
 
-* `src/` : contient tous les fichiers source Rust ainsi que le script Python pour l'interface graphique (`gui.py`).
-* `data/dico_freq.csv` : dictionnaire final utilisé pour la complétion.
-* `tools/Lexique383.tsv` : base de données brute téléchargée.
-* `tools/format_dico.py` : script Python utilisé pour convertir le fichier `.tsv` en `.csv`, et pour enlever les informations inutiles.
-* `Cargo.toml` : fichier de configuration indiquant les dépendances Rust et leurs versions.
-* `completion-system.png` : icône affichée dans le menu d’applications Ubuntu.
-
+-   `src/` : Contains all Rust source files and the Python script for the graphical interface (`gui.py`).
+-   `data/dico_freq.csv` : Final dictionary used for completion.
+-   `tools/Lexique383.tsv` : Raw database file downloaded.
+-   `tools/format_dico.py` : Python script used to convert the `.tsv` file into `.csv` and remove unnecessary information.
+-   `Cargo.toml` : Configuration file specifying Rust dependencies and versions.
+-   `completion-system.png` : Icon displayed in the Ubuntu application menu.
